@@ -89,7 +89,7 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --badge-bg:rgba(255,255,255,.82);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{
   background:var(--bg);
   color:var(--ink);
@@ -98,12 +98,15 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  width:100%;
 }
 h1,h2,h3,.wordmark{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-.02em}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 20px}
-section{position:relative;padding:72px 0}
+/* clip the oversized decorative blurs: left unclipped they widen the layout,
+   which stretches the fixed nav past the screen on phones */
+section{position:relative;padding:72px 0;overflow:hidden}
 @media(min-width:768px){section{padding:110px 0}}
 
 /* ---------- ambient glow ---------- */
@@ -113,7 +116,7 @@ section{position:relative;padding:72px 0}
 
 /* ---------- nav ---------- */
 .nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:fixed;top:0;left:0;right:0;width:100%;max-width:100%;z-index:100;
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   background:var(--nav-bg);
   border-bottom:1px solid var(--line);
@@ -190,7 +193,10 @@ section{position:relative;padding:72px 0}
 }
 
 /* ---------- hero ---------- */
-.hero{padding:140px 0 80px;text-align:center;overflow:hidden}
+/* position:relative is load-bearing: without it the absolutely positioned glow
+   anchors to the viewport instead of the header, escapes overflow:hidden, and
+   widens the page — which stretches the fixed nav off-screen on phones */
+.hero{position:relative;padding:140px 0 80px;text-align:center;overflow:hidden}
 @media(min-width:768px){.hero{padding:180px 0 110px}}
 .hero-bg{
   position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -418,6 +424,8 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   border:1px solid rgba(var(--ov),.2);border-radius:999px;padding:5px 10px;
 }
 .shot .live b{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 1.8s ease-in-out infinite}
+/* no live embed below this width, so the badge would be inaccurate */
+@media(max-width:899px){.shot .live{display:none}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 .work-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
 .work-body h3{font-size:17.5px}
@@ -675,7 +683,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
   <div class="wrap" style="position:relative;z-index:1">
     <p class="kicker rv">Selected work</p>
     <h2 class="rv">Live sites, not mockups</h2>
-    <p class="sub rv">Every preview below is the real site, loading live. Tap any one to open it in a new tab.</p>
+    <p class="sub rv">Real sites we've built, running right now. Tap any one to open it and judge it for yourself.</p>
 
     <div class="work">
 
@@ -809,18 +817,26 @@ function sizeShots(){
 sizeShots();
 addEventListener('resize',sizeShots,{passive:true});
 
+/* Live embeds only on wider screens. Phones keep the designed panel instead:
+   mobile browsers force iframes to their content size regardless of CSS,
+   which breaks the layout, and three full sites is a heavy mobile load. */
+const canEmbed=matchMedia('(min-width:900px)');
 const shotIO=new IntersectionObserver(es=>{
   es.forEach(e=>{
     if(!e.isIntersecting)return;
     const f=e.target.querySelector('iframe[data-src]');
-    if(f){
+    if(f&&canEmbed.matches){
       f.src=f.dataset.src;
       f.removeAttribute('data-src');
+      shotIO.unobserve(e.target);
     }
-    shotIO.unobserve(e.target);
   });
 },{rootMargin:'300px'});
-shots.forEach(s=>shotIO.observe(s));
+function watchShots(){
+  if(canEmbed.matches)shots.forEach(s=>shotIO.observe(s));
+}
+watchShots();
+canEmbed.addEventListener('change',watchShots);
 
 /* theme toggle: explicit choice wins and persists, otherwise follow the system */
 const root=document.documentElement;

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designs Redefined | Web Design & Marketing Agency</title>
+<meta name="description" content="Designs Redefined builds high-performing websites, e-commerce stores and landing pages — backed by sharp branding and marketing that gets you noticed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+<style>
+:root{
+  --bg:#03020B;
+  --bg-2:#090A11;
+  --card:#0B0A16;
+  --ink:#EDEDFA;
+  --ink-dim:rgba(237,237,250,.62);
+  --ink-faint:rgba(237,237,250,.38);
+  --line:rgba(237,237,250,.1);
+  --accent:#8B7CF6;
+  --accent-2:#5EEAD4;
+  --radius:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,.wordmark{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 20px}
+section{position:relative;padding:72px 0}
+@media(min-width:768px){section{padding:110px 0}}
+
+/* ---------- ambient glow ---------- */
+.glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.glow-hero{top:-120px;left:50%;transform:translateX(-50%);width:640px;height:480px;background:radial-gradient(circle,rgba(139,124,246,.22),transparent 65%)}
+.glow-teal{width:420px;height:420px;background:radial-gradient(circle,rgba(94,234,212,.1),transparent 65%)}
+
+/* ---------- nav ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(3,2,11,.72);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.wordmark{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+.wordmark .mark{
+  width:30px;height:30px;border-radius:9px;flex:none;
+  background:linear-gradient(135deg,var(--accent),#4c3fd1);
+  display:grid;place-items:center;font-size:13px;color:#fff;
+  box-shadow:0 0 18px rgba(139,124,246,.45);
+}
+.nav-links{display:none;gap:28px;font-size:14.5px;color:var(--ink-dim)}
+.nav-links a:hover{color:var(--ink)}
+@media(min-width:860px){.nav-links{display:flex}}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 22px;border-radius:999px;font-weight:600;font-size:15px;
+  border:1px solid transparent;cursor:pointer;transition:.25s;
+}
+.btn-primary{
+  background:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.82) 100%);
+  color:#0a0918;
+  box-shadow:0 0 0 1px rgba(255,255,255,.15),0 8px 30px rgba(139,124,246,.25);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.2),0 12px 36px rgba(139,124,246,.4)}
+.btn-ghost{border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:rgba(237,237,250,.3);background:rgba(237,237,250,.05)}
+.nav .btn{padding:10px 18px;font-size:14px}
+
+/* ---------- hero ---------- */
+.hero{padding:140px 0 80px;text-align:center;overflow:hidden}
+@media(min-width:768px){.hero{padding:180px 0 110px}}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  width:100%;height:100%;display:block;opacity:.75;
+  -webkit-mask-image:linear-gradient(180deg,#000 40%,transparent 97%);
+  mask-image:linear-gradient(180deg,#000 40%,transparent 97%);
+}
+.orb-canvas{width:100%;aspect-ratio:1/1;display:block;border-radius:var(--radius)}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-dim);
+  border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+  background:linear-gradient(180deg,rgba(217,217,217,.05),rgba(217,217,217,.01));
+  margin-bottom:26px;
+}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 10px var(--accent-2)}
+.hero h1{
+  font-size:clamp(38px,8.5vw,72px);
+  line-height:1.08;font-weight:700;
+  background:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin:0 auto 22px;max-width:820px;
+}
+.hero p{color:var(--ink-dim);font-size:clamp(16px,2.5vw,19px);max-width:560px;margin:0 auto 34px}
+.hero-cta{display:flex;flex-direction:column;align-items:center;gap:14px}
+@media(min-width:520px){.hero-cta{flex-direction:row;justify-content:center}}
+.hero-stats{
+  margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;
+}
+.hero-stats div{background:var(--bg);padding:22px 10px}
+.hero-stats b{display:block;font-family:'Space Grotesk';font-size:clamp(22px,4.5vw,32px);font-weight:700}
+.hero-stats span{font-size:12.5px;color:var(--ink-faint)}
+
+/* ---------- statement (word reveal) ---------- */
+.statement{padding:60px 0}
+.statement p{
+  font-family:'Space Grotesk';font-weight:600;
+  font-size:clamp(24px,5.2vw,42px);line-height:1.3;letter-spacing:-.02em;
+  max-width:900px;
+}
+.statement .w{opacity:.14;transition:opacity .35s ease}
+.statement .w.on{opacity:1}
+
+/* ---------- section headers ---------- */
+.kicker{
+  font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;
+}
+h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bottom:16px}
+.sub{color:var(--ink-dim);max-width:560px}
+
+/* ---------- bento services ---------- */
+.grid{display:grid;gap:16px;margin-top:44px}
+@media(min-width:680px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{
+  position:relative;border-radius:var(--radius);padding:28px 24px;
+  background:linear-gradient(180deg,rgba(217,217,217,.045),rgba(217,217,217,.012));
+  border:1px solid var(--line);
+  transition:transform .3s,border-color .3s;
+  overflow:hidden;
+}
+.card:hover{transform:translateY(-4px);border-color:rgba(139,124,246,.35)}
+.card::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,0%),rgba(139,124,246,.1),transparent 60%);
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.card:hover::before{opacity:1}
+.card .icon{
+  width:44px;height:44px;border-radius:12px;margin-bottom:18px;
+  display:grid;place-items:center;
+  background:rgba(139,124,246,.12);border:1px solid rgba(139,124,246,.25);
+  color:var(--accent);
+}
+.card.alt .icon{background:rgba(94,234,212,.1);border-color:rgba(94,234,212,.25);color:var(--accent-2)}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--ink-dim)}
+.card .tag{
+  position:absolute;top:20px;right:20px;font-size:10.5px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);
+  border:1px solid rgba(94,234,212,.3);border-radius:999px;padding:4px 10px;
+}
+
+/* ---------- feature rows ---------- */
+.feature{display:grid;gap:36px;align-items:center;margin-top:64px}
+@media(min-width:880px){
+  .feature{grid-template-columns:1fr 1fr;gap:64px}
+  .feature.flip .f-visual{order:2}
+}
+.f-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin:22px 0 26px}
+.f-list li{
+  display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--ink-dim);
+  border:1px solid var(--line);border-radius:14px;padding:13px 16px;
+  background:linear-gradient(180deg,rgba(217,217,217,.03),transparent);
+}
+.f-list li b{color:var(--ink);font-weight:600}
+.f-list .chk{
+  flex:none;width:20px;height:20px;border-radius:50%;margin-top:1px;
+  background:rgba(139,124,246,.15);border:1px solid rgba(139,124,246,.4);
+  display:grid;place-items:center;color:var(--accent);font-size:11px;
+}
+.f-visual{
+  position:relative;border-radius:var(--radius);border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(217,217,217,.04),rgba(217,217,217,.01));
+  padding:22px;min-height:300px;overflow:hidden;
+}
+.f-visual::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 70% 20%,rgba(139,124,246,.14),transparent 55%);
+  pointer-events:none;
+}
+/* mock browser */
+.browser{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--bg-2);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.browser-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.browser-bar i{width:9px;height:9px;border-radius:50%;background:rgba(237,237,250,.18)}
+.browser-bar .url{
+  flex:1;margin-left:8px;height:20px;border-radius:6px;
+  background:rgba(237,237,250,.06);
+  font-style:normal;font-size:10px;color:var(--ink-faint);
+  display:flex;align-items:center;padding:0 10px;
+}
+.browser-body{padding:18px;display:flex;flex-direction:column;gap:12px}
+.sk{border-radius:8px;background:linear-gradient(90deg,rgba(237,237,250,.07),rgba(237,237,250,.12),rgba(237,237,250,.07));background-size:200% 100%;animation:shimmer 2.6s infinite linear}
+@keyframes shimmer{to{background-position:-200% 0}}
+.sk.hero-sk{height:64px;border-radius:12px}
+.sk-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sk-row .sk{height:52px}
+.sk.wide{height:14px;width:70%}
+.sk.mid{height:14px;width:45%}
+/* mock chart */
+.chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding:6px 2px 0}
+.chart i{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--accent),rgba(139,124,246,.25));animation:rise 1.2s ease both}
+.chart i:nth-child(odd){background:linear-gradient(180deg,var(--accent-2),rgba(94,234,212,.2))}
+@keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.chart i{transform-origin:bottom}
+/* brand tiles */
+.brand-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.brand-tiles .tile{
+  border-radius:14px;border:1px solid var(--line);padding:20px 14px;text-align:center;
+  background:rgba(237,237,250,.03);
+  font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--ink-dim);
+}
+.brand-tiles .tile.big{grid-column:1/-1;font-size:22px;color:var(--ink);
+  background:linear-gradient(135deg,rgba(139,124,246,.18),rgba(94,234,212,.08))}
+
+/* ---------- process ---------- */
+.steps{display:grid;gap:16px;margin-top:48px;counter-reset:step}
+@media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{
+  position:relative;border-radius:var(--radius);padding:30px 24px 26px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(217,217,217,.04),rgba(217,217,217,.01));
+}
+.step .num{
+  font-family:'Space Grotesk';font-size:44px;font-weight:700;line-height:1;
+  background:linear-gradient(180deg,var(--accent),rgba(139,124,246,.2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:14px;
+}
+.step h3{font-size:18px;margin-bottom:8px}
+.step p{font-size:14.5px;color:var(--ink-dim)}
+
+/* ---------- CTA band ---------- */
+.cta-band{
+  border-radius:24px;text-align:center;padding:64px 24px;overflow:hidden;position:relative;
+  border:1px solid rgba(139,124,246,.3);
+  background:
+    radial-gradient(circle at 50% -20%,rgba(139,124,246,.3),transparent 60%),
+    linear-gradient(180deg,rgba(217,217,217,.05),rgba(217,217,217,.01));
+}
+.cta-band>*{position:relative;z-index:1}
+#cta3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.5;pointer-events:none}
+.cta-band h2{max-width:600px;margin:0 auto 14px}
+.cta-band p{color:var(--ink-dim);max-width:480px;margin:0 auto 30px}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
+.foot{display:flex;flex-direction:column;gap:28px}
+@media(min-width:768px){.foot{flex-direction:row;justify-content:space-between;align-items:flex-start}}
+.foot-links{display:flex;flex-wrap:wrap;gap:20px;font-size:14px;color:var(--ink-dim)}
+.foot-links a:hover{color:var(--ink)}
+.foot small{color:var(--ink-faint);font-size:12.5px}
+.social{display:flex;gap:12px}
+.social a{
+  width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-dim);transition:.25s;
+}
+.social a:hover{color:var(--ink);border-color:rgba(139,124,246,.4);background:rgba(139,124,246,.08)}
+
+/* ---------- reveal on scroll ---------- */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.rv.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .statement .w{opacity:1}
+  .sk,.chart i{animation:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="wordmark" href="#top"><span class="mark">◆</span>Designs Redefined</a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#web">Web</a>
+      <a href="#brand">Design &amp; Marketing</a>
+      <a href="#process">Process</a>
+    </div>
+    <a class="btn btn-primary" href="#contact">Talk to Us</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="hero3d" class="hero-bg" aria-hidden="true"></canvas>
+  <span class="glow glow-hero"></span>
+  <div class="wrap" style="position:relative;z-index:1">
+    <span class="badge"><span class="dot"></span>Web Design &amp; Marketing Agency</span>
+    <h1>Websites that win you customers, not just compliments</h1>
+    <p>Designs Redefined builds fast, conversion-focused websites for growing businesses — backed by the branding and marketing to make them impossible to ignore.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#contact">Talk to Us&nbsp;→</a>
+      <a class="btn btn-ghost" href="#services">See what we do</a>
+    </div>
+    <div class="hero-stats rv">
+      <div><b>50+</b><span>Projects shipped</span></div>
+      <div><b>&lt;2s</b><span>Average load time</span></div>
+      <div><b>7 days</b><span>To first design</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="statement">
+  <div class="wrap">
+    <p id="statement">Designs Redefined gives your business a complete online presence — bringing web design, development, branding and marketing together in one team, so everything just works.</p>
+  </div>
+</section>
+
+<section id="services">
+  <span class="glow glow-teal" style="right:-160px;top:80px"></span>
+  <div class="wrap" style="position:relative;z-index:1">
+    <p class="kicker rv">What we do</p>
+    <h2 class="rv">Everything your business needs online</h2>
+    <p class="sub rv">Web first, always — with design and marketing muscle when you need it.</p>
+    <div class="grid">
+      <div class="card rv">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M7 6.5h.01"/></svg></div>
+        <h3>Custom Websites</h3>
+        <p>Hand-built sites designed around your business — no bloated templates, no cookie-cutter look. Yours, and only yours.</p>
+      </div>
+      <div class="card rv">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M3 3h2l2.6 12.5A2 2 0 0 0 9.55 17h8.9a2 2 0 0 0 1.95-1.55L22 8H6"/></svg></div>
+        <h3>E-Commerce Stores</h3>
+        <p>Online stores that make buying effortless — clean product pages, smooth checkout, and everything wired to sell.</p>
+      </div>
+      <div class="card rv">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+        <h3>Landing Pages</h3>
+        <p>High-converting pages for launches, ads and campaigns — built to turn clicks into enquiries and enquiries into sales.</p>
+      </div>
+      <div class="card rv">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>SEO &amp; Performance</h3>
+        <p>Sites tuned to load fast and rank well — technical SEO, Core Web Vitals and speed baked in from day one.</p>
+      </div>
+      <div class="card alt rv">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-.8 2.6-1.7 3.6C13.4 11.7 13 12.5 13 14h-2c0-2 .7-3.1 1.8-4.3.8-.9 1.2-1.6 1.2-2.7a2 2 0 1 0-4 0H8a4 4 0 0 1 4-4z" fill="currentColor" stroke="none" opacity=".0"/><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
+        <span class="tag">Design</span>
+        <h3>Branding &amp; Identity</h3>
+        <p>Logos, colors and visual identity that make your business look as good as it actually is — everywhere it shows up.</p>
+      </div>
+      <div class="card alt rv">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11 20 5v14L3 13v-2zM7 13.5V19a1.5 1.5 0 0 0 3 0v-4"/></svg></div>
+        <span class="tag">Marketing</span>
+        <h3>Marketing &amp; Content</h3>
+        <p>Social graphics, ad creative and campaigns that carry your new look out into the world and bring customers back in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="web" style="padding-top:20px">
+  <div class="wrap">
+
+    <div class="feature">
+      <div>
+        <p class="kicker rv">Web Design</p>
+        <h2 class="rv">Designed to convert, not just to look pretty</h2>
+        <p class="sub rv">Every layout decision is made with one question in mind: does this help a visitor become a customer?</p>
+        <ul class="f-list">
+          <li class="rv"><span class="chk">✓</span><span><b>Mobile-first, always.</b>&nbsp;Most of your visitors are on their phone — we design for them first.</span></li>
+          <li class="rv"><span class="chk">✓</span><span><b>Clear calls to action.</b>&nbsp;Visitors always know the next step — call, book, buy.</span></li>
+          <li class="rv"><span class="chk">✓</span><span><b>Built around your brand.</b>&nbsp;Your voice and personality, not a template's.</span></li>
+        </ul>
+        <a class="btn btn-ghost rv" href="#contact">Start a project →</a>
+      </div>
+      <div class="f-visual rv">
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i><em class="url">yourbusiness.com</em></div>
+          <div class="browser-body">
+            <div class="sk hero-sk"></div>
+            <div class="sk wide"></div>
+            <div class="sk mid"></div>
+            <div class="sk-row"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature flip">
+      <div>
+        <p class="kicker rv">Development &amp; Performance</p>
+        <h2 class="rv">Fast, secure, and built to last</h2>
+        <p class="sub rv">A slow site loses customers before it even loads. We build lean, modern sites that fly on any connection.</p>
+        <ul class="f-list">
+          <li class="rv"><span class="chk">✓</span><span><b>Speed as a feature.</b>&nbsp;Optimized images, clean code, sub-2-second loads.</span></li>
+          <li class="rv"><span class="chk">✓</span><span><b>SEO from the ground up.</b>&nbsp;Structured, crawlable, and ready to rank.</span></li>
+          <li class="rv"><span class="chk">✓</span><span><b>Ongoing care.</b>&nbsp;Updates, backups and support after launch — we don't disappear.</span></li>
+        </ul>
+        <a class="btn btn-ghost rv" href="#contact">Get a free site audit →</a>
+      </div>
+      <div class="f-visual rv">
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i><em class="url">performance report</em></div>
+          <div class="browser-body">
+            <div class="sk wide"></div>
+            <div class="chart"><i style="height:45%"></i><i style="height:65%"></i><i style="height:55%"></i><i style="height:80%"></i><i style="height:70%"></i><i style="height:95%"></i><i style="height:88%"></i></div>
+            <div class="sk mid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature" id="brand">
+      <div>
+        <p class="kicker rv" style="color:var(--accent-2)">Design &amp; Marketing</p>
+        <h2 class="rv">A brand that people remember</h2>
+        <p class="sub rv">A great website deserves a great brand behind it. We round out your online presence with identity and marketing that match.</p>
+        <ul class="f-list">
+          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(94,234,212,.1);border-color:rgba(94,234,212,.35)">✓</span><span><b>Brand identity.</b>&nbsp;Logo, color palette and typography that feel unmistakably you.</span></li>
+          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(94,234,212,.1);border-color:rgba(94,234,212,.35)">✓</span><span><b>Content &amp; creative.</b>&nbsp;Social posts and ad graphics that stay on-brand.</span></li>
+        </ul>
+        <a class="btn btn-ghost rv" href="#contact">Refresh your brand →</a>
+      </div>
+      <div class="f-visual rv" style="padding:0;border:none;background:none">
+        <canvas id="orb3d" class="orb-canvas" aria-hidden="true"
+             style="border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55)"></canvas>
+        <div class="brand-tiles" style="margin-top:12px">
+          <div class="tile big">Designs Redefined</div>
+          <div class="tile">Aa · Grotesk</div>
+          <div class="tile" style="background:linear-gradient(135deg,rgba(139,124,246,.35),rgba(139,124,246,.08));color:var(--ink)">#8B7CF6</div>
+          <div class="tile" style="background:linear-gradient(135deg,rgba(94,234,212,.3),rgba(94,234,212,.06));color:var(--ink)">#5EEAD4</div>
+          <div class="tile">◆ Mark</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="process">
+  <span class="glow glow-teal" style="left:-180px;bottom:0"></span>
+  <div class="wrap" style="position:relative;z-index:1;text-align:center">
+    <p class="kicker rv">How it works</p>
+    <h2 class="rv">From first call to live site</h2>
+    <div class="steps" style="text-align:left">
+      <div class="step rv">
+        <div class="num">1</div>
+        <h3>Tell us about your business</h3>
+        <p>A quick call to understand what you do, who your customers are, and what you want your website to achieve.</p>
+      </div>
+      <div class="step rv">
+        <div class="num">2</div>
+        <h3>We design &amp; build</h3>
+        <p>You get a first design within days, not months. We refine it together, then build it fast, mobile-first and SEO-ready.</p>
+      </div>
+      <div class="step rv">
+        <div class="num">3</div>
+        <h3>Launch &amp; grow</h3>
+        <p>We launch your site, then help it work harder — with performance care, branding and marketing that bring customers in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="padding-top:20px">
+  <div class="wrap">
+    <div class="cta-band rv">
+      <canvas id="cta3d" aria-hidden="true"></canvas>
+      <h2>Ready to redefine your online presence?</h2>
+      <p>Tell us about your project — we'll get back to you within one business day with honest advice and a clear next step.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="mailto:hello@designsredefined.com">hello@designsredefined.com</a>
+        <a class="btn btn-ghost" href="https://www.facebook.com/designsredefined" target="_blank" rel="noopener">Message us on Facebook</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <a class="wordmark" href="#top" style="margin-bottom:12px"><span class="mark">◆</span>Designs Redefined</a>
+      <p style="color:var(--ink-faint);font-size:13.5px;max-width:280px;margin-top:10px">Web design &amp; marketing agency. Websites, branding and marketing for businesses that want to stand out.</p>
+    </div>
+    <div class="foot-links">
+      <a href="#services">Services</a>
+      <a href="#web">Web</a>
+      <a href="#brand">Design &amp; Marketing</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="social">
+      <a href="https://www.facebook.com/designsredefined" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2-.1-2 0-3.4 1.2-3.4 3.5V11H8.5v3H11v7h2.5z"/></svg>
+      </a>
+      <a href="mailto:hello@designsredefined.com" aria-label="Email">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:32px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between">
+    <small>© 2026 Designs Redefined. All rights reserved.</small>
+    <small>Made with care, redefined with purpose.</small>
+  </div>
+</footer>
+
+<script>
+// reveal on scroll
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// word-by-word statement reveal
+const st=document.getElementById('statement');
+st.innerHTML=st.textContent.trim().split(/\s+/).map(w=>`<span class="w">${w}</span>`).join(' ');
+const words=[...st.querySelectorAll('.w')];
+function paintWords(){
+  const r=st.getBoundingClientRect(),vh=innerHeight;
+  const p=Math.min(1,Math.max(0,(vh*0.85-r.top)/(vh*0.6)));
+  const n=Math.floor(p*words.length);
+  words.forEach((w,i)=>w.classList.toggle('on',i<n));
+}
+addEventListener('scroll',paintWords,{passive:true});paintWords();
+
+// card hover glow follows pointer
+document.querySelectorAll('.card').forEach(c=>{
+  c.addEventListener('pointermove',e=>{
+    const r=c.getBoundingClientRect();
+    c.style.setProperty('--mx',(e.clientX-r.left)+'px');
+    c.style.setProperty('--my',(e.clientY-r.top)+'px');
+  });
+});
+</script>
+
+<script type="module">
+import * as THREE from './assets/vendor/three.module.min.js';
+
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DPR=Math.min(devicePixelRatio||1,2);
+const ACCENT=new THREE.Color('#8B7CF6'), TEAL=new THREE.Color('#5EEAD4');
+
+function makeRenderer(canvas){
+  const r=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  r.setPixelRatio(DPR);
+  return r;
+}
+function fit(renderer,camera,canvas){
+  const w=canvas.clientWidth,h=canvas.clientHeight;
+  if(canvas.width!==Math.floor(w*DPR)||canvas.height!==Math.floor(h*DPR)){
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h;camera.updateProjectionMatrix();
+  }
+}
+// only render scenes that are on screen
+const live=new Map();
+const vis=new IntersectionObserver(es=>es.forEach(e=>live.set(e.target,e.isIntersecting)),{rootMargin:'80px'});
+
+/* ============ HERO: faceted crystal + particles ============ */
+const heroCanvas=document.getElementById('hero3d');
+const heroScene=new THREE.Scene();
+const heroCam=new THREE.PerspectiveCamera(42,2,0.1,60);
+heroCam.position.set(0,0.1,6);
+const heroR=makeRenderer(heroCanvas);
+
+const gem=new THREE.Group();
+const gemMat=new THREE.MeshStandardMaterial({color:0x2e2750,flatShading:true,metalness:.45,roughness:.18,emissive:0x161030,emissiveIntensity:1});
+const pavilion=new THREE.Mesh(new THREE.ConeGeometry(1.25,1.55,8,1),gemMat);
+pavilion.rotation.x=Math.PI; pavilion.position.y=-0.5;
+const crown=new THREE.Mesh(new THREE.CylinderGeometry(0.72,1.25,0.55,8),gemMat);
+crown.position.y=0.55;
+gem.add(pavilion,crown);
+[pavilion,crown].forEach(m=>{
+  const edges=new THREE.LineSegments(
+    new THREE.EdgesGeometry(m.geometry),
+    new THREE.LineBasicMaterial({color:ACCENT,transparent:true,opacity:.35}));
+  edges.position.copy(m.position);edges.rotation.copy(m.rotation);
+  gem.add(edges);
+});
+gem.rotation.z=0.18;
+heroScene.add(gem);
+
+// responsive placement: gem to the side on wide screens, centered behind text on mobile
+function placeGem(){
+  const wide=innerWidth>=880;
+  gem.position.set(wide?2.4:0,wide?0.1:-1.0,0);
+  gem.scale.setScalar(wide?0.85:0.6);
+}
+placeGem();addEventListener('resize',placeGem);
+
+const l1=new THREE.PointLight(ACCENT,220);l1.position.set(3,3,4);
+const l2=new THREE.PointLight(TEAL,110);l2.position.set(-4,-2,3);
+const l3=new THREE.PointLight(0xffffff,70);l3.position.set(0,4,-3);
+heroScene.add(l1,l2,l3,new THREE.AmbientLight(0x2b2545,3.5));
+
+// particle field
+const N=380,pos=new Float32Array(N*3);
+for(let i=0;i<N*3;i++)pos[i]=(Math.random()-0.5)*16;
+const pGeo=new THREE.BufferGeometry();
+pGeo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+const stars=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x9d90f5,size:.035,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false}));
+heroScene.add(stars);
+
+// pointer parallax
+let px=0,py=0,tx=0,ty=0;
+addEventListener('pointermove',e=>{
+  tx=(e.clientX/innerWidth-0.5)*2;
+  ty=(e.clientY/innerHeight-0.5)*2;
+},{passive:true});
+
+/* ============ ORB: swirling shader sphere ============ */
+const orbCanvas=document.getElementById('orb3d');
+const orbScene=new THREE.Scene();
+const orbCam=new THREE.PerspectiveCamera(38,1,0.1,20);
+orbCam.position.z=3.1;
+const orbR=makeRenderer(orbCanvas);
+const orbUniforms={uTime:{value:0}};
+const orb=new THREE.Mesh(
+  new THREE.SphereGeometry(1,72,72),
+  new THREE.ShaderMaterial({
+    uniforms:orbUniforms,
+    vertexShader:`
+      varying vec3 vN; varying vec3 vP;
+      void main(){ vN=normalize(normalMatrix*normal); vP=position;
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader:`
+      uniform float uTime; varying vec3 vN; varying vec3 vP;
+      void main(){
+        float t=uTime*0.35;
+        float sw=sin(vP.x*3.0+t)+sin(vP.y*4.0-t*1.3)+sin((vP.x+vP.z)*2.5+t*0.7);
+        float m=smoothstep(-2.2,2.2,sw);
+        vec3 purple=vec3(0.545,0.486,0.965), teal=vec3(0.369,0.918,0.831), ink=vec3(0.02,0.015,0.06);
+        vec3 col=mix(purple,teal,m);
+        float fres=pow(1.0-abs(dot(vN,vec3(0.0,0.0,1.0))),2.0);
+        col=mix(ink,col,0.35+0.65*fres);
+        col+=fres*0.35;
+        gl_FragColor=vec4(col,1.0);
+      }`
+  })
+);
+orbScene.add(orb);
+
+/* ============ CTA: animated wave field ============ */
+const ctaCanvas=document.getElementById('cta3d');
+const ctaScene=new THREE.Scene();
+const ctaCam=new THREE.PerspectiveCamera(50,2,0.1,50);
+ctaCam.position.set(0,1.6,4.2);ctaCam.lookAt(0,0,0);
+const ctaR=makeRenderer(ctaCanvas);
+const waveGeo=new THREE.PlaneGeometry(14,8,90,50);
+const wave=new THREE.Points(waveGeo,new THREE.PointsMaterial({color:0x8B7CF6,size:.035,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));
+wave.rotation.x=-Math.PI/2.15;
+ctaScene.add(wave);
+const wavePos=waveGeo.attributes.position;
+const waveBase=wavePos.array.slice();
+
+[heroCanvas,orbCanvas,ctaCanvas].forEach(c=>vis.observe(c));
+
+const clock=new THREE.Clock();
+function frame(){
+  const t=clock.getElapsedTime();
+  px+=(tx-px)*0.04; py+=(ty-py)*0.04;
+
+  if(live.get(heroCanvas)!==false){
+    fit(heroR,heroCam,heroCanvas);
+    gem.rotation.y=t*0.25+px*0.5;
+    gem.rotation.x=Math.sin(t*0.3)*0.08+py*0.25;
+    gem.position.y+= (Math.sin(t*0.8)*0.0009);
+    stars.rotation.y=t*0.02;
+    heroR.render(heroScene,heroCam);
+  }
+  if(live.get(orbCanvas)===true){
+    fit(orbR,orbCam,orbCanvas);
+    orbUniforms.uTime.value=t;
+    orb.rotation.y=t*0.15;
+    orbR.render(orbScene,orbCam);
+  }
+  if(live.get(ctaCanvas)===true){
+    fit(ctaR,ctaCam,ctaCanvas);
+    for(let i=0;i<wavePos.count;i++){
+      const x=waveBase[i*3],y=waveBase[i*3+1];
+      wavePos.array[i*3+2]=Math.sin(x*0.8+t*1.1)*0.28+Math.cos(y*0.9+t*0.8)*0.22;
+    }
+    wavePos.needsUpdate=true;
+    ctaR.render(ctaScene,ctaCam);
+  }
+  if(!reduced)requestAnimationFrame(frame);
+}
+if(reduced){
+  // render a single static frame for each scene
+  fit(heroR,heroCam,heroCanvas);heroR.render(heroScene,heroCam);
+  fit(orbR,orbCam,orbCanvas);orbR.render(orbScene,orbCam);
+  fit(ctaR,ctaCam,ctaCanvas);ctaR.render(ctaScene,ctaCam);
+}else{
+  frame();
+}
+</script>
+</body>
+</html>

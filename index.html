@@ -37,7 +37,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --mark-fg:#0a0a0a;
   --head-grad:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
   --shot-bg:#0a0a0d;
-  --shot-fallback:linear-gradient(160deg,#12121a,#08080c);
   --badge-bg:rgba(10,10,12,.72);
   --radius:20px;
 }
@@ -62,7 +61,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
     --mark-fg:#FFFFFF;
     --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
     --shot-bg:#ECECF0;
-    --shot-fallback:linear-gradient(160deg,#F3F3F6,#E3E3E9);
     --badge-bg:rgba(255,255,255,.82);
   }
 }
@@ -85,7 +83,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --mark-fg:#FFFFFF;
   --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
   --shot-bg:#ECECF0;
-  --shot-fallback:linear-gradient(160deg,#F3F3F6,#E3E3E9);
   --badge-bg:rgba(255,255,255,.82);
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -397,23 +394,11 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   transform:scale(var(--s,.28));transform-origin:top left;
   pointer-events:none; /* page scroll never gets trapped in the preview */
 }
-/* sits behind the iframe: covered once the live site paints,
-   and reads as a designed panel if a browser blocks embedding */
-.shot .shot-fallback{
+/* real screenshot of the site, behind the live embed: shows instantly,
+   then the live version paints over it once it loads */
+.shot .shot-poster{
   position:absolute;inset:0;z-index:0;
-  display:flex;flex-direction:column;justify-content:center;gap:8px;
-  padding:0 22px;text-align:left;
-  background:
-    radial-gradient(circle at 78% 12%,rgba(var(--ov),.10),transparent 58%),
-    var(--shot-fallback);
-}
-.shot .shot-fallback strong{
-  font-family:'Space Grotesk';font-size:19px;font-weight:700;
-  letter-spacing:-.02em;color:var(--ink);
-}
-.shot .shot-fallback em{
-  font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink-faint);
+  width:100%;height:100%;object-fit:cover;object-position:top center;
 }
 .shot .live{
   position:absolute;top:10px;right:10px;z-index:2;
@@ -424,8 +409,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   border:1px solid rgba(var(--ov),.2);border-radius:999px;padding:5px 10px;
 }
 .shot .live b{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 1.8s ease-in-out infinite}
-/* no live embed below this width, so the badge would be inaccurate */
-@media(max-width:899px){.shot .live{display:none}}
+
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 .work-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
 .work-body h3{font-size:17.5px}
@@ -691,7 +675,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/O-kly</em></div>
         <div class="shot">
           <span class="live"><b></b>Live</span>
-          <span class="shot-fallback"><strong>Oakly&#174;</strong><em>danialhyatt7-collab.github.io/O-kly</em></span>
+          <img class="shot-poster" src="assets/work-okly.webp" alt="Oakly furniture site homepage" loading="lazy" decoding="async" width="880" height="605">
           <iframe data-src="https://danialhyatt7-collab.github.io/O-kly/index.html" title="Oakly furniture website preview"
                   loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
                   sandbox="allow-scripts allow-same-origin"></iframe>
@@ -710,7 +694,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt.com</em></div>
         <div class="shot">
           <span class="live"><b></b>Live</span>
-          <span class="shot-fallback"><strong>Danial Hyatt</strong><em>danialhyatt.com</em></span>
+          <img class="shot-poster" src="assets/work-danialhyatt.webp" alt="Danial Hyatt motion design site homepage" loading="lazy" decoding="async" width="880" height="605">
           <iframe data-src="https://danialhyatt.com/" title="Danial Hyatt motion design website preview"
                   loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
                   sandbox="allow-scripts allow-same-origin"></iframe>
@@ -729,7 +713,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/alqanoon</em></div>
         <div class="shot">
           <span class="live"><b></b>Live</span>
-          <span class="shot-fallback"><strong>Al-Qanoon E-Stamps</strong><em>danialhyatt7-collab.github.io/alqanoon</em></span>
+          <img class="shot-poster" src="assets/work-alqanoon.webp" alt="Al-Qanoon E-Stamps site homepage" loading="lazy" decoding="async" width="880" height="605">
           <iframe data-src="https://danialhyatt7-collab.github.io/alqanoon/" title="Al-Qanoon E-Stamps website preview"
                   loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
                   sandbox="allow-scripts allow-same-origin"></iframe>
@@ -817,26 +801,20 @@ function sizeShots(){
 sizeShots();
 addEventListener('resize',sizeShots,{passive:true});
 
-/* Live embeds only on wider screens. Phones keep the designed panel instead:
-   mobile browsers force iframes to their content size regardless of CSS,
-   which breaks the layout, and three full sites is a heavy mobile load. */
-const canEmbed=matchMedia('(min-width:900px)');
+/* Live embeds on every screen size. Each card shows its real screenshot
+   immediately, and the live site paints over it once loaded. */
 const shotIO=new IntersectionObserver(es=>{
   es.forEach(e=>{
     if(!e.isIntersecting)return;
     const f=e.target.querySelector('iframe[data-src]');
-    if(f&&canEmbed.matches){
+    if(f){
       f.src=f.dataset.src;
       f.removeAttribute('data-src');
-      shotIO.unobserve(e.target);
     }
+    shotIO.unobserve(e.target);
   });
-},{rootMargin:'300px'});
-function watchShots(){
-  if(canEmbed.matches)shots.forEach(s=>shotIO.observe(s));
-}
-watchShots();
-canEmbed.addEventListener('change',watchShots);
+},{rootMargin:'400px'});
+shots.forEach(s=>shotIO.observe(s));
 
 /* theme toggle: explicit choice wins and persists, otherwise follow the system */
 const root=document.documentElement;

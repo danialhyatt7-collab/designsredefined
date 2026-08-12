@@ -18,8 +18,8 @@
   --ink-dim:rgba(237,237,250,.62);
   --ink-faint:rgba(237,237,250,.38);
   --line:rgba(237,237,250,.1);
-  --accent:#8B7CF6;
-  --accent-2:#5EEAD4;
+  --accent:#FFFFFF;
+  --accent-2:#A1A1AA;
   --radius:20px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -42,8 +42,8 @@ section{position:relative;padding:72px 0}
 
 /* ---------- ambient glow ---------- */
 .glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
-.glow-hero{top:-120px;left:50%;transform:translateX(-50%);width:640px;height:480px;background:radial-gradient(circle,rgba(139,124,246,.22),transparent 65%)}
-.glow-teal{width:420px;height:420px;background:radial-gradient(circle,rgba(94,234,212,.1),transparent 65%)}
+.glow-hero{top:-120px;left:50%;transform:translateX(-50%);width:640px;height:480px;background:radial-gradient(circle,rgba(255,255,255,0.154),transparent 65%)}
+.glow-teal{width:420px;height:420px;background:radial-gradient(circle,rgba(255,255,255,0.055),transparent 65%)}
 
 /* ---------- nav ---------- */
 .nav{
@@ -56,9 +56,9 @@ section{position:relative;padding:72px 0}
 .wordmark{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
 .wordmark .mark{
   width:30px;height:30px;border-radius:9px;flex:none;
-  background:linear-gradient(135deg,var(--accent),#4c3fd1);
-  display:grid;place-items:center;font-size:13px;color:#fff;
-  box-shadow:0 0 18px rgba(139,124,246,.45);
+  background:linear-gradient(135deg,#FFFFFF,#8a8a92);color:#0a0a0a;
+  display:grid;place-items:center;font-size:13px;
+  box-shadow:0 0 18px rgba(255,255,255,0.315);
 }
 .nav-links{display:none;gap:28px;font-size:14.5px;color:var(--ink-dim)}
 .nav-links a:hover{color:var(--ink)}
@@ -71,9 +71,9 @@ section{position:relative;padding:72px 0}
 .btn-primary{
   background:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.82) 100%);
   color:#0a0918;
-  box-shadow:0 0 0 1px rgba(255,255,255,.15),0 8px 30px rgba(139,124,246,.25);
+  box-shadow:0 0 0 1px rgba(255,255,255,.15),0 8px 30px rgba(255,255,255,0.175);
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.2),0 12px 36px rgba(139,124,246,.4)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.2),0 12px 36px rgba(255,255,255,0.28)}
 .btn-ghost{border-color:var(--line);color:var(--ink)}
 .btn-ghost:hover{border-color:rgba(237,237,250,.3);background:rgba(237,237,250,.05)}
 .nav .btn{padding:10px 18px;font-size:14px}
@@ -129,7 +129,7 @@ section{position:relative;padding:72px 0}
 /* ---------- section headers ---------- */
 .kicker{
   font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:14px;
+  color:rgba(237,237,250,.7);margin-bottom:14px;
 }
 h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bottom:16px}
 .sub{color:var(--ink-dim);max-width:560px}
@@ -145,26 +145,26 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   transition:transform .3s,border-color .3s;
   overflow:hidden;
 }
-.card:hover{transform:translateY(-4px);border-color:rgba(139,124,246,.35)}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.245)}
 .card::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(320px circle at var(--mx,50%) var(--my,0%),rgba(139,124,246,.1),transparent 60%);
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,0.07),transparent 60%);
   opacity:0;transition:opacity .3s;pointer-events:none;
 }
 .card:hover::before{opacity:1}
 .card .icon{
   width:44px;height:44px;border-radius:12px;margin-bottom:18px;
   display:grid;place-items:center;
-  background:rgba(139,124,246,.12);border:1px solid rgba(139,124,246,.25);
+  background:rgba(255,255,255,0.084);border:1px solid rgba(255,255,255,0.175);
   color:var(--accent);
 }
-.card.alt .icon{background:rgba(94,234,212,.1);border-color:rgba(94,234,212,.25);color:var(--accent-2)}
+.card.alt .icon{background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.138);color:var(--accent-2)}
 .card h3{font-size:18px;margin-bottom:8px}
 .card p{font-size:14.5px;color:var(--ink-dim)}
 .card .tag{
   position:absolute;top:20px;right:20px;font-size:10.5px;font-weight:600;
   letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);
-  border:1px solid rgba(94,234,212,.3);border-radius:999px;padding:4px 10px;
+  border:1px solid rgba(255,255,255,0.165);border-radius:999px;padding:4px 10px;
 }
 
 /* ---------- feature rows ---------- */
@@ -182,7 +182,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .f-list li b{color:var(--ink);font-weight:600}
 .f-list .chk{
   flex:none;width:20px;height:20px;border-radius:50%;margin-top:1px;
-  background:rgba(139,124,246,.15);border:1px solid rgba(139,124,246,.4);
+  background:rgba(255,255,255,0.105);border:1px solid rgba(255,255,255,0.28);
   display:grid;place-items:center;color:var(--accent);font-size:11px;
 }
 .f-visual{
@@ -192,7 +192,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 }
 .f-visual::after{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 70% 20%,rgba(139,124,246,.14),transparent 55%);
+  background:radial-gradient(circle at 70% 20%,rgba(255,255,255,0.098),transparent 55%);
   pointer-events:none;
 }
 /* mock browser */
@@ -215,8 +215,8 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .sk.mid{height:14px;width:45%}
 /* mock chart */
 .chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding:6px 2px 0}
-.chart i{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--accent),rgba(139,124,246,.25));animation:rise 1.2s ease both}
-.chart i:nth-child(odd){background:linear-gradient(180deg,var(--accent-2),rgba(94,234,212,.2))}
+.chart i{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--accent),rgba(255,255,255,0.175));animation:rise 1.2s ease both}
+.chart i:nth-child(odd){background:linear-gradient(180deg,var(--accent-2),rgba(255,255,255,0.11))}
 @keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 .chart i{transform-origin:bottom}
 /* brand tiles */
@@ -227,7 +227,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--ink-dim);
 }
 .brand-tiles .tile.big{grid-column:1/-1;font-size:22px;color:var(--ink);
-  background:linear-gradient(135deg,rgba(139,124,246,.18),rgba(94,234,212,.08))}
+  background:linear-gradient(135deg,rgba(255,255,255,0.126),rgba(255,255,255,0.044))}
 
 /* ---------- process ---------- */
 .steps{display:grid;gap:16px;margin-top:48px;counter-reset:step}
@@ -239,7 +239,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 }
 .step .num{
   font-family:'Space Grotesk';font-size:44px;font-weight:700;line-height:1;
-  background:linear-gradient(180deg,var(--accent),rgba(139,124,246,.2));
+  background:linear-gradient(180deg,var(--accent),rgba(255,255,255,0.14));
   -webkit-background-clip:text;background-clip:text;color:transparent;
   margin-bottom:14px;
 }
@@ -249,9 +249,9 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 /* ---------- CTA band ---------- */
 .cta-band{
   border-radius:24px;text-align:center;padding:64px 24px;overflow:hidden;position:relative;
-  border:1px solid rgba(139,124,246,.3);
+  border:1px solid rgba(255,255,255,0.21);
   background:
-    radial-gradient(circle at 50% -20%,rgba(139,124,246,.3),transparent 60%),
+    radial-gradient(circle at 50% -20%,rgba(255,255,255,0.21),transparent 60%),
     linear-gradient(180deg,rgba(217,217,217,.05),rgba(217,217,217,.01));
 }
 .cta-band>*{position:relative;z-index:1}
@@ -271,7 +271,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
   width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
   display:grid;place-items:center;color:var(--ink-dim);transition:.25s;
 }
-.social a:hover{color:var(--ink);border-color:rgba(139,124,246,.4);background:rgba(139,124,246,.08)}
+.social a:hover{color:var(--ink);border-color:rgba(255,255,255,0.28);background:rgba(255,255,255,0.056)}
 
 /* ---------- reveal on scroll ---------- */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
@@ -420,12 +420,12 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
 
     <div class="feature" id="brand">
       <div>
-        <p class="kicker rv" style="color:var(--accent-2)">Design &amp; Marketing</p>
+        <p class="kicker rv">Design &amp; Marketing</p>
         <h2 class="rv">A brand that people remember</h2>
         <p class="sub rv">A great website deserves a great brand behind it. We round out your online presence with identity and marketing that match.</p>
         <ul class="f-list">
-          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(94,234,212,.1);border-color:rgba(94,234,212,.35)">✓</span><span><b>Brand identity.</b>&nbsp;Logo, color palette and typography that feel unmistakably you.</span></li>
-          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(94,234,212,.1);border-color:rgba(94,234,212,.35)">✓</span><span><b>Content &amp; creative.</b>&nbsp;Social posts and ad graphics that stay on-brand.</span></li>
+          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.193)">✓</span><span><b>Brand identity.</b>&nbsp;Logo, color palette and typography that feel unmistakably you.</span></li>
+          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.193)">✓</span><span><b>Content &amp; creative.</b>&nbsp;Social posts and ad graphics that stay on-brand.</span></li>
         </ul>
         <a class="btn btn-ghost rv" href="#contact">Refresh your brand →</a>
       </div>
@@ -435,8 +435,8 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
         <div class="brand-tiles" style="margin-top:12px">
           <div class="tile big">Designs Redefined</div>
           <div class="tile">Aa · Grotesk</div>
-          <div class="tile" style="background:linear-gradient(135deg,rgba(139,124,246,.35),rgba(139,124,246,.08));color:var(--ink)">#8B7CF6</div>
-          <div class="tile" style="background:linear-gradient(135deg,rgba(94,234,212,.3),rgba(94,234,212,.06));color:var(--ink)">#5EEAD4</div>
+          <div class="tile" style="background:linear-gradient(135deg,rgba(255,255,255,0.245),rgba(255,255,255,0.056));color:var(--ink)">#FFFFFF</div>
+          <div class="tile" style="background:linear-gradient(135deg,rgba(255,255,255,0.165),rgba(255,255,255,0.033));color:var(--ink)">#3F3F46</div>
           <div class="tile">◆ Mark</div>
         </div>
       </div>
@@ -543,8 +543,28 @@ document.querySelectorAll('.card').forEach(c=>{
 import * as THREE from './assets/vendor/three.module.min.js';
 
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const DPR=Math.min(devicePixelRatio||1,2);
-const ACCENT=new THREE.Color('#8B7CF6'), TEAL=new THREE.Color('#5EEAD4');
+const DPR=Math.min(devicePixelRatio||1,innerWidth<768?1.5:2);
+const SILVER=new THREE.Color('#FFFFFF'), STEEL=new THREE.Color('#9BA0AC');
+
+// studio-style equirect environment (bright softbox strips on black) for premium reflections
+function makeStudioEnv(){
+  const c=document.createElement('canvas');c.width=256;c.height=128;
+  const g=c.getContext('2d');
+  g.fillStyle='#050507';g.fillRect(0,0,256,128);
+  const strip=(x,y,w,h,a)=>{
+    const gr=g.createLinearGradient(x,y,x,y+h);
+    gr.addColorStop(0,'rgba(255,255,255,0)');
+    gr.addColorStop(.5,`rgba(255,255,255,${a})`);
+    gr.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle=gr;g.fillRect(x,y,w,h);
+  };
+  strip(20,10,60,50,.95); strip(150,20,40,60,.6); strip(90,70,80,40,.35); strip(220,5,26,70,.5);
+  const tex=new THREE.CanvasTexture(c);
+  tex.mapping=THREE.EquirectangularReflectionMapping;
+  tex.colorSpace=THREE.SRGBColorSpace;
+  return tex;
+}
+const studioEnv=makeStudioEnv();
 
 function makeRenderer(canvas){
   const r=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
@@ -569,8 +589,14 @@ const heroCam=new THREE.PerspectiveCamera(42,2,0.1,60);
 heroCam.position.set(0,0.1,6);
 const heroR=makeRenderer(heroCanvas);
 
+heroScene.environment=studioEnv;
 const gem=new THREE.Group();
-const gemMat=new THREE.MeshStandardMaterial({color:0x2e2750,flatShading:true,metalness:.45,roughness:.18,emissive:0x161030,emissiveIntensity:1});
+const gemMat=new THREE.MeshPhysicalMaterial({
+  color:0x0d0d11,flatShading:true,
+  metalness:.92,roughness:.16,
+  clearcoat:1,clearcoatRoughness:.12,
+  envMap:studioEnv,envMapIntensity:1.6
+});
 const pavilion=new THREE.Mesh(new THREE.ConeGeometry(1.25,1.55,8,1),gemMat);
 pavilion.rotation.x=Math.PI; pavilion.position.y=-0.5;
 const crown=new THREE.Mesh(new THREE.CylinderGeometry(0.72,1.25,0.55,8),gemMat);
@@ -579,7 +605,7 @@ gem.add(pavilion,crown);
 [pavilion,crown].forEach(m=>{
   const edges=new THREE.LineSegments(
     new THREE.EdgesGeometry(m.geometry),
-    new THREE.LineBasicMaterial({color:ACCENT,transparent:true,opacity:.35}));
+    new THREE.LineBasicMaterial({color:SILVER,transparent:true,opacity:.22}));
   edges.position.copy(m.position);edges.rotation.copy(m.rotation);
   gem.add(edges);
 });
@@ -594,17 +620,17 @@ function placeGem(){
 }
 placeGem();addEventListener('resize',placeGem);
 
-const l1=new THREE.PointLight(ACCENT,220);l1.position.set(3,3,4);
-const l2=new THREE.PointLight(TEAL,110);l2.position.set(-4,-2,3);
-const l3=new THREE.PointLight(0xffffff,70);l3.position.set(0,4,-3);
-heroScene.add(l1,l2,l3,new THREE.AmbientLight(0x2b2545,3.5));
+const l1=new THREE.PointLight(SILVER,200);l1.position.set(3,3,4);
+const l2=new THREE.PointLight(STEEL,80);l2.position.set(-4,-2,3);
+const l3=new THREE.PointLight(0xffffff,120);l3.position.set(0,4,-3);
+heroScene.add(l1,l2,l3,new THREE.AmbientLight(0x26262c,3));
 
 // particle field
 const N=380,pos=new Float32Array(N*3);
 for(let i=0;i<N*3;i++)pos[i]=(Math.random()-0.5)*16;
 const pGeo=new THREE.BufferGeometry();
 pGeo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-const stars=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x9d90f5,size:.035,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false}));
+const stars=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xdfe2ea,size:.028,transparent:true,opacity:.4,blending:THREE.AdditiveBlending,depthWrite:false}));
 heroScene.add(stars);
 
 // pointer parallax
@@ -633,13 +659,13 @@ const orb=new THREE.Mesh(
       uniform float uTime; varying vec3 vN; varying vec3 vP;
       void main(){
         float t=uTime*0.35;
-        float sw=sin(vP.x*3.0+t)+sin(vP.y*4.0-t*1.3)+sin((vP.x+vP.z)*2.5+t*0.7);
-        float m=smoothstep(-2.2,2.2,sw);
-        vec3 purple=vec3(0.545,0.486,0.965), teal=vec3(0.369,0.918,0.831), ink=vec3(0.02,0.015,0.06);
-        vec3 col=mix(purple,teal,m);
+        float sw=sin(vP.x*4.0+t)+sin(vP.y*5.0-t*1.3)+sin((vP.x+vP.z)*3.5+t*0.7);
+        float m=smoothstep(-1.4,1.4,sw);
+        vec3 lightSilver=vec3(0.88,0.89,0.93), darkSteel=vec3(0.07,0.075,0.09), ink=vec3(0.012,0.012,0.018);
+        vec3 col=mix(darkSteel,lightSilver,m*m);
         float fres=pow(1.0-abs(dot(vN,vec3(0.0,0.0,1.0))),2.0);
-        col=mix(ink,col,0.35+0.65*fres);
-        col+=fres*0.35;
+        col=mix(ink,col,0.45+0.55*fres);
+        col+=fres*0.55;
         gl_FragColor=vec4(col,1.0);
       }`
   })
@@ -653,7 +679,7 @@ const ctaCam=new THREE.PerspectiveCamera(50,2,0.1,50);
 ctaCam.position.set(0,1.6,4.2);ctaCam.lookAt(0,0,0);
 const ctaR=makeRenderer(ctaCanvas);
 const waveGeo=new THREE.PlaneGeometry(14,8,90,50);
-const wave=new THREE.Points(waveGeo,new THREE.PointsMaterial({color:0x8B7CF6,size:.035,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));
+const wave=new THREE.Points(waveGeo,new THREE.PointsMaterial({color:0xE9EAF0,size:.03,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,depthWrite:false}));
 wave.rotation.x=-Math.PI/2.15;
 ctaScene.add(wave);
 const wavePos=waveGeo.attributes.position;

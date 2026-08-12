@@ -246,6 +246,84 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .step h3{font-size:18px;margin-bottom:8px}
 .step p{font-size:14.5px;color:var(--ink-dim)}
 
+/* ---------- portfolio / live work ---------- */
+.work{display:grid;gap:20px;margin-top:44px}
+@media(min-width:900px){.work{grid-template-columns:repeat(3,1fr);gap:18px}}
+.work-item{
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(217,217,217,.045),rgba(217,217,217,.012));
+  transition:transform .35s ease,border-color .35s ease;
+  display:flex;flex-direction:column;
+}
+.work-item:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.28)}
+.work-chrome{
+  display:flex;align-items:center;gap:6px;padding:10px 12px;
+  border-bottom:1px solid var(--line);background:rgba(255,255,255,.03);
+}
+.work-chrome i{width:8px;height:8px;border-radius:50%;background:rgba(237,237,250,.2);flex:none}
+.work-chrome .url{
+  flex:1;margin-left:6px;height:20px;border-radius:6px;
+  background:rgba(237,237,250,.06);font-style:normal;
+  font-size:10.5px;color:var(--ink-faint);
+  display:flex;align-items:center;padding:0 9px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+/* live scaled iframe viewport */
+.shot{
+  position:relative;width:100%;aspect-ratio:16/11;overflow:hidden;
+  background:#0a0a0d;display:block;
+}
+.shot iframe{
+  position:absolute;top:0;left:0;z-index:1;
+  width:1280px;height:880px;border:0;
+  transform:scale(var(--s,.28));transform-origin:top left;
+  pointer-events:none; /* page scroll never gets trapped in the preview */
+}
+/* sits behind the iframe: covered once the live site paints,
+   and reads as a designed panel if a browser blocks embedding */
+.shot .shot-fallback{
+  position:absolute;inset:0;z-index:0;
+  display:flex;flex-direction:column;justify-content:center;gap:8px;
+  padding:0 22px;text-align:left;
+  background:
+    radial-gradient(circle at 78% 12%,rgba(255,255,255,.10),transparent 58%),
+    linear-gradient(160deg,#12121a,#08080c);
+}
+.shot .shot-fallback strong{
+  font-family:'Space Grotesk';font-size:19px;font-weight:700;
+  letter-spacing:-.02em;color:var(--ink);
+}
+.shot .shot-fallback em{
+  font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-faint);
+}
+.shot .live{
+  position:absolute;top:10px;right:10px;z-index:2;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);background:rgba(10,10,12,.72);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:5px 10px;
+}
+.shot .live b{width:5px;height:5px;border-radius:50%;background:#fff;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.work-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.work-body h3{font-size:17.5px}
+.work-body p{font-size:14px;color:var(--ink-dim);flex:1}
+.work-tags{display:flex;flex-wrap:wrap;gap:7px}
+.work-tags span{
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;padding:4px 9px;
+}
+.work-visit{
+  display:inline-flex;align-items:center;gap:7px;margin-top:4px;
+  font-size:14px;font-weight:600;color:var(--ink);
+}
+.work-visit svg{transition:transform .25s}
+.work-item:hover .work-visit svg{transform:translate(2px,-2px)}
+@media(prefers-reduced-motion:reduce){.shot .live b{animation:none}}
+
 /* ---------- CTA band ---------- */
 .cta-band{
   border-radius:24px;text-align:center;padding:64px 24px;overflow:hidden;position:relative;
@@ -291,6 +369,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
     <div class="nav-links">
       <a href="#services">Services</a>
       <a href="#web">Web</a>
+      <a href="#work">Work</a>
       <a href="#brand">Design &amp; Marketing</a>
       <a href="#process">Process</a>
     </div>
@@ -307,7 +386,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
     <p>Designs Redefined builds fast, conversion-focused websites for growing businesses — backed by the branding and marketing to make them impossible to ignore.</p>
     <div class="hero-cta">
       <a class="btn btn-primary" href="#contact">Talk to Us&nbsp;→</a>
-      <a class="btn btn-ghost" href="#services">See what we do</a>
+      <a class="btn btn-ghost" href="#work">See our work</a>
     </div>
     <div class="hero-stats rv">
       <div><b>50+</b><span>Projects shipped</span></div>
@@ -470,6 +549,76 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
   </div>
 </section>
 
+<section id="work">
+  <span class="glow glow-teal" style="right:-180px;top:40px"></span>
+  <div class="wrap" style="position:relative;z-index:1">
+    <p class="kicker rv">Selected work</p>
+    <h2 class="rv">Live sites, not mockups</h2>
+    <p class="sub rv">Every preview below is the real site, loading live. Tap any one to open it in a new tab.</p>
+
+    <div class="work">
+
+      <a class="work-item rv" href="https://danialhyatt7-collab.github.io/O-kly/index.html" target="_blank" rel="noopener">
+        <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/O-kly</em></div>
+        <div class="shot">
+          <span class="live"><b></b>Live</span>
+          <span class="shot-fallback"><strong>Oakly&#174;</strong><em>danialhyatt7-collab.github.io/O-kly</em></span>
+          <iframe data-src="https://danialhyatt7-collab.github.io/O-kly/index.html" title="Oakly furniture website preview"
+                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+                  sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+        <div class="work-body">
+          <h3>Oakly — Modern Furnica</h3>
+          <p>A furniture brand storefront for handmade solid-oak pieces, with a marquee of buying incentives, product series pages and an email capture built into the hero.</p>
+          <div class="work-tags"><span>E-Commerce</span><span>Brand Site</span><span>Animation</span></div>
+          <span class="work-visit">Visit live site
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="work-item rv" href="https://danialhyatt.com/" target="_blank" rel="noopener">
+        <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt.com</em></div>
+        <div class="shot">
+          <span class="live"><b></b>Live</span>
+          <span class="shot-fallback"><strong>Danial Hyatt</strong><em>danialhyatt.com</em></span>
+          <iframe data-src="https://danialhyatt.com/" title="Danial Hyatt motion design website preview"
+                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+                  sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+        <div class="work-body">
+          <h3>Danial Hyatt — Product Motion</h3>
+          <p>A motion designer's portfolio and services site: showreel-led hero, packages and pricing, rotating client quotes and a clear hire-me path throughout.</p>
+          <div class="work-tags"><span>Portfolio</span><span>Video</span><span>Services</span></div>
+          <span class="work-visit">Visit live site
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="work-item rv" href="https://danialhyatt7-collab.github.io/alqanoon/" target="_blank" rel="noopener">
+        <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/alqanoon</em></div>
+        <div class="shot">
+          <span class="live"><b></b>Live</span>
+          <span class="shot-fallback"><strong>Al-Qanoon E-Stamps</strong><em>danialhyatt7-collab.github.io/alqanoon</em></span>
+          <iframe data-src="https://danialhyatt7-collab.github.io/alqanoon/" title="Al-Qanoon E-Stamps website preview"
+                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+                  sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+        <div class="work-body">
+          <h3>Al-Qanoon E-Stamps</h3>
+          <p>A local service site for online e-stamp paper in Islamabad and Rawalpindi — process explainer, document types, flat pricing, FAQ and WhatsApp-first ordering.</p>
+          <div class="work-tags"><span>Lead Gen</span><span>Local SEO</span><span>Service Site</span></div>
+          <span class="work-visit">Visit live site
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
 <section id="contact" style="padding-top:20px">
   <div class="wrap">
     <div class="cta-band rv">
@@ -493,6 +642,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
     <div class="foot-links">
       <a href="#services">Services</a>
       <a href="#web">Web</a>
+      <a href="#work">Work</a>
       <a href="#brand">Design &amp; Marketing</a>
       <a href="#process">Process</a>
       <a href="#contact">Contact</a>
@@ -528,6 +678,28 @@ function paintWords(){
   words.forEach((w,i)=>w.classList.toggle('on',i<n));
 }
 addEventListener('scroll',paintWords,{passive:true});paintWords();
+
+/* live portfolio previews: scale a desktop-width iframe into the card,
+   and only load each one when it is about to enter the viewport */
+const shots=[...document.querySelectorAll('.shot')];
+function sizeShots(){
+  shots.forEach(s=>s.style.setProperty('--s',(s.clientWidth/1280).toFixed(4)));
+}
+sizeShots();
+addEventListener('resize',sizeShots,{passive:true});
+
+const shotIO=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const f=e.target.querySelector('iframe[data-src]');
+    if(f){
+      f.src=f.dataset.src;
+      f.removeAttribute('data-src');
+    }
+    shotIO.unobserve(e.target);
+  });
+},{rootMargin:'300px'});
+shots.forEach(s=>shotIO.observe(s));
 
 // card hover glow follows pointer
 document.querySelectorAll('.card').forEach(c=>{

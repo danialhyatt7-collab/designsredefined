@@ -9,18 +9,84 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+<script>
+/* applied before first paint so there is no flash of the wrong theme */
+(function(){try{var t=localStorage.getItem('dr-theme');
+if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
 <style>
 :root{
+  color-scheme:dark;
+  --ov:255,255,255;          /* overlay tint for fills, borders, glows */
+  --ink-rgb:237,237,250;
+  --shadow:0,0,0;
+  --shadow-a:.5;
   --bg:#03020B;
   --bg-2:#090A11;
   --card:#0B0A16;
   --ink:#EDEDFA;
-  --ink-dim:rgba(237,237,250,.62);
-  --ink-faint:rgba(237,237,250,.38);
-  --line:rgba(237,237,250,.1);
+  --ink-dim:rgba(var(--ink-rgb),.62);
+  --ink-faint:rgba(var(--ink-rgb),.38);
+  --line:rgba(var(--ink-rgb),.1);
   --accent:#FFFFFF;
   --accent-2:#A1A1AA;
+  --nav-bg:rgba(3,2,11,.72);
+  --btn-bg:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.82) 100%);
+  --btn-fg:#0a0918;
+  --mark-bg:linear-gradient(135deg,#FFFFFF,#8a8a92);
+  --mark-fg:#0a0a0a;
+  --head-grad:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
+  --shot-bg:#0a0a0d;
+  --shot-fallback:linear-gradient(160deg,#12121a,#08080c);
+  --badge-bg:rgba(10,10,12,.72);
   --radius:20px;
+}
+/* light theme: explicit choice, or system preference when no choice is stored */
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    color-scheme:light;
+    --ov:0,0,0;
+    --ink-rgb:14,14,20;
+    --shadow:22,22,38;
+    --shadow-a:.13;
+    --bg:#FAFAFB;
+    --bg-2:#FFFFFF;
+    --card:#FFFFFF;
+    --ink:#0B0B10;
+    --accent:#0B0B10;
+    --accent-2:#52525B;
+    --nav-bg:rgba(250,250,251,.8);
+    --btn-bg:linear-gradient(180deg,#16161C 0%,rgba(22,22,28,.9) 100%);
+    --btn-fg:#FFFFFF;
+    --mark-bg:linear-gradient(135deg,#16161C,#4C4C57);
+    --mark-fg:#FFFFFF;
+    --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
+    --shot-bg:#ECECF0;
+    --shot-fallback:linear-gradient(160deg,#F3F3F6,#E3E3E9);
+    --badge-bg:rgba(255,255,255,.82);
+  }
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --ov:0,0,0;
+  --ink-rgb:14,14,20;
+  --shadow:22,22,38;
+  --shadow-a:.13;
+  --bg:#FAFAFB;
+  --bg-2:#FFFFFF;
+  --card:#FFFFFF;
+  --ink:#0B0B10;
+  --accent:#0B0B10;
+  --accent-2:#52525B;
+  --nav-bg:rgba(250,250,251,.8);
+  --btn-bg:linear-gradient(180deg,#16161C 0%,rgba(22,22,28,.9) 100%);
+  --btn-fg:#FFFFFF;
+  --mark-bg:linear-gradient(135deg,#16161C,#4C4C57);
+  --mark-fg:#FFFFFF;
+  --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
+  --shot-bg:#ECECF0;
+  --shot-fallback:linear-gradient(160deg,#F3F3F6,#E3E3E9);
+  --badge-bg:rgba(255,255,255,.82);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -42,41 +108,86 @@ section{position:relative;padding:72px 0}
 
 /* ---------- ambient glow ---------- */
 .glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
-.glow-hero{top:-120px;left:50%;transform:translateX(-50%);width:640px;height:480px;background:radial-gradient(circle,rgba(255,255,255,0.154),transparent 65%)}
-.glow-teal{width:420px;height:420px;background:radial-gradient(circle,rgba(255,255,255,0.055),transparent 65%)}
+.glow-hero{top:-120px;left:50%;transform:translateX(-50%);width:640px;height:480px;background:radial-gradient(circle,rgba(var(--ov),0.154),transparent 65%)}
+.glow-teal{width:420px;height:420px;background:radial-gradient(circle,rgba(var(--ov),0.055),transparent 65%)}
 
 /* ---------- nav ---------- */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  background:rgba(3,2,11,.72);
+  background:var(--nav-bg);
   border-bottom:1px solid var(--line);
 }
 .nav-inner{max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.wordmark{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+.wordmark{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
 .wordmark .mark{
   width:30px;height:30px;border-radius:9px;flex:none;
-  background:linear-gradient(135deg,#FFFFFF,#8a8a92);color:#0a0a0a;
+  background:var(--mark-bg);color:var(--mark-fg);
   display:grid;place-items:center;font-size:13px;
-  box-shadow:0 0 18px rgba(255,255,255,0.315);
+  box-shadow:0 0 18px rgba(var(--ov),0.315);
 }
 .nav-links{display:none;gap:28px;font-size:14.5px;color:var(--ink-dim)}
 .nav-links a:hover{color:var(--ink)}
 @media(min-width:860px){.nav-links{display:flex}}
+.nav-right{display:flex;align-items:center;gap:10px}
+
+/* ---------- theme toggle ---------- */
+.theme-btn{
+  position:relative;flex:none;
+  width:38px;height:38px;border-radius:999px;
+  border:1px solid var(--line);background:linear-gradient(180deg,rgba(var(--ov),.06),rgba(var(--ov),.02));
+  color:var(--ink);cursor:pointer;
+  display:grid;place-items:center;
+  transition:border-color .25s,background .25s,transform .25s;
+  -webkit-tap-highlight-color:transparent;
+}
+.theme-btn:hover{border-color:rgba(var(--ink-rgb),.3);transform:translateY(-1px)}
+.theme-btn svg{position:absolute;width:17px;height:17px;transition:opacity .35s ease,transform .45s cubic-bezier(.4,0,.2,1)}
+/* sun shows in dark theme (tap to go light), moon shows in light theme */
+.theme-btn .i-sun{opacity:1;transform:rotate(0) scale(1)}
+.theme-btn .i-moon{opacity:0;transform:rotate(-70deg) scale(.5)}
+:root[data-theme="light"] .theme-btn .i-sun{opacity:0;transform:rotate(70deg) scale(.5)}
+:root[data-theme="light"] .theme-btn .i-moon{opacity:1;transform:rotate(0) scale(1)}
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .theme-btn .i-sun{opacity:0;transform:rotate(70deg) scale(.5)}
+  :root:not([data-theme="dark"]) .theme-btn .i-moon{opacity:1;transform:rotate(0) scale(1)}
+}
+
+/* smooth cross-theme fade, enabled only after first paint.
+   Scoped to surfaces on purpose: a blanket `*` rule would replace the
+   transition shorthand on revealed/hovered elements and kill those animations. */
+.theme-anim{transition:background-color .45s ease,color .45s ease}
+.theme-anim .nav,
+.theme-anim .shot{transition:background-color .45s ease,border-color .45s ease,color .45s ease}
+@media(prefers-reduced-motion:reduce){
+  .theme-anim,
+  .theme-anim .nav,
+  .theme-anim .shot{transition:none}
+  .theme-btn svg{transition:none}
+}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:12px 22px;border-radius:999px;font-weight:600;font-size:15px;
   border:1px solid transparent;cursor:pointer;transition:.25s;
 }
 .btn-primary{
-  background:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.82) 100%);
-  color:#0a0918;
-  box-shadow:0 0 0 1px rgba(255,255,255,.15),0 8px 30px rgba(255,255,255,0.175);
+  background:var(--btn-bg);
+  color:var(--btn-fg);
+  box-shadow:0 0 0 1px rgba(var(--ov),.15),0 8px 30px rgba(var(--ov),0.175);
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,255,255,.2),0 12px 36px rgba(255,255,255,0.28)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(var(--ov),.2),0 12px 36px rgba(var(--ov),0.28)}
 .btn-ghost{border-color:var(--line);color:var(--ink)}
-.btn-ghost:hover{border-color:rgba(237,237,250,.3);background:rgba(237,237,250,.05)}
-.nav .btn{padding:10px 18px;font-size:14px}
+.btn-ghost:hover{border-color:rgba(var(--ink-rgb),.3);background:rgba(var(--ink-rgb),.05)}
+.nav .btn{padding:10px 18px;font-size:14px;white-space:nowrap}
+/* keep the logo, toggle and CTA on one comfortable row on small phones */
+@media(max-width:520px){
+  .nav-inner{padding:12px 16px;gap:8px}
+  .wordmark{font-size:15px;gap:8px}
+  .wordmark .mark{width:26px;height:26px;border-radius:8px;font-size:11px}
+  .nav-right{gap:7px}
+  .theme-btn{width:34px;height:34px}
+  .nav .btn{padding:9px 14px;font-size:13px}
+}
 
 /* ---------- hero ---------- */
 .hero{padding:140px 0 80px;text-align:center;overflow:hidden}
@@ -93,14 +204,14 @@ section{position:relative;padding:72px 0}
   font-size:11.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
   color:var(--ink-dim);
   border:1px solid var(--line);border-radius:999px;padding:8px 16px;
-  background:linear-gradient(180deg,rgba(217,217,217,.05),rgba(217,217,217,.01));
+  background:linear-gradient(180deg,rgba(var(--ov),.05),rgba(var(--ov),.01));
   margin-bottom:26px;
 }
 .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 10px var(--accent-2)}
 .hero h1{
   font-size:clamp(38px,8.5vw,72px);
   line-height:1.08;font-weight:700;
-  background:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
+  background:var(--head-grad);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   margin:0 auto 22px;max-width:820px;
 }
@@ -129,7 +240,7 @@ section{position:relative;padding:72px 0}
 /* ---------- section headers ---------- */
 .kicker{
   font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(237,237,250,.7);margin-bottom:14px;
+  color:rgba(var(--ink-rgb),.7);margin-bottom:14px;
 }
 h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bottom:16px}
 .sub{color:var(--ink-dim);max-width:560px}
@@ -140,31 +251,31 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 @media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
 .card{
   position:relative;border-radius:var(--radius);padding:28px 24px;
-  background:linear-gradient(180deg,rgba(217,217,217,.045),rgba(217,217,217,.012));
+  background:linear-gradient(180deg,rgba(var(--ov),.045),rgba(var(--ov),.012));
   border:1px solid var(--line);
   transition:transform .3s,border-color .3s;
   overflow:hidden;
 }
-.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.245)}
+.card:hover{transform:translateY(-4px);border-color:rgba(var(--ov),0.245)}
 .card::before{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(320px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,0.07),transparent 60%);
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,0%),rgba(var(--ov),0.07),transparent 60%);
   opacity:0;transition:opacity .3s;pointer-events:none;
 }
 .card:hover::before{opacity:1}
 .card .icon{
   width:44px;height:44px;border-radius:12px;margin-bottom:18px;
   display:grid;place-items:center;
-  background:rgba(255,255,255,0.084);border:1px solid rgba(255,255,255,0.175);
+  background:rgba(var(--ov),0.084);border:1px solid rgba(var(--ov),0.175);
   color:var(--accent);
 }
-.card.alt .icon{background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.138);color:var(--accent-2)}
+.card.alt .icon{background:rgba(var(--ov),0.055);border-color:rgba(var(--ov),0.138);color:var(--accent-2)}
 .card h3{font-size:18px;margin-bottom:8px}
 .card p{font-size:14.5px;color:var(--ink-dim)}
 .card .tag{
   position:absolute;top:20px;right:20px;font-size:10.5px;font-weight:600;
   letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);
-  border:1px solid rgba(255,255,255,0.165);border-radius:999px;padding:4px 10px;
+  border:1px solid rgba(var(--ov),0.165);border-radius:999px;padding:4px 10px;
 }
 
 /* ---------- feature rows ---------- */
@@ -177,36 +288,36 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .f-list li{
   display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--ink-dim);
   border:1px solid var(--line);border-radius:14px;padding:13px 16px;
-  background:linear-gradient(180deg,rgba(217,217,217,.03),transparent);
+  background:linear-gradient(180deg,rgba(var(--ov),.03),transparent);
 }
 .f-list li b{color:var(--ink);font-weight:600}
 .f-list .chk{
   flex:none;width:20px;height:20px;border-radius:50%;margin-top:1px;
-  background:rgba(255,255,255,0.105);border:1px solid rgba(255,255,255,0.28);
+  background:rgba(var(--ov),0.105);border:1px solid rgba(var(--ov),0.28);
   display:grid;place-items:center;color:var(--accent);font-size:11px;
 }
 .f-visual{
   position:relative;border-radius:var(--radius);border:1px solid var(--line);
-  background:linear-gradient(180deg,rgba(217,217,217,.04),rgba(217,217,217,.01));
+  background:linear-gradient(180deg,rgba(var(--ov),.04),rgba(var(--ov),.01));
   padding:22px;min-height:300px;overflow:hidden;
 }
 .f-visual::after{
   content:"";position:absolute;inset:0;
-  background:radial-gradient(circle at 70% 20%,rgba(255,255,255,0.098),transparent 55%);
+  background:radial-gradient(circle at 70% 20%,rgba(var(--ov),0.098),transparent 55%);
   pointer-events:none;
 }
 /* mock browser */
-.browser{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--bg-2);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.browser{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--bg-2);box-shadow:0 24px 60px rgba(var(--shadow),var(--shadow-a))}
 .browser-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line)}
-.browser-bar i{width:9px;height:9px;border-radius:50%;background:rgba(237,237,250,.18)}
+.browser-bar i{width:9px;height:9px;border-radius:50%;background:rgba(var(--ink-rgb),.18)}
 .browser-bar .url{
   flex:1;margin-left:8px;height:20px;border-radius:6px;
-  background:rgba(237,237,250,.06);
+  background:rgba(var(--ink-rgb),.06);
   font-style:normal;font-size:10px;color:var(--ink-faint);
   display:flex;align-items:center;padding:0 10px;
 }
 .browser-body{padding:18px;display:flex;flex-direction:column;gap:12px}
-.sk{border-radius:8px;background:linear-gradient(90deg,rgba(237,237,250,.07),rgba(237,237,250,.12),rgba(237,237,250,.07));background-size:200% 100%;animation:shimmer 2.6s infinite linear}
+.sk{border-radius:8px;background:linear-gradient(90deg,rgba(var(--ink-rgb),.07),rgba(var(--ink-rgb),.12),rgba(var(--ink-rgb),.07));background-size:200% 100%;animation:shimmer 2.6s infinite linear}
 @keyframes shimmer{to{background-position:-200% 0}}
 .sk.hero-sk{height:64px;border-radius:12px}
 .sk-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -215,19 +326,19 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .sk.mid{height:14px;width:45%}
 /* mock chart */
 .chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding:6px 2px 0}
-.chart i{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--accent),rgba(255,255,255,0.175));animation:rise 1.2s ease both}
-.chart i:nth-child(odd){background:linear-gradient(180deg,var(--accent-2),rgba(255,255,255,0.11))}
+.chart i{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--accent),rgba(var(--ov),0.175));animation:rise 1.2s ease both}
+.chart i:nth-child(odd){background:linear-gradient(180deg,var(--accent-2),rgba(var(--ov),0.11))}
 @keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 .chart i{transform-origin:bottom}
 /* brand tiles */
 .brand-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .brand-tiles .tile{
   border-radius:14px;border:1px solid var(--line);padding:20px 14px;text-align:center;
-  background:rgba(237,237,250,.03);
+  background:rgba(var(--ink-rgb),.03);
   font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--ink-dim);
 }
 .brand-tiles .tile.big{grid-column:1/-1;font-size:22px;color:var(--ink);
-  background:linear-gradient(135deg,rgba(255,255,255,0.126),rgba(255,255,255,0.044))}
+  background:linear-gradient(135deg,rgba(var(--ov),0.126),rgba(var(--ov),0.044))}
 
 /* ---------- process ---------- */
 .steps{display:grid;gap:16px;margin-top:48px;counter-reset:step}
@@ -235,11 +346,11 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .step{
   position:relative;border-radius:var(--radius);padding:30px 24px 26px;
   border:1px solid var(--line);
-  background:linear-gradient(180deg,rgba(217,217,217,.04),rgba(217,217,217,.01));
+  background:linear-gradient(180deg,rgba(var(--ov),.04),rgba(var(--ov),.01));
 }
 .step .num{
   font-family:'Space Grotesk';font-size:44px;font-weight:700;line-height:1;
-  background:linear-gradient(180deg,var(--accent),rgba(255,255,255,0.14));
+  background:linear-gradient(180deg,var(--accent),rgba(var(--ov),0.14));
   -webkit-background-clip:text;background-clip:text;color:transparent;
   margin-bottom:14px;
 }
@@ -252,19 +363,19 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .work-item{
   border-radius:var(--radius);overflow:hidden;
   border:1px solid var(--line);
-  background:linear-gradient(180deg,rgba(217,217,217,.045),rgba(217,217,217,.012));
+  background:linear-gradient(180deg,rgba(var(--ov),.045),rgba(var(--ov),.012));
   transition:transform .35s ease,border-color .35s ease;
   display:flex;flex-direction:column;
 }
-.work-item:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.28)}
+.work-item:hover{transform:translateY(-5px);border-color:rgba(var(--ov),.28)}
 .work-chrome{
   display:flex;align-items:center;gap:6px;padding:10px 12px;
-  border-bottom:1px solid var(--line);background:rgba(255,255,255,.03);
+  border-bottom:1px solid var(--line);background:rgba(var(--ov),.03);
 }
-.work-chrome i{width:8px;height:8px;border-radius:50%;background:rgba(237,237,250,.2);flex:none}
+.work-chrome i{width:8px;height:8px;border-radius:50%;background:rgba(var(--ink-rgb),.2);flex:none}
 .work-chrome .url{
   flex:1;margin-left:6px;height:20px;border-radius:6px;
-  background:rgba(237,237,250,.06);font-style:normal;
+  background:rgba(var(--ink-rgb),.06);font-style:normal;
   font-size:10.5px;color:var(--ink-faint);
   display:flex;align-items:center;padding:0 9px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
@@ -272,7 +383,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 /* live scaled iframe viewport */
 .shot{
   position:relative;width:100%;aspect-ratio:16/11;overflow:hidden;
-  background:#0a0a0d;display:block;
+  background:var(--shot-bg);display:block;
 }
 .shot iframe{
   position:absolute;top:0;left:0;z-index:1;
@@ -287,8 +398,8 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   display:flex;flex-direction:column;justify-content:center;gap:8px;
   padding:0 22px;text-align:left;
   background:
-    radial-gradient(circle at 78% 12%,rgba(255,255,255,.10),transparent 58%),
-    linear-gradient(160deg,#12121a,#08080c);
+    radial-gradient(circle at 78% 12%,rgba(var(--ov),.10),transparent 58%),
+    var(--shot-fallback);
 }
 .shot .shot-fallback strong{
   font-family:'Space Grotesk';font-size:19px;font-weight:700;
@@ -302,11 +413,11 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   position:absolute;top:10px;right:10px;z-index:2;
   display:inline-flex;align-items:center;gap:6px;
   font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--ink);background:rgba(10,10,12,.72);
+  color:var(--ink);background:var(--badge-bg);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:5px 10px;
+  border:1px solid rgba(var(--ov),.2);border-radius:999px;padding:5px 10px;
 }
-.shot .live b{width:5px;height:5px;border-radius:50%;background:#fff;animation:pulse 1.8s ease-in-out infinite}
+.shot .live b{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 1.8s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 .work-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
 .work-body h3{font-size:17.5px}
@@ -327,10 +438,10 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 /* ---------- CTA band ---------- */
 .cta-band{
   border-radius:24px;text-align:center;padding:64px 24px;overflow:hidden;position:relative;
-  border:1px solid rgba(255,255,255,0.21);
+  border:1px solid rgba(var(--ov),0.21);
   background:
-    radial-gradient(circle at 50% -20%,rgba(255,255,255,0.21),transparent 60%),
-    linear-gradient(180deg,rgba(217,217,217,.05),rgba(217,217,217,.01));
+    radial-gradient(circle at 50% -20%,rgba(var(--ov),0.21),transparent 60%),
+    linear-gradient(180deg,rgba(var(--ov),.05),rgba(var(--ov),.01));
 }
 .cta-band>*{position:relative;z-index:1}
 #cta3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.5;pointer-events:none}
@@ -349,7 +460,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
   width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
   display:grid;place-items:center;color:var(--ink-dim);transition:.25s;
 }
-.social a:hover{color:var(--ink);border-color:rgba(255,255,255,0.28);background:rgba(255,255,255,0.056)}
+.social a:hover{color:var(--ink);border-color:rgba(var(--ov),0.28);background:rgba(var(--ov),0.056)}
 
 /* ---------- reveal on scroll ---------- */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
@@ -373,7 +484,17 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
       <a href="#brand">Design &amp; Marketing</a>
       <a href="#process">Process</a>
     </div>
-    <a class="btn btn-primary" href="#contact">Talk to Us</a>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch between dark and light mode" title="Switch theme">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/>
+        </svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+          <path d="M20.5 14.5A8.6 8.6 0 0 1 9.5 3.5a8.6 8.6 0 1 0 11 11z"/>
+        </svg>
+      </button>
+      <a class="btn btn-primary" href="#contact">Talk to Us</a>
+    </div>
   </div>
 </nav>
 
@@ -503,19 +624,19 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
         <h2 class="rv">A brand that people remember</h2>
         <p class="sub rv">A great website deserves a great brand behind it. We round out your online presence with identity and marketing that match.</p>
         <ul class="f-list">
-          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.193)">✓</span><span><b>Brand identity.</b>&nbsp;Logo, color palette and typography that feel unmistakably you.</span></li>
-          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.193)">✓</span><span><b>Content &amp; creative.</b>&nbsp;Social posts and ad graphics that stay on-brand.</span></li>
+          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(var(--ov),0.055);border-color:rgba(var(--ov),0.193)">✓</span><span><b>Brand identity.</b>&nbsp;Logo, color palette and typography that feel unmistakably you.</span></li>
+          <li class="rv"><span class="chk" style="color:var(--accent-2);background:rgba(var(--ov),0.055);border-color:rgba(var(--ov),0.193)">✓</span><span><b>Content &amp; creative.</b>&nbsp;Social posts and ad graphics that stay on-brand.</span></li>
         </ul>
         <a class="btn btn-ghost rv" href="#contact">Refresh your brand →</a>
       </div>
       <div class="f-visual rv" style="padding:0;border:none;background:none">
         <canvas id="orb3d" class="orb-canvas" aria-hidden="true"
-             style="border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55)"></canvas>
+             style="border:1px solid var(--line);box-shadow:0 30px 80px rgba(var(--shadow),var(--shadow-a))"></canvas>
         <div class="brand-tiles" style="margin-top:12px">
           <div class="tile big">Designs Redefined</div>
           <div class="tile">Aa · Grotesk</div>
-          <div class="tile" style="background:linear-gradient(135deg,rgba(255,255,255,0.245),rgba(255,255,255,0.056));color:var(--ink)">#FFFFFF</div>
-          <div class="tile" style="background:linear-gradient(135deg,rgba(255,255,255,0.165),rgba(255,255,255,0.033));color:var(--ink)">#3F3F46</div>
+          <div class="tile" style="background:linear-gradient(135deg,rgba(var(--ov),0.245),rgba(var(--ov),0.056));color:var(--ink)">#FFFFFF</div>
+          <div class="tile" style="background:linear-gradient(135deg,rgba(var(--ov),0.165),rgba(var(--ov),0.033));color:var(--ink)">#3F3F46</div>
           <div class="tile">◆ Mark</div>
         </div>
       </div>
@@ -701,6 +822,28 @@ const shotIO=new IntersectionObserver(es=>{
 },{rootMargin:'300px'});
 shots.forEach(s=>shotIO.observe(s));
 
+/* theme toggle: explicit choice wins and persists, otherwise follow the system */
+const root=document.documentElement;
+const sysDark=matchMedia('(prefers-color-scheme: dark)');
+function isDark(){
+  const set=root.getAttribute('data-theme');
+  return set ? set==='dark' : sysDark.matches;
+}
+// let CSS transitions run only after the first paint, so load is never animated
+requestAnimationFrame(()=>document.body.classList.add('theme-anim'));
+
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const next=isDark()?'light':'dark';
+  root.setAttribute('data-theme',next);
+  try{localStorage.setItem('dr-theme',next);}catch(e){}
+  window.dispatchEvent(new CustomEvent('themechange',{detail:{dark:next==='dark'}}));
+});
+// track the system setting while no explicit choice is stored
+sysDark.addEventListener('change',e=>{
+  if(!root.getAttribute('data-theme'))
+    window.dispatchEvent(new CustomEvent('themechange',{detail:{dark:e.matches}}));
+});
+
 // card hover glow follows pointer
 document.querySelectorAll('.card').forEach(c=>{
   c.addEventListener('pointermove',e=>{
@@ -762,6 +905,7 @@ heroCam.position.set(0,0.1,6);
 const heroR=makeRenderer(heroCanvas);
 
 heroScene.environment=studioEnv;
+const edgeMats=[];
 const gem=new THREE.Group();
 const gemMat=new THREE.MeshPhysicalMaterial({
   color:0x0d0d11,flatShading:true,
@@ -778,6 +922,7 @@ gem.add(pavilion,crown);
   const edges=new THREE.LineSegments(
     new THREE.EdgesGeometry(m.geometry),
     new THREE.LineBasicMaterial({color:SILVER,transparent:true,opacity:.22}));
+  edgeMats.push(edges.material);
   edges.position.copy(m.position);edges.rotation.copy(m.rotation);
   gem.add(edges);
 });
@@ -818,7 +963,7 @@ const orbScene=new THREE.Scene();
 const orbCam=new THREE.PerspectiveCamera(38,1,0.1,20);
 orbCam.position.z=3.1;
 const orbR=makeRenderer(orbCanvas);
-const orbUniforms={uTime:{value:0}};
+const orbUniforms={uTime:{value:0},uDark:{value:1}};
 const orb=new THREE.Mesh(
   new THREE.SphereGeometry(1,72,72),
   new THREE.ShaderMaterial({
@@ -828,7 +973,7 @@ const orb=new THREE.Mesh(
       void main(){ vN=normalize(normalMatrix*normal); vP=position;
         gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
     fragmentShader:`
-      uniform float uTime; varying vec3 vN; varying vec3 vP;
+      uniform float uTime; uniform float uDark; varying vec3 vN; varying vec3 vP;
       void main(){
         float t=uTime*0.35;
         float sw=sin(vP.x*4.0+t)+sin(vP.y*5.0-t*1.3)+sin((vP.x+vP.z)*3.5+t*0.7);
@@ -838,6 +983,11 @@ const orb=new THREE.Mesh(
         float fres=pow(1.0-abs(dot(vN,vec3(0.0,0.0,1.0))),2.0);
         col=mix(ink,col,0.45+0.55*fres);
         col+=fres*0.55;
+        /* light theme: graphite chrome on a pale ground, rim darkens instead of glows */
+        vec3 lp=mix(vec3(0.74,0.75,0.80),vec3(0.06,0.07,0.10),m*m);
+        lp=mix(vec3(0.87,0.88,0.91),lp,0.66+0.34*fres);
+        lp-=fres*0.10;
+        col=mix(lp,col,uDark);
         gl_FragColor=vec4(col,1.0);
       }`
   })
@@ -858,6 +1008,29 @@ const wavePos=waveGeo.attributes.position;
 const waveBase=wavePos.array.slice();
 
 [heroCanvas,orbCanvas,ctaCanvas].forEach(c=>vis.observe(c));
+
+/* recolor the 3D scenes when the theme changes */
+const PARTICLE_DARK=new THREE.Color(0xdfe2ea), PARTICLE_LIGHT=new THREE.Color(0x2b2b36);
+const WAVE_DARK=new THREE.Color(0xE9EAF0),     WAVE_LIGHT=new THREE.Color(0x2f2f3a);
+function paintTheme(dark){
+  orbUniforms.uDark.value=dark?1:0;
+  stars.material.color.copy(dark?PARTICLE_DARK:PARTICLE_LIGHT);
+  stars.material.opacity=dark?.4:.5;
+  stars.material.blending=dark?THREE.AdditiveBlending:THREE.NormalBlending;
+  wave.material.color.copy(dark?WAVE_DARK:WAVE_LIGHT);
+  wave.material.opacity=dark?.55:.6;
+  wave.material.blending=dark?THREE.AdditiveBlending:THREE.NormalBlending;
+  edgeMats.forEach(m=>{m.color.set(dark?0xffffff:0x2a2a33);m.opacity=dark?.22:.5;});
+  // the polished black gem stays black in both themes; its reflections just carry more weight on light
+  gemMat.envMapIntensity=dark?1.6:2.1;
+  gemMat.roughness=dark?.16:.12;
+  if(reduced)renderAll();
+}
+const themeIsDark=()=>{
+  const set=document.documentElement.getAttribute('data-theme');
+  return set?set==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+};
+addEventListener('themechange',e=>paintTheme(e.detail.dark));
 
 const clock=new THREE.Clock();
 function frame(){
@@ -889,11 +1062,14 @@ function frame(){
   }
   if(!reduced)requestAnimationFrame(frame);
 }
-if(reduced){
-  // render a single static frame for each scene
+function renderAll(){
   fit(heroR,heroCam,heroCanvas);heroR.render(heroScene,heroCam);
   fit(orbR,orbCam,orbCanvas);orbR.render(orbScene,orbCam);
   fit(ctaR,ctaCam,ctaCanvas);ctaR.render(ctaScene,ctaCam);
+}
+paintTheme(themeIsDark());
+if(reduced){
+  renderAll(); // single static frame per scene
 }else{
   frame();
 }

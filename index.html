@@ -199,6 +199,17 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 .hero{position:relative;z-index:1;padding:140px 0 80px;text-align:center;overflow:hidden}
 @media(min-width:768px){.hero{padding:180px 0 110px}}
 
+
+/* ---------- inertial smooth scroll (pointer devices only) ----------
+   The wrapper is fixed and translated, with body height driving the scrollbar.
+   .nav and .pagebg deliberately sit OUTSIDE it: a transformed ancestor makes
+   position:fixed descendants behave like absolute, which would break both. */
+html.has-smooth{scroll-behavior:auto}   /* the lerp does the smoothing now */
+.has-smooth #smooth{
+  position:fixed;top:0;left:0;width:100%;
+  will-change:transform;
+}
+
 /* ---------- page-wide continuous scroll background ---------- */
 .pagebg{
   position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
@@ -638,6 +649,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
   </div>
 </nav>
 
+<div id="smooth">
 <header class="hero" id="top">
   <span class="glow glow-hero"></span>
   <div class="wrap" style="position:relative;z-index:1">
@@ -928,6 +940,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
     <small>Made with care, redefined with purpose.</small>
   </div>
 </footer>
+</div><!-- /#smooth -->
 
 <script>
 // reveal on scroll
@@ -1037,6 +1050,48 @@ if(tShifts.length&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   },{passive:true});
   applyShift();
 }
+
+
+/* Inertial scrolling, desktop pointers only. Touch devices already have
+   native momentum and hijacking it there makes pages feel broken. */
+(function(){
+  const wrap=document.getElementById('smooth');
+  if(!wrap)return;
+  const touch=matchMedia('(hover:none)').matches||navigator.maxTouchPoints>0;
+  if(touch||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+
+  document.documentElement.classList.add('has-smooth');
+  let current=0,running=false;
+
+  const syncHeight=()=>{document.body.style.height=wrap.scrollHeight+'px';};
+  syncHeight();
+  new ResizeObserver(syncHeight).observe(wrap);
+
+  function tick(){
+    const target=window.scrollY;
+    current+=(target-current)*0.11;
+    if(Math.abs(target-current)<0.15){current=target;running=false;}  // settle and stop
+    wrap.style.transform=`translate3d(0,${-current.toFixed(2)}px,0)`;
+    if(running)requestAnimationFrame(tick);
+  }
+  addEventListener('scroll',()=>{        // loop runs only while actually scrolling
+    if(!running){running=true;requestAnimationFrame(tick);}
+  },{passive:true});
+
+  /* Anchor links need handling: inside a fixed wrapper the sections have no
+     document scroll position, so the browser has nothing to scroll them to.
+     Convert the target's on-screen position back into a document offset. */
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href^="#"]');
+    if(!a)return;
+    const id=a.getAttribute('href').slice(1);
+    const el=id?document.getElementById(id):null;
+    if(!el)return;
+    e.preventDefault();
+    const y=el.getBoundingClientRect().top+current;
+    window.scrollTo(0,Math.max(0,Math.round(y)));
+  });
+})();
 
 // card hover glow follows pointer
 document.querySelectorAll('.card').forEach(c=>{

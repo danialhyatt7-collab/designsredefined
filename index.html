@@ -38,7 +38,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --head-grad:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
   --shot-bg:#0a0a0d;
   --badge-bg:rgba(10,10,12,.72);
-  --sheen:rgba(255,255,255,.10);
   --radius:20px;
 }
 /* light theme: explicit choice, or system preference when no choice is stored */
@@ -63,7 +62,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
     --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
     --shot-bg:#ECECF0;
     --badge-bg:rgba(255,255,255,.82);
-    --sheen:rgba(15,15,25,.05);
   }
 }
 :root[data-theme="light"]{
@@ -86,7 +84,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
   --shot-bg:#ECECF0;
   --badge-bg:rgba(255,255,255,.82);
-  --sheen:rgba(15,15,25,.05);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden}
@@ -202,42 +199,13 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 
 /* ---------- inertial smooth scroll (pointer devices only) ----------
    The wrapper is fixed and translated, with body height driving the scrollbar.
-   .nav and .pagebg deliberately sit OUTSIDE it: a transformed ancestor makes
-   position:fixed descendants behave like absolute, which would break both. */
+   The nav deliberately sits OUTSIDE it: a transformed ancestor makes
+   position:fixed descendants behave like absolute, which would unpin it. */
 html.has-smooth{scroll-behavior:auto}   /* the lerp does the smoothing now */
 .has-smooth #smooth{
   position:fixed;top:0;left:0;width:100%;
   will-change:transform;
 }
-
-/* ---------- page-wide continuous scroll background ---------- */
-.pagebg{
-  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:space-around;
-  -webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);
-  mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);
-}
-.pb-line{overflow:hidden}
-.pb-run{
-  display:flex;width:max-content;
-  animation:run 30s linear infinite;
-}
-.pb-line:nth-child(2) .pb-run{animation-duration:44s}
-.pb-line:nth-child(3) .pb-run{animation-duration:36s}
-.pb-line:nth-child(4) .pb-run{animation-duration:52s}
-.pb-line:nth-child(5) .pb-run{animation-duration:40s}
-.pb-line:nth-child(6) .pb-run{animation-duration:58s}
-.pb-line.rev .pb-run{animation-direction:reverse}
-.pb-run b{
-  font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;
-  font-size:clamp(44px,11vw,120px);line-height:1;letter-spacing:-.03em;
-  white-space:nowrap;padding-right:.3em;
-  display:inline-flex;align-items:center;gap:.3em;
-  /* outline only, and faint: it has to sit under body copy without competing */
-  color:transparent;-webkit-text-stroke:1px rgba(var(--ink-rgb),.075);
-}
-.pb-run b i{font-style:normal;font-size:.3em;-webkit-text-stroke:0;color:rgba(var(--ink-rgb),.07)}
-@media(prefers-reduced-motion:reduce){.pb-run{animation:none}}
 
 /* ---------- hero ticker (continuous + scroll-driven) ---------- */
 .ticker{
@@ -546,37 +514,6 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 @media(prefers-reduced-motion:reduce){.shot .live b{animation:none}}
 
 
-/* ---------- sheen: soft light travelling across surfaces ----------
-   Animates transform, never background-position: the latter repaints the
-   element every frame, which is what makes this effect expensive elsewhere.
-   Gated on .on so a sweep only runs once its surface has been revealed. */
-.card>*,.step>*,.work-item>*{position:relative;z-index:1}
-.card.on::after,
-.step.on::after,
-.work-item.on::after,
-.cta-band.on::before{
-  content:"";position:absolute;
-  top:-60%;bottom:-60%;left:-50%;width:38%;
-  z-index:0;pointer-events:none;
-  background:linear-gradient(100deg,transparent,var(--sheen),transparent);
-  animation:sheen 9s ease-in-out infinite;
-  animation-delay:var(--sd,0s);
-}
-@keyframes sheen{
-  0%{transform:translateX(-20%) rotate(9deg)}
-  45%,100%{transform:translateX(460%) rotate(9deg)}   /* sweep, then rest */
-}
-/* stagger so surfaces never pulse in unison */
-.card:nth-child(2),.step:nth-child(2),.work-item:nth-child(2){--sd:1.4s}
-.card:nth-child(3),.step:nth-child(3),.work-item:nth-child(3){--sd:2.8s}
-.card:nth-child(4){--sd:.7s}
-.card:nth-child(5){--sd:2.1s}
-.card:nth-child(6){--sd:3.5s}
-.cta-band{--sd:1s}
-@media(prefers-reduced-motion:reduce){
-  .card.on::after,.step.on::after,.work-item.on::after,.cta-band.on::before{animation:none;opacity:0}
-}
-
 /* ---------- CTA band ---------- */
 .cta-band{
   border-radius:24px;text-align:center;padding:64px 24px;overflow:hidden;position:relative;
@@ -616,13 +553,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 </head>
 <body>
 
-<div class="pagebg" aria-hidden="true">
-    <div class="pb-line"><div class="t-shift" data-dir="-1"><div class="pb-run"><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b></div></div></div>
-    <div class="pb-line rev"><div class="t-shift" data-dir="1"><div class="pb-run"><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b></div></div></div>
-    <div class="pb-line"><div class="t-shift" data-dir="-1"><div class="pb-run"><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b></div></div></div>
-    <div class="pb-line rev"><div class="t-shift" data-dir="1"><div class="pb-run"><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b></div></div></div>
-    <div class="pb-line"><div class="t-shift" data-dir="-1"><div class="pb-run"><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b></div></div></div>
-    <div class="pb-line rev"><div class="t-shift" data-dir="1"><div class="pb-run"><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b></div></div></div>
 </div>
 
 <nav class="nav">
@@ -1041,8 +971,7 @@ if(tShifts.length&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
     const y=window.scrollY;
     tShifts.forEach(el=>{
       const dir=+el.dataset.dir||-1;
-      const rate=el.closest('.pagebg')?0.18:0.5;   // background drifts gently, hero band leads
-      el.style.transform=`translate3d(${(y*rate*dir).toFixed(1)}px,0,0)`;
+      el.style.transform=`translate3d(${(y*0.5*dir).toFixed(1)}px,0,0)`;
     });
   };
   addEventListener('scroll',()=>{                  // coalesced into one write per frame

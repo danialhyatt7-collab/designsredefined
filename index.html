@@ -126,12 +126,6 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 }
 .nav-inner{max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .wordmark{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
-.wordmark .mark{
-  width:30px;height:30px;border-radius:9px;flex:none;
-  background:var(--mark-bg);color:var(--mark-fg);
-  display:grid;place-items:center;font-size:13px;
-  box-shadow:0 0 18px rgba(var(--ov),0.315);
-}
 .nav-links{display:none;gap:28px;font-size:14.5px;color:var(--ink-dim)}
 .nav-links a:hover{color:var(--ink)}
 @media(min-width:860px){.nav-links{display:flex}}
@@ -189,7 +183,6 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 @media(max-width:520px){
   .nav-inner{padding:12px 16px;gap:8px}
   .wordmark{font-size:15px;gap:8px}
-  .wordmark .mark{width:26px;height:26px;border-radius:8px;font-size:11px}
   .nav-right{gap:7px}
   .theme-btn{width:34px;height:34px}
   .nav .btn{padding:9px 14px;font-size:13px}
@@ -260,10 +253,8 @@ html.has-smooth{scroll-behavior:auto}   /* the lerp does the smoothing now */
 .t-shift{will-change:transform}
 .t-run{
   display:flex;width:max-content;
-  animation:run 16s linear infinite;
+  will-change:transform;   /* position is driven in JS so scrolling can steer it */
 }
-.t-line.rev .t-run{animation-duration:21s;animation-direction:reverse}
-@keyframes run{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 .t-run b{
   font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;
   font-size:clamp(32px,8.4vw,64px);line-height:1.14;letter-spacing:-.02em;
@@ -280,8 +271,7 @@ html.has-smooth{scroll-behavior:auto}   /* the lerp does the smoothing now */
   -webkit-text-stroke:1px rgba(var(--ink-rgb),.45);
 }
 @media(prefers-reduced-motion:reduce){
-  .t-run{animation:none}
-  .t-shift{transform:none!important}
+  .t-run{transform:none!important}
 }
 .orb-canvas{width:100%;aspect-ratio:1/1;display:block;border-radius:var(--radius)}
 .badge{
@@ -596,7 +586,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 
 <nav class="nav">
   <div class="nav-inner">
-    <a class="wordmark" href="#top"><span class="mark">◆</span>Designs Redefined</a>
+    <a class="wordmark" href="#top">Designs Redefined</a>
     <div class="nav-links">
       <a href="#services">Services</a>
       <a href="#web">Web</a>
@@ -884,7 +874,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 <footer>
   <div class="wrap foot">
     <div>
-      <a class="wordmark" href="#top" style="margin-bottom:12px"><span class="mark">◆</span>Designs Redefined</a>
+      <a class="wordmark" href="#top" style="margin-bottom:12px">Designs Redefined</a>
       <p style="color:var(--ink-faint);font-size:13.5px;max-width:280px;margin-top:10px">Web design &amp; marketing agency. Websites, branding and marketing for businesses that want to stand out.</p>
     </div>
     <div class="foot-links">
@@ -999,78 +989,41 @@ sysDark.addEventListener('change',e=>{
     window.dispatchEvent(new CustomEvent('themechange',{detail:{dark:e.matches}}));
 });
 
-/* Rows loop on their own via CSS; scroll position pushes them further along.
-   Each row declares its own direction, so the offset always travels WITH the
-   animation - mismatched signs make a ticker appear to run backwards. */
-const tShifts=[...document.querySelectorAll('.t-shift')];
-if(tShifts.length&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-  let queued=false;
-  const applyShift=()=>{
-    queued=false;
-    const y=window.scrollY;
-    tShifts.forEach(el=>{
-      const dir=+el.dataset.dir||-1;
-      el.style.transform=`translate3d(${(y*0.5*dir).toFixed(1)}px,0,0)`;
-    });
-  };
-  addEventListener('scroll',()=>{                  // coalesced into one write per frame
-    if(!queued){queued=true;requestAnimationFrame(applyShift);}
-  },{passive:true});
-  applyShift();
-}
-
-
-/* Inertial scrolling, desktop pointers only. Touch devices already have
-   native momentum and hijacking it there makes pages feel broken. */
+/* Ticker rows advance on their own and take their direction from the scroll:
+   scrolling down runs them right-to-left, scrolling up reverses them. Each row
+   declares a base direction so the two rows always travel opposite each other. */
 (function(){
-  const wrap=document.getElementById('smooth');
-  if(!wrap)return;
-  const touch=matchMedia('(hover:none)').matches||navigator.maxTouchPoints>0;
-  if(touch||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const runs=[...document.querySelectorAll('.t-run')];
+  if(!runs.length||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 
-  document.documentElement.classList.add('has-smooth');
-  let current=0,running=false;
+  const SPEED=34;                 // px per second - an unhurried reading pace
+  const rows=runs.map(el=>({el,x:0,base:+el.closest('.t-shift').dataset.dir||-1}));
+  let dirSign=1, lastY=window.scrollY, lastT=performance.now(), visible=true, raf=0;
 
-  const syncHeight=()=>{document.body.style.height=wrap.scrollHeight+'px';};
-  syncHeight();
-  new ResizeObserver(syncHeight).observe(wrap);
-
-  function tick(){
-    const target=window.scrollY;
-    current+=(target-current)*0.11;
-    if(Math.abs(target-current)<0.15){current=target;running=false;}  // settle and stop
-    wrap.style.transform=`translate3d(0,${-current.toFixed(2)}px,0)`;
-    if(running)requestAnimationFrame(tick);
-  }
-  addEventListener('scroll',()=>{        // loop runs only while actually scrolling
-    if(!running){running=true;requestAnimationFrame(tick);}
+  addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    if(y!==lastY){dirSign=y>lastY?1:-1;lastY=y;}   // down = forward, up = reversed
   },{passive:true});
 
-  /* Anchor links need handling: inside a fixed wrapper the sections have no
-     document scroll position, so the browser has nothing to scroll them to.
-     Convert the target's on-screen position back into a document offset. */
-  /* Same root cause hits keyboard users: the browser cannot scroll a focused
-     element into view inside a fixed wrapper, so tabbing below the fold would
-     strand them on a page that never moves. Bring focus into view manually. */
-  addEventListener('focusin',e=>{
-    const el=e.target;
-    if(!el||!wrap.contains(el))return;
-    const r=el.getBoundingClientRect();
-    if(r.top>=72&&r.bottom<=innerHeight-16)return;     // already comfortably visible
-    const y=r.top+current-Math.max(96,innerHeight*0.3);
-    window.scrollTo(0,Math.max(0,Math.round(y)));
-  });
-
-  document.addEventListener('click',e=>{
-    const a=e.target.closest('a[href^="#"]');
-    if(!a)return;
-    const id=a.getAttribute('href').slice(1);
-    const el=id?document.getElementById(id):null;
-    if(!el)return;
-    e.preventDefault();
-    const y=el.getBoundingClientRect().top+current;
-    window.scrollTo(0,Math.max(0,Math.round(y)));
-  });
+  function frame(now){
+    const dt=Math.min((now-lastT)/1000,0.05);      // clamp so a stalled tab cannot jump
+    lastT=now;
+    for(const r of rows){
+      const half=r.el.scrollWidth/2;               // content is duplicated once
+      if(half>0){
+        r.x+=SPEED*dt*r.base*dirSign;
+        if(r.x<=-half)r.x+=half;                   // wrap seamlessly, both ways
+        else if(r.x>=0)r.x-=half;
+        r.el.style.transform=`translate3d(${r.x.toFixed(2)}px,0,0)`;
+      }
+    }
+    raf=visible?requestAnimationFrame(frame):0;
+  }
+  // only animate while the ticker is actually on screen
+  new IntersectionObserver(es=>{
+    visible=es[0].isIntersecting;
+    if(visible&&!raf){lastT=performance.now();raf=requestAnimationFrame(frame);}
+  },{rootMargin:'100px'}).observe(runs[0].closest('.ticker'));
 })();
 
 // card hover glow follows pointer

@@ -409,6 +409,47 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   border:1px solid rgba(var(--ov),.2);border-radius:999px;padding:5px 10px;
 }
 .shot .live b{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 1.8s ease-in-out infinite}
+/* the Live badge only means something once an embed is actually running */
+.shot .live{opacity:0;transition:opacity .3s}
+.work-item.is-live .shot .live{opacity:1}
+
+/* tap target that swaps the screenshot for the real site */
+.shot-play{
+  position:absolute;inset:0;z-index:3;
+  display:flex;align-items:center;justify-content:center;
+  border:0;padding:0;cursor:pointer;font:inherit;
+  background:linear-gradient(180deg,rgba(4,4,8,.10),rgba(4,4,8,.42));
+  opacity:0;transition:opacity .3s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.shot-play span{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12.5px;font-weight:600;letter-spacing:.01em;
+  color:#fff;background:rgba(10,10,12,.72);
+  border:1px solid rgba(255,255,255,.24);border-radius:999px;padding:9px 15px;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transform:translateY(4px);transition:transform .3s ease;
+}
+/* always visible on touch devices, revealed on hover for pointers */
+.work-item:hover .shot-play,.shot-play:focus-visible{opacity:1}
+.work-item:hover .shot-play span{transform:none}
+@media(hover:none){.shot-play{opacity:1}.shot-play span{transform:none}}
+.work-item.is-live .shot-play{opacity:0;pointer-events:none}
+
+.shot-stop{
+  position:absolute;top:10px;left:10px;z-index:4;
+  width:26px;height:26px;border-radius:999px;
+  display:none;place-items:center;cursor:pointer;
+  font-size:15px;line-height:1;color:#fff;
+  background:rgba(10,10,12,.72);border:1px solid rgba(255,255,255,.24);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.work-item.is-live .shot-stop{display:grid}
+/* screenshot stays put underneath; the live frame simply covers it */
+.work-item.is-live .shot-poster{opacity:0;transition:opacity .45s ease}
+@media(prefers-reduced-motion:reduce){
+  .shot-play,.shot-play span,.shot .live,.work-item.is-live .shot-poster{transition:none}
+}
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 .work-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
@@ -667,66 +708,69 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
   <div class="wrap" style="position:relative;z-index:1">
     <p class="kicker rv">Selected work</p>
     <h2 class="rv">Live sites, not mockups</h2>
-    <p class="sub rv">Real sites we've built, running right now. Tap any one to open it and judge it for yourself.</p>
+    <p class="sub rv">Real sites we've built, running right now. Load any one live in place, or open the real thing in a new tab.</p>
 
     <div class="work">
 
-      <a class="work-item rv" href="https://danialhyatt7-collab.github.io/O-kly/index.html" target="_blank" rel="noopener">
+      <article class="work-item rv">
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/O-kly</em></div>
-        <div class="shot">
-          <span class="live"><b></b>Live</span>
+        <div class="shot" data-src="https://danialhyatt7-collab.github.io/O-kly/index.html" data-name="Oakly">
           <img class="shot-poster" src="assets/work-okly.webp" alt="Oakly furniture site homepage" loading="lazy" decoding="async" width="880" height="605">
-          <iframe data-src="https://danialhyatt7-collab.github.io/O-kly/index.html" title="Oakly furniture website preview"
-                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
-                  sandbox="allow-scripts allow-same-origin"></iframe>
+          <button class="shot-play" type="button">
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
+          </button>
+          <span class="live"><b></b>Live</span>
+          <button class="shot-stop" type="button" aria-label="Stop live preview of Oakly" title="Stop live preview">&#215;</button>
         </div>
         <div class="work-body">
           <h3>Oakly — Modern Furnica</h3>
           <p>A furniture brand storefront for handmade solid-oak pieces, with a marquee of buying incentives, product series pages and an email capture built into the hero.</p>
           <div class="work-tags"><span>E-Commerce</span><span>Brand Site</span><span>Animation</span></div>
-          <span class="work-visit">Visit live site
+          <a class="work-visit" href="https://danialhyatt7-collab.github.io/O-kly/index.html" target="_blank" rel="noopener">Visit live site
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
-          </span>
+          </a>
         </div>
-      </a>
+      </article>
 
-      <a class="work-item rv" href="https://danialhyatt.com/" target="_blank" rel="noopener">
+      <article class="work-item rv">
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt.com</em></div>
-        <div class="shot">
-          <span class="live"><b></b>Live</span>
+        <div class="shot" data-src="https://danialhyatt.com/" data-name="Danial Hyatt">
           <img class="shot-poster" src="assets/work-danialhyatt.webp" alt="Danial Hyatt motion design site homepage" loading="lazy" decoding="async" width="880" height="605">
-          <iframe data-src="https://danialhyatt.com/" title="Danial Hyatt motion design website preview"
-                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
-                  sandbox="allow-scripts allow-same-origin"></iframe>
+          <button class="shot-play" type="button">
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
+          </button>
+          <span class="live"><b></b>Live</span>
+          <button class="shot-stop" type="button" aria-label="Stop live preview of Danial Hyatt" title="Stop live preview">&#215;</button>
         </div>
         <div class="work-body">
           <h3>Danial Hyatt — Product Motion</h3>
           <p>A motion designer's portfolio and services site: showreel-led hero, packages and pricing, rotating client quotes and a clear hire-me path throughout.</p>
           <div class="work-tags"><span>Portfolio</span><span>Video</span><span>Services</span></div>
-          <span class="work-visit">Visit live site
+          <a class="work-visit" href="https://danialhyatt.com/" target="_blank" rel="noopener">Visit live site
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
-          </span>
+          </a>
         </div>
-      </a>
+      </article>
 
-      <a class="work-item rv" href="https://danialhyatt7-collab.github.io/alqanoon/" target="_blank" rel="noopener">
+      <article class="work-item rv">
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/alqanoon</em></div>
-        <div class="shot">
-          <span class="live"><b></b>Live</span>
+        <div class="shot" data-src="https://danialhyatt7-collab.github.io/alqanoon/" data-name="Al-Qanoon E-Stamps">
           <img class="shot-poster" src="assets/work-alqanoon.webp" alt="Al-Qanoon E-Stamps site homepage" loading="lazy" decoding="async" width="880" height="605">
-          <iframe data-src="https://danialhyatt7-collab.github.io/alqanoon/" title="Al-Qanoon E-Stamps website preview"
-                  loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
-                  sandbox="allow-scripts allow-same-origin"></iframe>
+          <button class="shot-play" type="button">
+            <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
+          </button>
+          <span class="live"><b></b>Live</span>
+          <button class="shot-stop" type="button" aria-label="Stop live preview of Al-Qanoon E-Stamps" title="Stop live preview">&#215;</button>
         </div>
         <div class="work-body">
           <h3>Al-Qanoon E-Stamps</h3>
           <p>A local service site for online e-stamp paper in Islamabad and Rawalpindi — process explainer, document types, flat pricing, FAQ and WhatsApp-first ordering.</p>
           <div class="work-tags"><span>Lead Gen</span><span>Local SEO</span><span>Service Site</span></div>
-          <span class="work-visit">Visit live site
+          <a class="work-visit" href="https://danialhyatt7-collab.github.io/alqanoon/" target="_blank" rel="noopener">Visit live site
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M9 7h8v8"/></svg>
-          </span>
+          </a>
         </div>
-      </a>
+      </article>
 
     </div>
   </div>
@@ -801,20 +845,45 @@ function sizeShots(){
 sizeShots();
 addEventListener('resize',sizeShots,{passive:true});
 
-/* Live embeds on every screen size. Each card shows its real screenshot
-   immediately, and the live site paints over it once loaded. */
-const shotIO=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(!e.isIntersecting)return;
-    const f=e.target.querySelector('iframe[data-src]');
-    if(f){
-      f.src=f.dataset.src;
-      f.removeAttribute('data-src');
-    }
-    shotIO.unobserve(e.target);
-  });
-},{rootMargin:'400px'});
-shots.forEach(s=>shotIO.observe(s));
+/* Live previews are opt-in. Each card ships only its screenshot (~25KB);
+   the real site is fetched when the visitor asks for it. Embedding all three
+   up front pulled ~6.9MB of third-party assets and kept their scripts running. */
+let liveShot=null;
+
+function stopLive(shot){
+  if(!shot)return;
+  const f=shot.querySelector('iframe');
+  if(f)f.remove();                       // removing the frame halts its scripts and frees memory
+  shot.closest('.work-item').classList.remove('is-live');
+  if(liveShot===shot)liveShot=null;
+}
+
+function startLive(shot){
+  if(shot.querySelector('iframe'))return;
+  stopLive(liveShot);                    // only one live embed at a time
+  const f=document.createElement('iframe');
+  f.src=shot.dataset.src;
+  f.title=shot.dataset.name+' website, live preview';
+  f.setAttribute('scrolling','no');
+  f.setAttribute('tabindex','-1');
+  f.setAttribute('sandbox','allow-scripts allow-same-origin');
+  shot.appendChild(f);
+  shot.closest('.work-item').classList.add('is-live');
+  liveShot=shot;
+}
+
+shots.forEach(shot=>{
+  const play=shot.querySelector('.shot-play');
+  play.setAttribute('aria-label','Load live preview of '+shot.dataset.name);
+  play.addEventListener('click',()=>startLive(shot));
+  shot.querySelector('.shot-stop').addEventListener('click',()=>stopLive(shot));
+});
+
+/* release a running embed once it is well out of view */
+const liveIO=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(!e.isIntersecting&&e.target.querySelector('iframe'))stopLive(e.target);});
+},{rootMargin:'200px'});
+shots.forEach(s=>liveIO.observe(s));
 
 /* theme toggle: explicit choice wins and persists, otherwise follow the system */
 const root=document.documentElement;
@@ -1027,9 +1096,20 @@ const themeIsDark=()=>{
 addEventListener('themechange',e=>paintTheme(e.detail.dark));
 
 const clock=new THREE.Clock();
-function frame(){
+/* These are slow ambient scenes, so a capped frame rate looks identical while
+   costing a fraction of the CPU/GPU and battery. Phones get a lower cap. */
+const FPS_CAP=innerWidth<768?24:30;
+const FRAME_MS=1000/FPS_CAP;
+let lastFrame=-Infinity,paused=false;
+
+function frame(now){
+  if(!reduced)requestAnimationFrame(frame);
+  if(paused)return;
+  if(now-lastFrame<FRAME_MS)return;   // skip this tick, stay under the cap
+  lastFrame=now;
+
   const t=clock.getElapsedTime();
-  px+=(tx-px)*0.04; py+=(ty-py)*0.04;
+  px+=(tx-px)*0.12; py+=(ty-py)*0.12; // larger step compensates for fewer frames
 
   if(live.get(heroCanvas)!==false){
     fit(heroR,heroCam,heroCanvas);
@@ -1054,8 +1134,9 @@ function frame(){
     wavePos.needsUpdate=true;
     ctaR.render(ctaScene,ctaCam);
   }
-  if(!reduced)requestAnimationFrame(frame);
 }
+/* stop drawing entirely in a background tab */
+document.addEventListener('visibilitychange',()=>{paused=document.hidden;});
 function renderAll(){
   fit(heroR,heroCam,heroCanvas);heroR.render(heroScene,heroCam);
   fit(orbR,orbCam,orbCanvas);orbR.render(orbScene,orbCam);
@@ -1065,7 +1146,7 @@ paintTheme(themeIsDark());
 if(reduced){
   renderAll(); // single static frame per scene
 }else{
-  frame();
+  requestAnimationFrame(frame);
 }
 </script>
 </body>

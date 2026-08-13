@@ -38,6 +38,7 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --head-grad:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
   --shot-bg:#0a0a0d;
   --badge-bg:rgba(10,10,12,.72);
+  --sheen:rgba(255,255,255,.10);
   --radius:20px;
 }
 /* light theme: explicit choice, or system preference when no choice is stored */
@@ -62,6 +63,7 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
     --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
     --shot-bg:#ECECF0;
     --badge-bg:rgba(255,255,255,.82);
+    --sheen:rgba(15,15,25,.05);
   }
 }
 :root[data-theme="light"]{
@@ -84,6 +86,7 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
   --shot-bg:#ECECF0;
   --badge-bg:rgba(255,255,255,.82);
+  --sheen:rgba(15,15,25,.05);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden}
@@ -530,6 +533,38 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .work-visit svg{transition:transform .25s}
 .work-item:hover .work-visit svg{transform:translate(2px,-2px)}
 @media(prefers-reduced-motion:reduce){.shot .live b{animation:none}}
+
+
+/* ---------- sheen: soft light travelling across surfaces ----------
+   Animates transform, never background-position: the latter repaints the
+   element every frame, which is what makes this effect expensive elsewhere.
+   Gated on .on so a sweep only runs once its surface has been revealed. */
+.card>*,.step>*,.work-item>*{position:relative;z-index:1}
+.card.on::after,
+.step.on::after,
+.work-item.on::after,
+.cta-band.on::before{
+  content:"";position:absolute;
+  top:-60%;bottom:-60%;left:-50%;width:38%;
+  z-index:0;pointer-events:none;
+  background:linear-gradient(100deg,transparent,var(--sheen),transparent);
+  animation:sheen 9s ease-in-out infinite;
+  animation-delay:var(--sd,0s);
+}
+@keyframes sheen{
+  0%{transform:translateX(-20%) rotate(9deg)}
+  45%,100%{transform:translateX(460%) rotate(9deg)}   /* sweep, then rest */
+}
+/* stagger so surfaces never pulse in unison */
+.card:nth-child(2),.step:nth-child(2),.work-item:nth-child(2){--sd:1.4s}
+.card:nth-child(3),.step:nth-child(3),.work-item:nth-child(3){--sd:2.8s}
+.card:nth-child(4){--sd:.7s}
+.card:nth-child(5){--sd:2.1s}
+.card:nth-child(6){--sd:3.5s}
+.cta-band{--sd:1s}
+@media(prefers-reduced-motion:reduce){
+  .card.on::after,.step.on::after,.work-item.on::after,.cta-band.on::before{animation:none;opacity:0}
+}
 
 /* ---------- CTA band ---------- */
 .cta-band{

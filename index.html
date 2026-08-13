@@ -103,7 +103,7 @@ img{max-width:100%;display:block}
 .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 20px}
 /* clip the oversized decorative blurs: left unclipped they widen the layout,
    which stretches the fixed nav past the screen on phones */
-section{position:relative;padding:72px 0;overflow:hidden}
+section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 @media(min-width:768px){section{padding:110px 0}}
 
 /* ---------- ambient glow ---------- */
@@ -193,29 +193,61 @@ section{position:relative;padding:72px 0;overflow:hidden}
 /* position:relative is load-bearing: without it the absolutely positioned glow
    anchors to the viewport instead of the header, escapes overflow:hidden, and
    widens the page — which stretches the fixed nav off-screen on phones */
-.hero{position:relative;padding:140px 0 80px;text-align:center;overflow:hidden}
+.hero{position:relative;z-index:1;padding:140px 0 80px;text-align:center;overflow:hidden}
 @media(min-width:768px){.hero{padding:180px 0 110px}}
+
+/* ---------- page-wide continuous scroll background ---------- */
+.pagebg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-around;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);
+  mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);
+}
+.pb-line{overflow:hidden}
+.pb-run{
+  display:flex;width:max-content;
+  animation:run 30s linear infinite;
+}
+.pb-line:nth-child(2) .pb-run{animation-duration:44s}
+.pb-line:nth-child(3) .pb-run{animation-duration:36s}
+.pb-line:nth-child(4) .pb-run{animation-duration:52s}
+.pb-line:nth-child(5) .pb-run{animation-duration:40s}
+.pb-line:nth-child(6) .pb-run{animation-duration:58s}
+.pb-line.rev .pb-run{animation-direction:reverse}
+.pb-run b{
+  font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;
+  font-size:clamp(44px,11vw,120px);line-height:1;letter-spacing:-.03em;
+  white-space:nowrap;padding-right:.3em;
+  display:inline-flex;align-items:center;gap:.3em;
+  /* outline only, and faint: it has to sit under body copy without competing */
+  color:transparent;-webkit-text-stroke:1px rgba(var(--ink-rgb),.075);
+}
+.pb-run b i{font-style:normal;font-size:.3em;-webkit-text-stroke:0;color:rgba(var(--ink-rgb),.07)}
+@media(prefers-reduced-motion:reduce){.pb-run{animation:none}}
+
 /* ---------- hero ticker (continuous + scroll-driven) ---------- */
 .ticker{
   position:relative;z-index:1;
-  margin:52px 0 0;
-  display:flex;flex-direction:column;gap:6px;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  margin:46px 0 0;padding:26px 0;
+  display:flex;flex-direction:column;gap:2px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(var(--ov),.035),transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
 }
-@media(min-width:768px){.ticker{margin-top:70px;gap:10px}}
+@media(min-width:768px){.ticker{margin-top:64px;padding:34px 0;gap:6px}}
 .t-line{overflow:hidden}
 /* scroll offset lives on this wrapper so it never fights the CSS loop below */
 .t-shift{will-change:transform}
 .t-run{
   display:flex;width:max-content;
-  animation:run 34s linear infinite;
+  animation:run 16s linear infinite;
 }
-.t-line.rev .t-run{animation-duration:44s;animation-direction:reverse}
+.t-line.rev .t-run{animation-duration:21s;animation-direction:reverse}
 @keyframes run{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 .t-run b{
   font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;
-  font-size:clamp(26px,7vw,54px);line-height:1.1;letter-spacing:-.02em;
+  font-size:clamp(32px,8.4vw,64px);line-height:1.14;letter-spacing:-.02em;
   padding-right:.42em;white-space:nowrap;
   display:inline-flex;align-items:center;gap:.42em;
 }
@@ -226,7 +258,7 @@ section{position:relative;padding:72px 0;overflow:hidden}
 /* second row is outlined, which reads as depth rather than repetition */
 .t-line.rev .t-run b{
   color:transparent;
-  -webkit-text-stroke:1px rgba(var(--ink-rgb),.3);
+  -webkit-text-stroke:1px rgba(var(--ink-rgb),.45);
 }
 @media(prefers-reduced-motion:reduce){
   .t-run{animation:none}
@@ -513,7 +545,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .cta-band p{color:var(--ink-dim);max-width:480px;margin:0 auto 30px}
 
 /* ---------- footer ---------- */
-footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
+footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
 .foot{display:flex;flex-direction:column;gap:28px}
 @media(min-width:768px){.foot{flex-direction:row;justify-content:space-between;align-items:flex-start}}
 .foot-links{display:flex;flex-wrap:wrap;gap:20px;font-size:14px;color:var(--ink-dim)}
@@ -537,6 +569,15 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
 </style>
 </head>
 <body>
+
+<div class="pagebg" aria-hidden="true">
+    <div class="pb-line"><div class="t-shift" data-dir="-1"><div class="pb-run"><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b></div></div></div>
+    <div class="pb-line rev"><div class="t-shift" data-dir="1"><div class="pb-run"><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b></div></div></div>
+    <div class="pb-line"><div class="t-shift" data-dir="-1"><div class="pb-run"><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b></div></div></div>
+    <div class="pb-line rev"><div class="t-shift" data-dir="1"><div class="pb-run"><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b></div></div></div>
+    <div class="pb-line"><div class="t-shift" data-dir="-1"><div class="pb-run"><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b></div></div></div>
+    <div class="pb-line rev"><div class="t-shift" data-dir="1"><div class="pb-run"><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b><b>MARKETING<i>&#10022;</i></b><b>LANDING PAGES<i>&#10022;</i></b><b>SITE CARE<i>&#10022;</i></b><b>DESIGNS REDEFINED<i>&#10022;</i></b><b>WEB DESIGN<i>&#10022;</i></b><b>E-COMMERCE<i>&#10022;</i></b><b>BRANDING<i>&#10022;</i></b><b>SEO<i>&#10022;</i></b></div></div></div>
+</div>
 
 <nav class="nav">
   <div class="nav-inner">
@@ -573,8 +614,8 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
       <a class="btn btn-ghost" href="#work">See our work</a>
     </div>
   <div class="ticker" aria-hidden="true">
-    <div class="t-line"><div class="t-shift"><div class="t-run"><b>Custom Websites<i>&#10022;</i></b><b>E-Commerce<i>&#10022;</i></b><b>Landing Pages<i>&#10022;</i></b><b>SEO &amp; Performance<i>&#10022;</i></b><b>Branding<i>&#10022;</i></b><b>Marketing<i>&#10022;</i></b><b>Custom Websites<i>&#10022;</i></b><b>E-Commerce<i>&#10022;</i></b><b>Landing Pages<i>&#10022;</i></b><b>SEO &amp; Performance<i>&#10022;</i></b><b>Branding<i>&#10022;</i></b><b>Marketing<i>&#10022;</i></b></div></div></div>
-    <div class="t-line rev"><div class="t-shift"><div class="t-run"><b>Mobile-First<i>&#10022;</i></b><b>Built to Convert<i>&#10022;</i></b><b>Fast Loading<i>&#10022;</i></b><b>Made to Rank<i>&#10022;</i></b><b>Ongoing Support<i>&#10022;</i></b><b>Mobile-First<i>&#10022;</i></b><b>Built to Convert<i>&#10022;</i></b><b>Fast Loading<i>&#10022;</i></b><b>Made to Rank<i>&#10022;</i></b><b>Ongoing Support<i>&#10022;</i></b></div></div></div>
+    <div class="t-line"><div class="t-shift" data-dir="-1"><div class="t-run"><b>Custom Websites<i>&#10022;</i></b><b>E-Commerce<i>&#10022;</i></b><b>Landing Pages<i>&#10022;</i></b><b>SEO &amp; Performance<i>&#10022;</i></b><b>Branding<i>&#10022;</i></b><b>Social Content<i>&#10022;</i></b><b>Ad Creative<i>&#10022;</i></b><b>Site Care<i>&#10022;</i></b><b>Custom Websites<i>&#10022;</i></b><b>E-Commerce<i>&#10022;</i></b><b>Landing Pages<i>&#10022;</i></b><b>SEO &amp; Performance<i>&#10022;</i></b><b>Branding<i>&#10022;</i></b><b>Social Content<i>&#10022;</i></b><b>Ad Creative<i>&#10022;</i></b><b>Site Care<i>&#10022;</i></b></div></div></div>
+    <div class="t-line rev"><div class="t-shift" data-dir="1"><div class="t-run"><b>Mobile-First<i>&#10022;</i></b><b>Built to Convert<i>&#10022;</i></b><b>Fast Loading<i>&#10022;</i></b><b>Made to Rank<i>&#10022;</i></b><b>Hand-Built<i>&#10022;</i></b><b>No Templates<i>&#10022;</i></b><b>Ongoing Support<i>&#10022;</i></b><b>Mobile-First<i>&#10022;</i></b><b>Built to Convert<i>&#10022;</i></b><b>Fast Loading<i>&#10022;</i></b><b>Made to Rank<i>&#10022;</i></b><b>Hand-Built<i>&#10022;</i></b><b>No Templates<i>&#10022;</i></b><b>Ongoing Support<i>&#10022;</i></b></div></div></div>
   </div>
     <div class="hero-stats rv">
       <div><b>50+</b><span>Projects shipped</span></div>
@@ -941,20 +982,22 @@ sysDark.addEventListener('change',e=>{
     window.dispatchEvent(new CustomEvent('themechange',{detail:{dark:e.matches}}));
 });
 
-/* the ticker loops on its own via CSS; scrolling pushes it further along.
-   The offset goes on a wrapper so it never conflicts with that animation. */
+/* Rows loop on their own via CSS; scroll position pushes them further along.
+   Each row declares its own direction, so the offset always travels WITH the
+   animation - mismatched signs make a ticker appear to run backwards. */
 const tShifts=[...document.querySelectorAll('.t-shift')];
 if(tShifts.length&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   let queued=false;
   const applyShift=()=>{
     queued=false;
     const y=window.scrollY;
-    tShifts.forEach((el,i)=>{
-      const dir=i%2?-1:1;                       // rows drift apart as you scroll
-      el.style.transform=`translate3d(${(y*0.22*dir).toFixed(1)}px,0,0)`;
+    tShifts.forEach(el=>{
+      const dir=+el.dataset.dir||-1;
+      const rate=el.closest('.pagebg')?0.18:0.5;   // background drifts gently, hero band leads
+      el.style.transform=`translate3d(${(y*rate*dir).toFixed(1)}px,0,0)`;
     });
   };
-  addEventListener('scroll',()=>{               // coalesced into one write per frame
+  addEventListener('scroll',()=>{                  // coalesced into one write per frame
     if(!queued){queued=true;requestAnimationFrame(applyShift);}
   },{passive:true});
   applyShift();

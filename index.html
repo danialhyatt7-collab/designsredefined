@@ -195,11 +195,42 @@ section{position:relative;padding:72px 0;overflow:hidden}
    widens the page — which stretches the fixed nav off-screen on phones */
 .hero{position:relative;padding:140px 0 80px;text-align:center;overflow:hidden}
 @media(min-width:768px){.hero{padding:180px 0 110px}}
-.hero-bg{
-  position:absolute;inset:0;z-index:0;pointer-events:none;
-  width:100%;height:100%;display:block;opacity:.75;
-  -webkit-mask-image:linear-gradient(180deg,#000 40%,transparent 97%);
-  mask-image:linear-gradient(180deg,#000 40%,transparent 97%);
+/* ---------- hero ticker (continuous + scroll-driven) ---------- */
+.ticker{
+  position:relative;z-index:1;
+  margin:52px 0 0;
+  display:flex;flex-direction:column;gap:6px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+}
+@media(min-width:768px){.ticker{margin-top:70px;gap:10px}}
+.t-line{overflow:hidden}
+/* scroll offset lives on this wrapper so it never fights the CSS loop below */
+.t-shift{will-change:transform}
+.t-run{
+  display:flex;width:max-content;
+  animation:run 34s linear infinite;
+}
+.t-line.rev .t-run{animation-duration:44s;animation-direction:reverse}
+@keyframes run{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+.t-run b{
+  font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;
+  font-size:clamp(26px,7vw,54px);line-height:1.1;letter-spacing:-.02em;
+  padding-right:.42em;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:.42em;
+}
+.t-run b i{
+  font-style:normal;font-size:.42em;
+  color:var(--ink-faint);transform:translateY(-.08em);
+}
+/* second row is outlined, which reads as depth rather than repetition */
+.t-line.rev .t-run b{
+  color:transparent;
+  -webkit-text-stroke:1px rgba(var(--ink-rgb),.3);
+}
+@media(prefers-reduced-motion:reduce){
+  .t-run{animation:none}
+  .t-shift{transform:none!important}
 }
 .orb-canvas{width:100%;aspect-ratio:1/1;display:block;border-radius:var(--radius)}
 .badge{
@@ -227,13 +258,13 @@ section{position:relative;padding:72px 0;overflow:hidden}
   overflow:hidden;
 }
 .hero-stats div{background:var(--bg);padding:22px 10px}
-.hero-stats b{display:block;font-family:'Space Grotesk';font-size:clamp(22px,4.5vw,32px);font-weight:700}
+.hero-stats b{display:block;font-family:'Space Grotesk','Inter',sans-serif;font-size:clamp(22px,4.5vw,32px);font-weight:700}
 .hero-stats span{font-size:12.5px;color:var(--ink-faint)}
 
 /* ---------- statement (word reveal) ---------- */
 .statement{padding:60px 0}
 .statement p{
-  font-family:'Space Grotesk';font-weight:600;
+  font-family:'Space Grotesk','Inter',sans-serif;font-weight:600;
   font-size:clamp(24px,5.2vw,42px);line-height:1.3;letter-spacing:-.02em;
   max-width:900px;
 }
@@ -338,7 +369,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .brand-tiles .tile{
   border-radius:14px;border:1px solid var(--line);padding:20px 14px;text-align:center;
   background:rgba(var(--ink-rgb),.03);
-  font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--ink-dim);
+  font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;font-size:15px;color:var(--ink-dim);
 }
 .brand-tiles .tile.big{grid-column:1/-1;font-size:22px;color:var(--ink);
   background:linear-gradient(135deg,rgba(var(--ov),0.126),rgba(var(--ov),0.044))}
@@ -352,7 +383,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   background:linear-gradient(180deg,rgba(var(--ov),.04),rgba(var(--ov),.01));
 }
 .step .num{
-  font-family:'Space Grotesk';font-size:44px;font-weight:700;line-height:1;
+  font-family:'Space Grotesk','Inter',sans-serif;font-size:44px;font-weight:700;line-height:1;
   background:linear-gradient(180deg,var(--accent),rgba(var(--ov),0.14));
   -webkit-background-clip:text;background-clip:text;color:transparent;
   margin-bottom:14px;
@@ -532,7 +563,6 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
 </nav>
 
 <header class="hero" id="top">
-  <canvas id="hero3d" class="hero-bg" aria-hidden="true"></canvas>
   <span class="glow glow-hero"></span>
   <div class="wrap" style="position:relative;z-index:1">
     <span class="badge"><span class="dot"></span>Web Design &amp; Marketing Agency</span>
@@ -542,6 +572,10 @@ footer{border-top:1px solid var(--line);padding:48px 0 36px;margin-top:40px}
       <a class="btn btn-primary" href="#contact">Talk to Us&nbsp;→</a>
       <a class="btn btn-ghost" href="#work">See our work</a>
     </div>
+  <div class="ticker" aria-hidden="true">
+    <div class="t-line"><div class="t-shift"><div class="t-run"><b>Custom Websites<i>&#10022;</i></b><b>E-Commerce<i>&#10022;</i></b><b>Landing Pages<i>&#10022;</i></b><b>SEO &amp; Performance<i>&#10022;</i></b><b>Branding<i>&#10022;</i></b><b>Marketing<i>&#10022;</i></b><b>Custom Websites<i>&#10022;</i></b><b>E-Commerce<i>&#10022;</i></b><b>Landing Pages<i>&#10022;</i></b><b>SEO &amp; Performance<i>&#10022;</i></b><b>Branding<i>&#10022;</i></b><b>Marketing<i>&#10022;</i></b></div></div></div>
+    <div class="t-line rev"><div class="t-shift"><div class="t-run"><b>Mobile-First<i>&#10022;</i></b><b>Built to Convert<i>&#10022;</i></b><b>Fast Loading<i>&#10022;</i></b><b>Made to Rank<i>&#10022;</i></b><b>Ongoing Support<i>&#10022;</i></b><b>Mobile-First<i>&#10022;</i></b><b>Built to Convert<i>&#10022;</i></b><b>Fast Loading<i>&#10022;</i></b><b>Made to Rank<i>&#10022;</i></b><b>Ongoing Support<i>&#10022;</i></b></div></div></div>
+  </div>
     <div class="hero-stats rv">
       <div><b>50+</b><span>Projects shipped</span></div>
       <div><b>&lt;2s</b><span>Average load time</span></div>
@@ -907,6 +941,25 @@ sysDark.addEventListener('change',e=>{
     window.dispatchEvent(new CustomEvent('themechange',{detail:{dark:e.matches}}));
 });
 
+/* the ticker loops on its own via CSS; scrolling pushes it further along.
+   The offset goes on a wrapper so it never conflicts with that animation. */
+const tShifts=[...document.querySelectorAll('.t-shift')];
+if(tShifts.length&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  let queued=false;
+  const applyShift=()=>{
+    queued=false;
+    const y=window.scrollY;
+    tShifts.forEach((el,i)=>{
+      const dir=i%2?-1:1;                       // rows drift apart as you scroll
+      el.style.transform=`translate3d(${(y*0.22*dir).toFixed(1)}px,0,0)`;
+    });
+  };
+  addEventListener('scroll',()=>{               // coalesced into one write per frame
+    if(!queued){queued=true;requestAnimationFrame(applyShift);}
+  },{passive:true});
+  applyShift();
+}
+
 // card hover glow follows pointer
 document.querySelectorAll('.card').forEach(c=>{
   c.addEventListener('pointermove',e=>{
@@ -918,31 +971,13 @@ document.querySelectorAll('.card').forEach(c=>{
 </script>
 
 <script type="module">
-import * as THREE from './assets/vendor/three.module.min.js';
+/* Three.js is 654KB and now serves only the brand orb and the contact-band wave,
+   both well down the page. Load it on approach so it never taxes the first paint. */
+async function boot3D(){
+const THREE=await import('./assets/vendor/three.module.min.js');
 
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const DPR=Math.min(devicePixelRatio||1,innerWidth<768?1.5:2);
-const SILVER=new THREE.Color('#FFFFFF'), STEEL=new THREE.Color('#9BA0AC');
-
-// studio-style equirect environment (bright softbox strips on black) for premium reflections
-function makeStudioEnv(){
-  const c=document.createElement('canvas');c.width=256;c.height=128;
-  const g=c.getContext('2d');
-  g.fillStyle='#050507';g.fillRect(0,0,256,128);
-  const strip=(x,y,w,h,a)=>{
-    const gr=g.createLinearGradient(x,y,x,y+h);
-    gr.addColorStop(0,'rgba(255,255,255,0)');
-    gr.addColorStop(.5,`rgba(255,255,255,${a})`);
-    gr.addColorStop(1,'rgba(255,255,255,0)');
-    g.fillStyle=gr;g.fillRect(x,y,w,h);
-  };
-  strip(20,10,60,50,.95); strip(150,20,40,60,.6); strip(90,70,80,40,.35); strip(220,5,26,70,.5);
-  const tex=new THREE.CanvasTexture(c);
-  tex.mapping=THREE.EquirectangularReflectionMapping;
-  tex.colorSpace=THREE.SRGBColorSpace;
-  return tex;
-}
-const studioEnv=makeStudioEnv();
 
 function makeRenderer(canvas){
   const r=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
@@ -959,66 +994,6 @@ function fit(renderer,camera,canvas){
 // only render scenes that are on screen
 const live=new Map();
 const vis=new IntersectionObserver(es=>es.forEach(e=>live.set(e.target,e.isIntersecting)),{rootMargin:'80px'});
-
-/* ============ HERO: faceted crystal + particles ============ */
-const heroCanvas=document.getElementById('hero3d');
-const heroScene=new THREE.Scene();
-const heroCam=new THREE.PerspectiveCamera(42,2,0.1,60);
-heroCam.position.set(0,0.1,6);
-const heroR=makeRenderer(heroCanvas);
-
-heroScene.environment=studioEnv;
-const edgeMats=[];
-const gem=new THREE.Group();
-const gemMat=new THREE.MeshPhysicalMaterial({
-  color:0x0d0d11,flatShading:true,
-  metalness:.92,roughness:.16,
-  clearcoat:1,clearcoatRoughness:.12,
-  envMap:studioEnv,envMapIntensity:1.6
-});
-const pavilion=new THREE.Mesh(new THREE.ConeGeometry(1.25,1.55,8,1),gemMat);
-pavilion.rotation.x=Math.PI; pavilion.position.y=-0.5;
-const crown=new THREE.Mesh(new THREE.CylinderGeometry(0.72,1.25,0.55,8),gemMat);
-crown.position.y=0.55;
-gem.add(pavilion,crown);
-[pavilion,crown].forEach(m=>{
-  const edges=new THREE.LineSegments(
-    new THREE.EdgesGeometry(m.geometry),
-    new THREE.LineBasicMaterial({color:SILVER,transparent:true,opacity:.22}));
-  edgeMats.push(edges.material);
-  edges.position.copy(m.position);edges.rotation.copy(m.rotation);
-  gem.add(edges);
-});
-gem.rotation.z=0.18;
-heroScene.add(gem);
-
-// responsive placement: gem to the side on wide screens, centered behind text on mobile
-function placeGem(){
-  const wide=innerWidth>=880;
-  gem.position.set(wide?2.4:0,wide?0.1:-1.0,0);
-  gem.scale.setScalar(wide?0.85:0.6);
-}
-placeGem();addEventListener('resize',placeGem);
-
-const l1=new THREE.PointLight(SILVER,200);l1.position.set(3,3,4);
-const l2=new THREE.PointLight(STEEL,80);l2.position.set(-4,-2,3);
-const l3=new THREE.PointLight(0xffffff,120);l3.position.set(0,4,-3);
-heroScene.add(l1,l2,l3,new THREE.AmbientLight(0x26262c,3));
-
-// particle field
-const N=380,pos=new Float32Array(N*3);
-for(let i=0;i<N*3;i++)pos[i]=(Math.random()-0.5)*16;
-const pGeo=new THREE.BufferGeometry();
-pGeo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-const stars=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xdfe2ea,size:.028,transparent:true,opacity:.4,blending:THREE.AdditiveBlending,depthWrite:false}));
-heroScene.add(stars);
-
-// pointer parallax
-let px=0,py=0,tx=0,ty=0;
-addEventListener('pointermove',e=>{
-  tx=(e.clientX/innerWidth-0.5)*2;
-  ty=(e.clientY/innerHeight-0.5)*2;
-},{passive:true});
 
 /* ============ ORB: swirling shader sphere ============ */
 const orbCanvas=document.getElementById('orb3d');
@@ -1070,23 +1045,15 @@ ctaScene.add(wave);
 const wavePos=waveGeo.attributes.position;
 const waveBase=wavePos.array.slice();
 
-[heroCanvas,orbCanvas,ctaCanvas].forEach(c=>vis.observe(c));
+[orbCanvas,ctaCanvas].forEach(c=>vis.observe(c));
 
 /* recolor the 3D scenes when the theme changes */
-const PARTICLE_DARK=new THREE.Color(0xdfe2ea), PARTICLE_LIGHT=new THREE.Color(0x2b2b36);
 const WAVE_DARK=new THREE.Color(0xE9EAF0),     WAVE_LIGHT=new THREE.Color(0x2f2f3a);
 function paintTheme(dark){
   orbUniforms.uDark.value=dark?1:0;
-  stars.material.color.copy(dark?PARTICLE_DARK:PARTICLE_LIGHT);
-  stars.material.opacity=dark?.4:.5;
-  stars.material.blending=dark?THREE.AdditiveBlending:THREE.NormalBlending;
   wave.material.color.copy(dark?WAVE_DARK:WAVE_LIGHT);
   wave.material.opacity=dark?.55:.6;
   wave.material.blending=dark?THREE.AdditiveBlending:THREE.NormalBlending;
-  edgeMats.forEach(m=>{m.color.set(dark?0xffffff:0x2a2a33);m.opacity=dark?.22:.5;});
-  // the polished black gem stays black in both themes; its reflections just carry more weight on light
-  gemMat.envMapIntensity=dark?1.6:2.1;
-  gemMat.roughness=dark?.16:.12;
   if(reduced)renderAll();
 }
 const themeIsDark=()=>{
@@ -1109,16 +1076,6 @@ function frame(now){
   lastFrame=now;
 
   const t=clock.getElapsedTime();
-  px+=(tx-px)*0.12; py+=(ty-py)*0.12; // larger step compensates for fewer frames
-
-  if(live.get(heroCanvas)!==false){
-    fit(heroR,heroCam,heroCanvas);
-    gem.rotation.y=t*0.25+px*0.5;
-    gem.rotation.x=Math.sin(t*0.3)*0.08+py*0.25;
-    gem.position.y+= (Math.sin(t*0.8)*0.0009);
-    stars.rotation.y=t*0.02;
-    heroR.render(heroScene,heroCam);
-  }
   if(live.get(orbCanvas)===true){
     fit(orbR,orbCam,orbCanvas);
     orbUniforms.uTime.value=t;
@@ -1138,7 +1095,6 @@ function frame(now){
 /* stop drawing entirely in a background tab */
 document.addEventListener('visibilitychange',()=>{paused=document.hidden;});
 function renderAll(){
-  fit(heroR,heroCam,heroCanvas);heroR.render(heroScene,heroCam);
   fit(orbR,orbCam,orbCanvas);orbR.render(orbScene,orbCam);
   fit(ctaR,ctaCam,ctaCanvas);ctaR.render(ctaScene,ctaCam);
 }
@@ -1147,6 +1103,17 @@ if(reduced){
   renderAll(); // single static frame per scene
 }else{
   requestAnimationFrame(frame);
+}
+} // end boot3D
+
+const need=['orb3d','cta3d'].map(id=>document.getElementById(id)).filter(Boolean);
+if(need.length){
+  let booted=false;
+  const bootIO=new IntersectionObserver(es=>{
+    if(booted||!es.some(e=>e.isIntersecting))return;
+    booted=true;bootIO.disconnect();boot3D();
+  },{rootMargin:'700px'});   // starts loading before either canvas is on screen
+  need.forEach(c=>bootIO.observe(c));
 }
 </script>
 </body>

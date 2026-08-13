@@ -38,6 +38,8 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --head-grad:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
   --shot-bg:#0a0a0d;
   --badge-bg:rgba(10,10,12,.72);
+  --cloud-a:rgba(255,255,255,.115);
+  --cloud-b:rgba(255,255,255,.05);
   --radius:20px;
 }
 /* light theme: explicit choice, or system preference when no choice is stored */
@@ -62,6 +64,8 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
     --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
     --shot-bg:#ECECF0;
     --badge-bg:rgba(255,255,255,.82);
+    --cloud-a:rgba(16,16,32,.062);
+    --cloud-b:rgba(16,16,32,.028);
   }
 }
 :root[data-theme="light"]{
@@ -84,6 +88,8 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.7) 100%);
   --shot-bg:#ECECF0;
   --badge-bg:rgba(255,255,255,.82);
+  --cloud-a:rgba(16,16,32,.062);
+  --cloud-b:rgba(16,16,32,.028);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden}
@@ -206,6 +212,37 @@ html.has-smooth{scroll-behavior:auto}   /* the lerp does the smoothing now */
   position:fixed;top:0;left:0;width:100%;
   will-change:transform;
 }
+
+
+/* ---------- drifting light clouds ----------
+   Softness comes from the gradient's own falloff, not filter:blur(). Blurring
+   elements this large is what makes the effect expensive; a radial gradient
+   costs nothing and reads the same. Only transform animates, so it composites. */
+.clouds{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.clouds span{
+  position:absolute;border-radius:50%;
+  width:78vmax;height:78vmax;
+  background:radial-gradient(circle at 50% 50%,
+    var(--cloud-a) 0%, var(--cloud-b) 34%, transparent 68%);
+  will-change:transform;
+}
+.clouds span:nth-child(1){top:-32vmax;left:-26vmax;animation:cloud1 46s ease-in-out infinite alternate}
+.clouds span:nth-child(2){top:6vmax;right:-34vmax;animation:cloud2 58s ease-in-out infinite alternate}
+.clouds span:nth-child(3){bottom:-40vmax;left:12vmax;animation:cloud3 52s ease-in-out infinite alternate}
+/* paths overlap so the blobs cross rather than orbit in parallel */
+@keyframes cloud1{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(26vmax,16vmax,0) scale(1.18)}
+}
+@keyframes cloud2{
+  from{transform:translate3d(0,0,0) scale(1.1)}
+  to{transform:translate3d(-30vmax,20vmax,0) scale(.92)}
+}
+@keyframes cloud3{
+  from{transform:translate3d(0,0,0) scale(.95)}
+  to{transform:translate3d(18vmax,-24vmax,0) scale(1.2)}
+}
+@media(prefers-reduced-motion:reduce){.clouds span{animation:none}}
 
 /* ---------- hero ticker (continuous + scroll-driven) ---------- */
 .ticker{
@@ -554,6 +591,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 <body>
 
 </div>
+
+<div class="clouds" aria-hidden="true"><span></span><span></span><span></span></div>
 
 <nav class="nav">
   <div class="nav-inner">
@@ -1010,6 +1049,18 @@ if(tShifts.length&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   /* Anchor links need handling: inside a fixed wrapper the sections have no
      document scroll position, so the browser has nothing to scroll them to.
      Convert the target's on-screen position back into a document offset. */
+  /* Same root cause hits keyboard users: the browser cannot scroll a focused
+     element into view inside a fixed wrapper, so tabbing below the fold would
+     strand them on a page that never moves. Bring focus into view manually. */
+  addEventListener('focusin',e=>{
+    const el=e.target;
+    if(!el||!wrap.contains(el))return;
+    const r=el.getBoundingClientRect();
+    if(r.top>=72&&r.bottom<=innerHeight-16)return;     // already comfortably visible
+    const y=r.top+current-Math.max(96,innerHeight*0.3);
+    window.scrollTo(0,Math.max(0,Math.round(y)));
+  });
+
   document.addEventListener('click',e=>{
     const a=e.target.closest('a[href^="#"]');
     if(!a)return;

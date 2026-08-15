@@ -180,15 +180,19 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:12px 22px;border-radius:999px;font-weight:600;font-size:15px;
   border:1px solid transparent;cursor:pointer;transition:.25s;
+  /* --tx/--ty are driven by the magnetic-pointer script, --lift by :hover,
+     so the two never fight over the transform property */
+  --tx:0px;--ty:0px;--lift:0px;
+  transform:translate3d(var(--tx),calc(var(--ty) + var(--lift)),0);
 }
 .btn-primary{
   background:var(--btn-bg);
   color:var(--btn-fg);
   box-shadow:0 0 0 1px rgba(var(--ov),.15),0 8px 30px rgba(var(--ov),0.175);
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(var(--ov),.2),0 12px 36px rgba(var(--ov),0.28)}
+.btn-primary:hover{--lift:-2px;box-shadow:0 0 0 1px rgba(var(--ov),.2),0 12px 36px rgba(var(--ov),0.28)}
 .btn-ghost{border-color:var(--line);color:var(--ink)}
-.btn-ghost:hover{border-color:rgba(var(--ink-rgb),.3);background:rgba(var(--ink-rgb),.05)}
+.btn-ghost:hover{--lift:-2px;border-color:rgba(var(--ink-rgb),.3);background:rgba(var(--ink-rgb),.05)}
 .nav .btn{padding:10px 18px;font-size:14px;white-space:nowrap}
 /* keep the logo, toggle and CTA on one comfortable row on small phones */
 @media(max-width:520px){
@@ -241,9 +245,17 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 }
 .btn-arrow:hover i{transform:translateX(3px)}
 
+/* the hero preview is desktop-only: on phones it would cost a screenshot and
+   a lot of hero height for something the Work section already does better */
+.hero .hero-preview{display:none}
 @media(min-width:900px){
-  .hero-grid{min-height:340px}
-  .hero h1{max-width:15ch}
+  .hero-grid{
+    min-height:340px;
+    grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+    align-items:center;gap:40px;
+  }
+  .hero h1{font-size:clamp(34px,4.05vw,48px);max-width:none}
+  .hero .hero-preview{display:flex}
 }
 
 /* bottom pill bar */
@@ -273,9 +285,26 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 .hero-copy>*:nth-child(3){animation-delay:.21s}
 .hero-copy>*:nth-child(4){animation-delay:.29s}
 @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---- first-paint sequence ----
+   Everything here hangs off html.ready, which the script sets on load. If the
+   script never runs the page just renders in its final state. */
+html.ready .nav{animation:navIn .85s cubic-bezier(.2,.7,.3,1) both}
+@keyframes navIn{from{transform:translateY(-100%)}to{transform:none}}
+/* the headline masks up as one block, keeping its gradient fill intact */
+html.ready .hero h1{animation:headIn 1s cubic-bezier(.2,.75,.25,1) .12s both}
+@keyframes headIn{
+  from{opacity:0;clip-path:inset(0 0 108% 0);transform:translateY(10px)}
+  to{opacity:1;clip-path:inset(0 0 -25% 0);transform:none}
+}
+html.ready .hero-preview{animation:riseIn .9s cubic-bezier(.2,.7,.3,1) .3s both}
+html.ready .ticker,html.ready .hero-bar{animation:riseIn .8s cubic-bezier(.2,.7,.3,1) .44s both}
+
 @media(prefers-reduced-motion:reduce){
   .hb-scroll i,.hero-proof .stars i{animation:none}
   .hero-copy>*{animation:none}
+  html.ready .nav,html.ready .hero h1,html.ready .hero-preview,
+  html.ready .ticker,html.ready .hero-bar{animation:none}
 }
 
 /* ---------- hero ticker (continuous + scroll-driven) ---------- */
@@ -354,6 +383,15 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   opacity:0;transition:opacity .3s;pointer-events:none;
 }
 .card:hover::before{opacity:1}
+/* same pointer-tracked falloff on the process steps and work cards, so the
+   whole page answers the cursor the same way */
+.step,.work-item{position:relative}
+.step::before,.work-item::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,0%),rgba(var(--ov),0.06),transparent 60%);
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.step:hover::before,.work-item:hover::before{opacity:1}
 .card .icon{
   width:44px;height:44px;border-radius:12px;margin-bottom:18px;
   display:grid;place-items:center;
@@ -432,7 +470,25 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   background:linear-gradient(135deg,rgba(var(--ov),0.126),rgba(var(--ov),0.044))}
 
 /* ---------- process ---------- */
-.steps{display:grid;gap:16px;margin-top:48px;counter-reset:step}
+/* animated stat numbers */
+.cnt{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* process rail: draws itself across as the section scrolls through */
+.steps-rail{position:relative;height:1px;margin-top:44px;background:var(--line)}
+.steps-rail i{
+  position:absolute;left:0;top:0;height:1px;width:100%;transform-origin:left center;
+  transform:scaleX(var(--p,0));
+  background:linear-gradient(90deg,rgba(var(--ov),.45),rgba(var(--ov),.12));
+}
+.steps-rail b{
+  position:absolute;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;
+  background:var(--bg);border:1px solid var(--line);
+  transition:border-color .4s,background .4s,transform .4s;
+}
+.steps-rail b.on{background:rgba(var(--ov),.5);border-color:rgba(var(--ov),.5);transform:scale(1.3)}
+@media(max-width:859px){.steps-rail b{display:none}}
+
+.steps{display:grid;gap:16px;margin-top:26px;counter-reset:step}
 @media(min-width:860px){.steps{grid-template-columns:repeat(3,1fr)}}
 .step{
   position:relative;border-radius:var(--radius);padding:30px 24px 26px;
@@ -484,9 +540,13 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 }
 /* real screenshot of the site, behind the live embed: shows instantly,
    then the live version paints over it once it loads */
+/* the poster is a tall capture of the real page; the card is a window onto it
+   and the script pans it as the card crosses the viewport */
 .shot .shot-poster{
-  position:absolute;inset:0;z-index:0;
-  width:100%;height:100%;object-fit:cover;object-position:top center;
+  position:absolute;top:0;left:0;z-index:0;
+  width:100%;height:auto;
+  transform:translate3d(0,var(--sy,0px),0) scale(var(--pz,1));
+  transform-origin:top center;will-change:transform;
 }
 .shot .live{
   position:absolute;top:10px;right:10px;z-index:2;
@@ -569,7 +629,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .card .icon{transition:transform .35s cubic-bezier(.34,1.4,.5,1),background .3s}
 .card:hover .icon{transform:translateY(-2px) scale(1.06)}
 .work-item .shot-poster{transition:transform .6s cubic-bezier(.2,.7,.3,1)}
-.work-item:hover .shot-poster{transform:scale(1.04)}
+.work-item:hover .shot-poster{--pz:1.04}
 .step .num{transition:transform .35s cubic-bezier(.34,1.4,.5,1)}
 .step:hover .num{transform:translateY(-3px)}
 .f-list li{transition:border-color .3s,transform .3s}
@@ -659,7 +719,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       <h1>Websites that win you customers, not just compliments</h1>
       <div class="hero-proof">
         <span class="stars" aria-hidden="true"><i>&#9733;</i><i>&#9733;</i><i>&#9733;</i><i>&#9733;</i><i>&#9733;</i></span>
-        <span>50+ projects shipped</span>
+        <span><b class="cnt" data-to="50" data-suffix="+">50+</b> projects shipped</span>
       </div>
       <div class="hero-cta">
         <a class="btn btn-primary btn-arrow" href="#contact">Talk to Us<i aria-hidden="true">&#8594;</i></a>
@@ -667,6 +727,18 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       </div>
     </div>
 
+    <!-- desktop-only live preview; same opt-in machinery as the Work cards -->
+    <div class="hero-preview work-item">
+      <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/O-kly</em></div>
+      <div class="shot" data-src="https://danialhyatt7-collab.github.io/O-kly/index.html" data-name="Oakly">
+        <img class="shot-poster" src="assets/work-okly-tall.webp" alt="Oakly furniture site homepage, a recent build" decoding="async" width="880" height="1815">
+        <button class="shot-play" type="button">
+          <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
+        </button>
+        <span class="live"><b></b>Live</span>
+        <button class="shot-stop" type="button" aria-label="Stop live preview of Oakly" title="Stop live preview">&#215;</button>
+      </div>
+    </div>
 
   </div>
 
@@ -677,8 +749,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 
   <div class="wrap">
     <div class="hero-bar">
-      <span>&lt;2s average load</span>
-      <span class="hb-mid">7 days to first design</span>
+      <span>&lt;<b class="cnt" data-to="2" data-suffix="s">2s</b> average load</span>
+      <span class="hb-mid"><b class="cnt" data-to="7">7</b> days to first design</span>
       <a href="#services" class="hb-scroll">Scroll Down <i aria-hidden="true">&#8595;</i></a>
     </div>
   </div>
@@ -817,6 +889,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
   <div class="wrap" style="position:relative;z-index:1;text-align:center">
     <p class="kicker rv">How it works</p>
     <h2 class="rv">From first call to live site</h2>
+    <div class="steps-rail" aria-hidden="true"><i></i><b style="left:16.67%"></b><b style="left:50%"></b><b style="left:83.33%"></b></div>
     <div class="steps" style="text-align:left">
       <div class="step rv">
         <div class="num">1</div>
@@ -849,7 +922,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       <article class="work-item rv">
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/O-kly</em></div>
         <div class="shot" data-src="https://danialhyatt7-collab.github.io/O-kly/index.html" data-name="Oakly">
-          <img class="shot-poster" src="assets/work-okly.webp" alt="Oakly furniture site homepage" loading="lazy" decoding="async" width="880" height="605">
+          <img class="shot-poster" src="assets/work-okly-tall.webp" alt="Oakly furniture site homepage" loading="lazy" decoding="async" width="880" height="1815">
           <button class="shot-play" type="button">
             <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
           </button>
@@ -869,7 +942,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       <article class="work-item rv">
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt.com</em></div>
         <div class="shot" data-src="https://danialhyatt.com/" data-name="Danial Hyatt">
-          <img class="shot-poster" src="assets/work-danialhyatt.webp" alt="Danial Hyatt motion design site homepage" loading="lazy" decoding="async" width="880" height="605">
+          <img class="shot-poster" src="assets/work-danialhyatt-tall.webp" alt="Danial Hyatt motion design site homepage" loading="lazy" decoding="async" width="880" height="1815">
           <button class="shot-play" type="button">
             <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
           </button>
@@ -889,7 +962,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       <article class="work-item rv">
         <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/alqanoon</em></div>
         <div class="shot" data-src="https://danialhyatt7-collab.github.io/alqanoon/" data-name="Al-Qanoon E-Stamps">
-          <img class="shot-poster" src="assets/work-alqanoon.webp" alt="Al-Qanoon E-Stamps site homepage" loading="lazy" decoding="async" width="880" height="605">
+          <img class="shot-poster" src="assets/work-alqanoon-tall.webp" alt="Al-Qanoon E-Stamps site homepage" loading="lazy" decoding="async" width="880" height="1815">
           <button class="shot-play" type="button">
             <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
           </button>
@@ -955,6 +1028,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 </div><!-- /#smooth -->
 
 <script>
+const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
+const stillMotion=matchMedia('(prefers-reduced-motion:reduce)');
+
 // reveal on scroll
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
@@ -1013,6 +1089,36 @@ shots.forEach(shot=>{
   play.addEventListener('click',()=>startLive(shot));
   shot.querySelector('.shot-stop').addEventListener('click',()=>stopLive(shot));
 });
+
+/* pan each tall poster as its card crosses the viewport, so a static
+   screenshot reads as the full page rather than one cropped viewport */
+(()=>{
+  if(stillMotion.matches)return;
+  const RATIO=1815/880;                 // poster aspect, matches the captured art
+  const pan=()=>{
+    const vh=innerHeight;
+    shots.forEach(s=>{
+      const r=s.getBoundingClientRect();
+      if(r.bottom<-80||r.top>vh+80)return;
+      const travel=r.width*RATIO-r.height;
+      if(travel<=0)return;
+      // the hero card is already on screen at load, so it pans off page scroll
+      // and starts on the site's own hero rather than part-way down
+      const raw=s.closest('.hero-preview')
+        ? 0.18+scrollY/(vh*1.35)
+        : (vh-r.top)/(vh+r.height);
+      // hold at the top of the page while the card enters, pan through the
+      // middle of the crossing, settle before it leaves
+      const p=Math.min(1,Math.max(0,(raw-0.18)/0.62));
+      s.style.setProperty('--sy',(-travel*p).toFixed(1)+'px');
+    });
+  };
+  let queued=false;
+  const onScroll=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;pan()})};
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',onScroll,{passive:true});
+  pan();
+})();
 
 /* release a running embed once it is well out of view */
 const liveIO=new IntersectionObserver(es=>{
@@ -1094,14 +1200,85 @@ sysDark.addEventListener('change',e=>{
   tick();setInterval(tick,30000);   // minute display: no need to run every second
 })();
 
-// card hover glow follows pointer
-document.querySelectorAll('.card').forEach(c=>{
-  c.addEventListener('pointermove',e=>{
-    const r=c.getBoundingClientRect();
-    c.style.setProperty('--mx',(e.clientX-r.left)+'px');
-    c.style.setProperty('--my',(e.clientY-r.top)+'px');
+/* hover glow follows the pointer across every panel on the page.
+   Reads are batched into one rAF so a fast cursor cannot queue up work. */
+(()=>{
+  if(!finePointer.matches)return;
+  let pending=null;
+  const paint=()=>{
+    pending.el.style.setProperty('--mx',pending.x+'px');
+    pending.el.style.setProperty('--my',pending.y+'px');
+    pending=null;
+  };
+  document.querySelectorAll('.card,.step,.work-item').forEach(c=>{
+    c.addEventListener('pointermove',e=>{
+      const r=c.getBoundingClientRect();
+      const queued=pending;
+      pending={el:c,x:e.clientX-r.left,y:e.clientY-r.top};
+      if(!queued)requestAnimationFrame(paint);
+    },{passive:true});
   });
-});
+})();
+
+/* magnetic buttons: the primary CTAs lean toward the cursor within a small
+   radius and spring back on leave. The .25s transition on .btn does the easing. */
+(()=>{
+  if(!finePointer.matches||stillMotion.matches)return;
+  const PULL=0.28,MAX=7;
+  document.querySelectorAll('.btn-primary').forEach(b=>{
+    const reset=()=>{b.style.setProperty('--tx','0px');b.style.setProperty('--ty','0px')};
+    b.addEventListener('pointermove',e=>{
+      const r=b.getBoundingClientRect();
+      const dx=(e.clientX-(r.left+r.width/2))*PULL;
+      const dy=(e.clientY-(r.top+r.height/2))*PULL;
+      b.style.setProperty('--tx',Math.max(-MAX,Math.min(MAX,dx)).toFixed(1)+'px');
+      b.style.setProperty('--ty',Math.max(-MAX,Math.min(MAX,dy)).toFixed(1)+'px');
+    },{passive:true});
+    b.addEventListener('pointerleave',reset);
+    b.addEventListener('blur',reset);
+  });
+})();
+
+/* stat numbers count up the first time they scroll into view */
+(()=>{
+  const nums=[...document.querySelectorAll('.cnt')];
+  if(!nums.length)return;
+  const settle=el=>{el.textContent=el.dataset.to+(el.dataset.suffix||'')};
+  if(stillMotion.matches){nums.forEach(settle);return}
+  const run=el=>{
+    const to=+el.dataset.to,suffix=el.dataset.suffix||'',t0=performance.now(),dur=1000;
+    const step=now=>{
+      const p=Math.min(1,(now-t0)/dur);
+      const eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(to*eased)+suffix;
+      if(p<1)requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const cio=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){run(e.target);cio.unobserve(e.target)}});
+  },{threshold:.6});
+  nums.forEach(n=>cio.observe(n));
+})();
+
+/* the process rail draws across as its section moves through the viewport */
+(()=>{
+  const rail=document.querySelector('.steps-rail');
+  if(!rail)return;
+  const dots=[...rail.querySelectorAll('b')];
+  const paintRail=()=>{
+    const r=rail.getBoundingClientRect(),vh=innerHeight;
+    const p=Math.min(1,Math.max(0,(vh*0.88-r.top)/(vh*0.42)));
+    rail.style.setProperty('--p',p.toFixed(3));
+    dots.forEach((d,i)=>d.classList.toggle('on',p>=(i+0.5)/dots.length));
+  };
+  addEventListener('scroll',paintRail,{passive:true});
+  addEventListener('resize',paintRail,{passive:true});
+  paintRail();
+})();
+
+// arms the first-paint sequence; without it the page renders in its final state
+addEventListener('DOMContentLoaded',()=>document.documentElement.classList.add('ready'));
 </script>
 
 <script type="module">

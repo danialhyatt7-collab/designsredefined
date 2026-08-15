@@ -203,17 +203,6 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 .hero{position:relative;z-index:1;padding:88px 0 0;overflow:hidden}
 @media(min-width:900px){.hero{padding:124px 0 0}}
 
-/* oversized wordmark behind everything */
-.hero-word{
-  position:absolute;left:50%;bottom:150px;transform:translateX(-50%);
-  font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;
-  font-size:clamp(64px,17vw,230px);line-height:.8;letter-spacing:-.045em;
-  white-space:nowrap;pointer-events:none;z-index:0;
-  color:transparent;-webkit-text-stroke:1px rgba(var(--ink-rgb),.11);
-  animation:wordDrift 26s ease-in-out infinite alternate;
-}
-@keyframes wordDrift{from{transform:translateX(-52%)}to{transform:translateX(-48%)}}
-
 .hero-grid{position:relative;z-index:1;display:grid;gap:22px}
 
 /* ---- type scale: 12 / 13.5 / 15 / display ---- */
@@ -255,7 +244,6 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 @media(min-width:900px){
   .hero-grid{min-height:340px}
   .hero h1{max-width:15ch}
-  .hero-word{bottom:126px}
 }
 
 /* bottom pill bar */
@@ -286,7 +274,7 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 .hero-copy>*:nth-child(4){animation-delay:.29s}
 @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){
-  .hero-word,.hb-scroll i,.hero-proof .stars i{animation:none}
+  .hb-scroll i,.hero-proof .stars i{animation:none}
   .hero-copy>*{animation:none}
 }
 
@@ -664,9 +652,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
 <div id="smooth">
 <header class="hero" id="top">
   <span class="glow glow-hero"></span>
-
-  <!-- oversized wordmark sitting behind the figure -->
-  <span class="hero-word" aria-hidden="true">REDEFINED</span>
 
   <div class="wrap hero-grid">
     <div class="hero-copy">

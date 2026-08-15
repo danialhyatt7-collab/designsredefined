@@ -30,7 +30,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --line:rgba(var(--ink-rgb),.1);
   --accent:#FFFFFF;
   --accent-2:#A1A1AA;
-  --signal:#FF6A3D;      /* the one non-monochrome colour, used sparingly */
   --nav-bg:rgba(3,2,11,.72);
   --btn-bg:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.82) 100%);
   --btn-fg:#0a0918;
@@ -57,7 +56,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
     --ink:#0B0B10;
     --accent:#0B0B10;
     --accent-2:#52525B;
-    --signal:#D8451A;
     --nav-bg:rgba(250,250,251,.8);
     --btn-bg:linear-gradient(180deg,#16161C 0%,rgba(22,22,28,.9) 100%);
     --btn-fg:#FFFFFF;
@@ -82,7 +80,6 @@ if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)
   --ink:#0B0B10;
   --accent:#0B0B10;
   --accent-2:#52525B;
-  --signal:#D8451A;
   --nav-bg:rgba(250,250,251,.8);
   --btn-bg:linear-gradient(180deg,#16161C 0%,rgba(22,22,28,.9) 100%);
   --btn-fg:#FFFFFF;
@@ -351,41 +348,7 @@ html.ready .ticker,html.ready .hero-bar{animation:riseIn .8s cubic-bezier(.2,.7,
 @media(min-width:520px){.band-cta{flex-direction:row;justify-content:center}}
 
 /* ---------- statement (word reveal) ---------- */
-/* ---------- proof: who we have built for, and what they said ---------- */
-.proof-strip{padding:26px 0 6px}
-.proof-strip .lead{
-  font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-faint);margin-bottom:16px;
-}
-.proof-names{
-  display:flex;flex-wrap:wrap;align-items:center;gap:14px 34px;
-  font-family:'Space Grotesk','Inter',sans-serif;
-  font-size:clamp(16px,2.3vw,21px);font-weight:600;letter-spacing:-.01em;
-  color:var(--ink-dim);
-}
-.proof-names a{color:inherit;transition:color .25s}
-.proof-names a:hover{color:var(--ink)}
-
-.quote{
-  max-width:760px;margin:0 auto;text-align:center;
-}
-.quote blockquote{
-  font-family:'Space Grotesk','Inter',sans-serif;
-  font-size:clamp(20px,3.2vw,30px);line-height:1.32;font-weight:600;letter-spacing:-.02em;
-  color:var(--ink);margin:0 0 22px;
-}
-.quote .mark{display:block;font-size:34px;line-height:1;color:var(--signal);margin-bottom:14px}
-.quote figcaption{font-size:14px;color:var(--ink-dim)}
-.quote figcaption b{color:var(--ink);font-weight:600}
-.quote .todo{
-  display:inline-block;margin-top:18px;padding:5px 11px;border-radius:999px;
-  border:1px dashed rgba(var(--ink-rgb),.3);
-  font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);
-}
-
-/* pulled in tight against the hero; the band and Work sections breathe instead */
-.statement{padding:44px 0}
-@media(min-width:768px){.statement{padding:74px 0}}
+.statement{padding:60px 0}
 .statement p{
   font-family:'Space Grotesk','Inter',sans-serif;font-weight:600;
   font-size:clamp(24px,5.2vw,42px);line-height:1.3;letter-spacing:-.02em;
@@ -460,66 +423,8 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .f-list .chk{
   flex:none;width:20px;height:20px;border-radius:50%;margin-top:1px;
   background:rgba(var(--ov),0.105);border:1px solid rgba(var(--ov),0.28);
-  display:grid;place-items:center;color:var(--signal);font-size:11px;
+  display:grid;place-items:center;color:var(--accent);font-size:11px;
 }
-/* a real crop of a site we built, not a diagram of one */
-.f-shot{
-  position:relative;border-radius:var(--radius);overflow:hidden;
-  border:1px solid var(--line);
-  box-shadow:0 30px 80px rgba(var(--shadow),var(--shadow-a));
-  background:var(--shot-bg);line-height:0;
-}
-.f-shot img{width:100%;height:auto;display:block}
-.f-shot figcaption{
-  position:absolute;left:0;right:0;bottom:0;z-index:2;
-  padding:26px 16px 12px;line-height:1.3;
-  font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
-  color:#EDEDFA;
-  background:linear-gradient(180deg,transparent,rgba(6,6,10,.82));
-}
-
-/* Full-bleed band that inverts against whichever theme is running: the base
-   sheet is dark, so the band is light here, and both light-theme blocks below
-   flip it back to dark. A band that matched the theme would read as a seam. */
-.band{
-  --ov:0,0,0;--ink-rgb:11,11,16;--shadow:0,0,0;--shadow-a:.14;
-  --ink:#0B0B10;--ink-dim:rgba(var(--ink-rgb),.66);--line:rgba(var(--ink-rgb),.14);
-  --head-grad:linear-gradient(180deg,#0B0B10 0%,rgba(11,11,16,.74) 100%);
-  --shot-bg:#E6E6EB;
-  background:#F1F1F4;color:var(--ink);
-  padding:96px 0;margin-top:24px;
-}
-@media(prefers-color-scheme:light){
-  :root:not([data-theme="dark"]) .band{
-    --ov:255,255,255;--ink-rgb:237,237,250;--shadow:0,0,0;--shadow-a:.5;
-    --ink:#EDEDFA;--ink-dim:rgba(var(--ink-rgb),.62);--line:rgba(var(--ink-rgb),.13);
-    --head-grad:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
-    --shot-bg:#0a0a0d;
-    background:#08070F;
-  }
-}
-:root[data-theme="light"] .band{
-  --ov:255,255,255;--ink-rgb:237,237,250;--shadow:0,0,0;--shadow-a:.5;
-  --ink:#EDEDFA;--ink-dim:rgba(var(--ink-rgb),.62);--line:rgba(var(--ink-rgb),.13);
-  --head-grad:linear-gradient(180deg,#FFFFFF 0%,rgba(255,255,255,.72) 100%);
-  --shot-bg:#0a0a0d;
-  background:#08070F;
-}
-@media(min-width:768px){.band{padding:132px 0}}
-.band .btn-ghost{border-color:rgba(var(--ink-rgb),.38);color:var(--ink)}
-/* a light screenshot on a light band needs its own edge to sit on */
-.band .f-shot{border-color:rgba(var(--ink-rgb),.22);box-shadow:0 24px 70px rgba(var(--shadow),calc(var(--shadow-a) + .1))}
-.band .feature{margin-top:0}
-
-/* the brand row runs centred and stacked, so the page does not serve a third
-   identical two-column row */
-.feature.stack{grid-template-columns:1fr;text-align:center;justify-items:center;gap:34px}
-.feature.stack .f-list{align-items:center}
-.feature.stack .f-list li{text-align:left;max-width:420px}
-.feature.stack .sub{max-width:52ch;margin-left:auto;margin-right:auto}
-.feature.stack .f-visual{width:100%;max-width:440px}
-.feature.stack .orb-canvas{max-height:330px}
-
 .f-visual{
   position:relative;border-radius:var(--radius);border:1px solid var(--line);
   background:linear-gradient(180deg,rgba(var(--ov),.04),rgba(var(--ov),.01));
@@ -580,7 +485,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   background:var(--bg);border:1px solid var(--line);
   transition:border-color .4s,background .4s,transform .4s;
 }
-.steps-rail b.on{background:var(--signal);border-color:var(--signal);transform:scale(1.3)}
+.steps-rail b.on{background:rgba(var(--ov),.5);border-color:rgba(var(--ov),.5);transform:scale(1.3)}
 @media(max-width:859px){.steps-rail b{display:none}}
 
 .steps{display:grid;gap:16px;margin-top:26px;counter-reset:step}
@@ -651,7 +556,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   border:1px solid rgba(var(--ov),.2);border-radius:999px;padding:5px 10px;
 }
-.shot .live b{width:5px;height:5px;border-radius:50%;background:var(--signal);animation:pulse 1.8s ease-in-out infinite}
+.shot .live b{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse 1.8s ease-in-out infinite}
 /* the Live badge only means something once an embed is actually running */
 .shot .live{opacity:0;transition:opacity .3s}
 .work-item.is-live .shot .live{opacity:1}
@@ -717,7 +622,7 @@ h2{font-size:clamp(28px,5.5vw,44px);line-height:1.15;font-weight:700;margin-bott
 .nav-links a{position:relative}
 .nav-links a::after{
   content:"";position:absolute;left:0;right:0;bottom:-5px;height:1px;
-  background:var(--signal);transform:scaleX(0);transform-origin:right;
+  background:currentColor;transform:scaleX(0);transform-origin:right;
   transition:transform .32s cubic-bezier(.2,.7,.3,1);
 }
 .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
@@ -857,17 +762,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
   </div>
 </section>
 
-<section class="proof-strip">
-  <div class="wrap">
-    <p class="lead rv">Recent builds</p>
-    <div class="proof-names rv">
-      <a href="https://danialhyatt7-collab.github.io/O-kly/index.html" target="_blank" rel="noopener">Oakly</a>
-      <a href="https://danialhyatt.com/" target="_blank" rel="noopener">Danial Hyatt</a>
-      <a href="https://danialhyatt7-collab.github.io/alqanoon/" target="_blank" rel="noopener">Al-Qanoon E-Stamps</a>
-    </div>
-  </div>
-</section>
-
 <section id="services">
   <span class="glow glow-teal" style="right:-160px;top:80px"></span>
   <div class="wrap" style="position:relative;z-index:1">
@@ -878,34 +772,34 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       <div class="card rv">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M7 6.5h.01"/></svg></div>
         <h3>Custom Websites</h3>
-        <p>Every page written and built from scratch. No page-builder bloat, no theme you will spot on three other sites in your city.</p>
+        <p>Hand-built sites designed around your business — no bloated templates, no cookie-cutter look. Yours, and only yours.</p>
       </div>
       <div class="card rv">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M3 3h2l2.6 12.5A2 2 0 0 0 9.55 17h8.9a2 2 0 0 0 1.95-1.55L22 8H6"/></svg></div>
         <h3>E-Commerce Stores</h3>
-        <p>Product pages, cart and checkout wired end to end — like the Oakly storefront, built to sell a single collection well.</p>
+        <p>Online stores that make buying effortless — clean product pages, smooth checkout, and everything wired to sell.</p>
       </div>
       <div class="card rv">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
         <h3>Landing Pages</h3>
-        <p>One page, one job. Built for a launch or an ad campaign, with a single next step the visitor cannot miss.</p>
+        <p>High-converting pages for launches, ads and campaigns — built to turn clicks into enquiries and enquiries into sales.</p>
       </div>
       <div class="card rv">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>SEO &amp; Performance</h3>
-        <p>Compressed images, no framework tax, and clean semantic markup — so Core Web Vitals pass without a rescue job later.</p>
+        <p>Sites tuned to load fast and rank well — technical SEO, Core Web Vitals and speed baked in from day one.</p>
       </div>
       <div class="card alt rv">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-.8 2.6-1.7 3.6C13.4 11.7 13 12.5 13 14h-2c0-2 .7-3.1 1.8-4.3.8-.9 1.2-1.6 1.2-2.7a2 2 0 1 0-4 0H8a4 4 0 0 1 4-4z" fill="currentColor" stroke="none" opacity=".0"/><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
         <span class="tag">Design</span>
         <h3>Branding &amp; Identity</h3>
-        <p>A wordmark, a type scale and a colour set, delivered as files you own and can hand to anyone.</p>
+        <p>Logos, colors and visual identity that make your business look as good as it actually is — everywhere it shows up.</p>
       </div>
       <div class="card alt rv">
         <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11 20 5v14L3 13v-2zM7 13.5V19a1.5 1.5 0 0 0 3 0v-4"/></svg></div>
         <span class="tag">Marketing</span>
         <h3>Marketing &amp; Content</h3>
-        <p>Social posts, ad cuts and motion work that reuse the same identity, so everything you publish looks related.</p>
+        <p>Social graphics, ad creative and campaigns that carry your new look out into the world and bring customers back in.</p>
       </div>
     </div>
   </div>
@@ -918,7 +812,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       <div>
         <p class="kicker rv">Web Design</p>
         <h2 class="rv">Designed to convert, not just to look pretty</h2>
-        <p class="sub rv">Every layout decision answers one question: does this move a visitor closer to calling, booking or buying?</p>
+        <p class="sub rv">Every layout decision is made with one question in mind: does this help a visitor become a customer?</p>
         <ul class="f-list">
           <li class="rv"><span class="chk">✓</span><span><b>Mobile-first, always.</b>&nbsp;Most of your visitors are on their phone — we design for them first.</span></li>
           <li class="rv"><span class="chk">✓</span><span><b>Clear calls to action.</b>&nbsp;Visitors always know the next step — call, book, buy.</span></li>
@@ -926,23 +820,24 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
         </ul>
         <a class="btn btn-ghost rv" href="#contact">Start a project →</a>
       </div>
-      <figure class="f-shot rv">
-        <img src="assets/feat-convert.webp" alt="Product collection grid from the Oakly site we built" loading="lazy" decoding="async" width="980" height="689">
-        <figcaption>Oakly — product grid</figcaption>
-      </figure>
+      <div class="f-visual rv">
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i><em class="url">yourbusiness.com</em></div>
+          <div class="browser-body">
+            <div class="sk hero-sk"></div>
+            <div class="sk wide"></div>
+            <div class="sk mid"></div>
+            <div class="sk-row"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
 
-<!-- the page inverts here: one dark full-bleed band breaks three near-identical
-     rows into something with a middle -->
-<section class="band" id="build">
-  <div class="wrap">
     <div class="feature flip">
       <div>
         <p class="kicker rv">Development &amp; Performance</p>
         <h2 class="rv">Fast, secure, and built to last</h2>
-        <p class="sub rv">Most small-business sites ship megabytes of unused framework. Ours ship the markup, the styles and almost nothing else.</p>
+        <p class="sub rv">A slow site loses customers before it even loads. We build lean, modern sites that fly on any connection.</p>
         <ul class="f-list">
           <li class="rv"><span class="chk">✓</span><span><b>Speed as a feature.</b>&nbsp;Optimized images, clean code, sub-2-second loads.</span></li>
           <li class="rv"><span class="chk">✓</span><span><b>SEO from the ground up.</b>&nbsp;Structured, crawlable, and ready to rank.</span></li>
@@ -950,17 +845,19 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
         </ul>
         <a class="btn btn-ghost rv" href="#contact">Get a free site audit →</a>
       </div>
-      <figure class="f-shot rv">
-        <img src="assets/feat-build.webp" alt="Ordering steps and pricing from the Al-Qanoon E-Stamps site we built" loading="lazy" decoding="async" width="980" height="689">
-        <figcaption>Al-Qanoon E-Stamps — ordering flow</figcaption>
-      </figure>
+      <div class="f-visual rv">
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i><em class="url">performance report</em></div>
+          <div class="browser-body">
+            <div class="sk wide"></div>
+            <div class="chart"><i style="height:45%"></i><i style="height:65%"></i><i style="height:55%"></i><i style="height:80%"></i><i style="height:70%"></i><i style="height:95%"></i><i style="height:88%"></i></div>
+            <div class="sk mid"></div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
 
-<section id="brand-section">
-  <div class="wrap">
-    <div class="feature stack" id="brand">
+    <div class="feature" id="brand">
       <div>
         <p class="kicker rv">Design &amp; Marketing</p>
         <h2 class="rv">A brand that people remember</h2>
@@ -1083,17 +980,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       </article>
 
     </div>
-  </div>
-</section>
-
-<section class="quote-section">
-  <div class="wrap">
-    <figure class="quote rv">
-      <span class="mark" aria-hidden="true">&ldquo;</span>
-      <blockquote>Placeholder quote — drop a real sentence from a client here, in their own words, about what changed after the site went live.</blockquote>
-      <figcaption><b>Client name</b> · Business, city</figcaption>
-      <span class="todo">Placeholder — replace with a real quote</span>
-    </figure>
   </div>
 </section>
 

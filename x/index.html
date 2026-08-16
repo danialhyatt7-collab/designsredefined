@@ -314,9 +314,20 @@ p{margin:0}
   display:block;
 }
 .preset:hover{transform:translateY(-5px) scale(1.02);box-shadow:inset 0 0 0 1px rgba(209,254,23,.5),0 18px 44px -18px rgba(0,0,0,.9)}
-.preset .fill{position:absolute;inset:0}
-.preset .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(0,0,0,.82) 100%)}
-.preset .name{position:absolute;left:11px;right:11px;bottom:10px;font-family:var(--grotesk);font-size:12.5px;font-weight:600;letter-spacing:-.01em}
+/* each tile is a hand-drawn miniature of a real page in that style */
+.preset .pv{position:absolute;inset:0;width:100%;height:100%;display:block;transition:transform .45s cubic-bezier(.2,.7,.3,1)}
+.preset:hover .pv{transform:scale(1.05)}
+/* only a whisper of shade for depth — a full veil would grey out the light mockups */
+.preset .veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 82%,rgba(0,0,0,.22) 100%)}
+/* the name rides in its own chip so it reads over light and dark art alike */
+.preset .name{
+  position:absolute;left:8px;bottom:8px;max-width:calc(100% - 16px);
+  font-family:var(--grotesk);font-size:11.5px;font-weight:600;letter-spacing:-.01em;line-height:1;
+  padding:6px 9px;border-radius:8px;
+  background:rgba(14,16,17,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .preset .hov{
   position:absolute;inset:0;display:grid;place-items:center;background:rgba(14,16,17,.6);
   backdrop-filter:blur(3px);opacity:0;transition:opacity .22s;
@@ -803,18 +814,118 @@ p{margin:0}
     </div>
 
     <div class="presets rv">
-      <a class="preset" href="#contact"><span class="fill art-a"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Bold Editorial</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-b"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Neon Retail</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-c"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Clean Clinic</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-d"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Deep Tech</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-e"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Warm Craft</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-a"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Acid Sport</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-c"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Soft Studio</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-d"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Legal &amp; Trust</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-b"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Hospitality</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-e"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Trade &amp; Field</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-a"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Fitness</span><span class="hov"><b>Use this →</b></span></a>
-      <a class="preset" href="#contact"><span class="fill art-c"></span><span class="fill art-grid"></span><span class="veil"></span><span class="name">Minimal Luxe</span><span class="hov"><b>Use this →</b></span></a>
+      <!-- Bold Editorial — heavy type, one wide image, acid rule -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#0e0e0e"/><circle cx="13" cy="12" r="2.6" fill="#d1fe17"/>
+        <rect x="82" y="11" width="12" height="2" rx="1" fill="#ffffff3d"/><rect x="98" y="11" width="10" height="2" rx="1" fill="#ffffff3d"/>
+        <rect x="12" y="28" width="84" height="8" rx="1.5" fill="#fff"/><rect x="12" y="40" width="66" height="8" rx="1.5" fill="#fff"/>
+        <rect x="12" y="52" width="38" height="8" rx="1.5" fill="#d1fe17"/>
+        <rect x="12" y="70" width="96" height="34" rx="3" fill="#1d1d1d"/>
+        <rect x="12" y="112" width="45" height="21" rx="3" fill="#171717"/><rect x="63" y="112" width="45" height="21" rx="3" fill="#171717"/>
+      </svg><span class="veil"></span><span class="name">Bold Editorial</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Neon Retail — promo bar, product grid, price chips -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#14061a"/><rect width="120" height="7" fill="#ff005b"/>
+        <circle cx="13" cy="19" r="2.6" fill="#fff"/><rect x="90" y="17" width="18" height="5" rx="2.5" fill="#ff005b"/>
+        <rect x="12" y="31" width="68" height="7" rx="1.5" fill="#fff"/><rect x="12" y="42" width="42" height="7" rx="1.5" fill="#ff005b"/>
+        <rect x="12" y="58" width="45" height="34" rx="3" fill="#2b0f36"/><rect x="63" y="58" width="45" height="34" rx="3" fill="#2b0f36"/>
+        <rect x="12" y="96" width="45" height="34" rx="3" fill="#2b0f36"/><rect x="63" y="96" width="45" height="34" rx="3" fill="#2b0f36"/>
+        <rect x="16" y="84" width="14" height="4" rx="2" fill="#ff005b"/><rect x="67" y="84" width="14" height="4" rx="2" fill="#ff005b"/>
+      </svg><span class="veil"></span><span class="name">Neon Retail</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Clean Clinic — white, calm, booking button, soft cards -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#ffffff"/>
+        <rect x="12" y="10" width="16" height="3" rx="1.5" fill="#16202b"/><rect x="84" y="10" width="24" height="3" rx="1.5" fill="#ccd8e5"/>
+        <rect x="12" y="26" width="76" height="7" rx="1.5" fill="#16202b"/><rect x="12" y="37" width="52" height="7" rx="1.5" fill="#16202b"/>
+        <rect x="12" y="52" width="34" height="11" rx="5.5" fill="#3d8bfd"/>
+        <rect x="12" y="72" width="96" height="28" rx="4" fill="#eaf1fb"/>
+        <rect x="12" y="106" width="29" height="26" rx="4" fill="#f4f7fb"/><rect x="45.5" y="106" width="29" height="26" rx="4" fill="#f4f7fb"/><rect x="79" y="106" width="29" height="26" rx="4" fill="#f4f7fb"/>
+      </svg><span class="veil"></span><span class="name">Clean Clinic</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Deep Tech — glow, mono block, stat tiles -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#0b1024"/><circle cx="98" cy="20" r="34" fill="#4778f5" opacity=".2"/>
+        <circle cx="13" cy="12" r="2.6" fill="#4778f5"/>
+        <rect x="12" y="30" width="78" height="7" rx="1.5" fill="#fff"/><rect x="12" y="41" width="50" height="7" rx="1.5" fill="#7ea3f8"/>
+        <rect x="12" y="58" width="96" height="28" rx="3" fill="#121b39"/>
+        <rect x="18" y="65" width="38" height="2.6" rx="1.3" fill="#4778f5"/><rect x="18" y="71" width="58" height="2.6" rx="1.3" fill="#ffffff2e"/><rect x="18" y="77" width="28" height="2.6" rx="1.3" fill="#ffffff2e"/>
+        <rect x="12" y="94" width="45" height="24" rx="3" fill="#121b39"/><rect x="63" y="94" width="45" height="24" rx="3" fill="#121b39"/>
+        <rect x="18" y="101" width="18" height="5" rx="1" fill="#4778f5"/><rect x="69" y="101" width="18" height="5" rx="1" fill="#4778f5"/>
+      </svg><span class="veil"></span><span class="name">Deep Tech</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Warm Craft — paper stock, big product shot, material swatches -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#f4ece1"/>
+        <rect x="12" y="11" width="15" height="3" rx="1.5" fill="#3b2a1d"/><rect x="88" y="11" width="20" height="3" rx="1.5" fill="#3b2a1d59"/>
+        <rect x="12" y="25" width="72" height="9" rx="1.5" fill="#3b2a1d"/><rect x="12" y="38" width="46" height="9" rx="1.5" fill="#c2643a"/>
+        <rect x="12" y="56" width="96" height="44" rx="3" fill="#ddcab5"/>
+        <circle cx="17" cy="111" r="4.5" fill="#c2643a"/><circle cx="29" cy="111" r="4.5" fill="#8a6a4a"/><circle cx="41" cy="111" r="4.5" fill="#3b2a1d"/>
+        <rect x="12" y="123" width="58" height="3" rx="1.5" fill="#3b2a1d40"/>
+      </svg><span class="veil"></span><span class="name">Warm Craft</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Acid Sport — diagonal cut, shouting type -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#000"/>
+        <path d="M0 92 120 56 120 106 0 142Z" fill="#d1fe17"/>
+        <rect x="12" y="20" width="88" height="11" rx="1" fill="#fff"/><rect x="12" y="35" width="58" height="11" rx="1" fill="#fff"/>
+        <rect x="12" y="112" width="40" height="7" rx="3.5" fill="#000"/>
+        <circle cx="13" cy="12" r="2.6" fill="#d1fe17"/>
+      </svg><span class="veil"></span><span class="name">Acid Sport</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Soft Studio — generous whitespace, one image, quiet caption -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#f2f0ee"/>
+        <rect x="14" y="12" width="12" height="2.6" rx="1.3" fill="#2b2b2b"/>
+        <rect x="14" y="34" width="56" height="5" rx="1" fill="#2b2b2b"/><rect x="14" y="43" width="38" height="5" rx="1" fill="#8a9a7b"/>
+        <rect x="14" y="60" width="92" height="52" rx="2" fill="#e3dfd9"/>
+        <rect x="14" y="120" width="32" height="2.6" rx="1.3" fill="#2b2b2b59"/>
+      </svg><span class="veil"></span><span class="name">Soft Studio</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Legal & Trust — centred, gold rule, two columns of substance -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#fbfaf7"/>
+        <rect x="50" y="12" width="20" height="3" rx="1.5" fill="#12233d"/>
+        <rect x="24" y="30" width="72" height="7" rx="1" fill="#12233d"/><rect x="38" y="41" width="44" height="7" rx="1" fill="#12233d"/>
+        <rect x="52" y="56" width="16" height="2" fill="#c8a24a"/>
+        <rect x="14" y="70" width="43" height="34" rx="2" fill="#efece5"/><rect x="63" y="70" width="43" height="34" rx="2" fill="#efece5"/>
+        <rect x="40" y="114" width="40" height="11" rx="2" fill="#12233d"/>
+      </svg><span class="veil"></span><span class="name">Legal &amp; Trust</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Hospitality — full-bleed room shot, gold accent, centred invite -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#21101a"/>
+        <rect width="120" height="66" fill="#3a1d2b"/><circle cx="60" cy="32" r="17" fill="#d8a657" opacity=".3"/>
+        <rect x="52" y="78" width="16" height="2" fill="#d8a657"/>
+        <rect x="26" y="88" width="68" height="7" rx="1" fill="#f3e6d8"/><rect x="40" y="99" width="40" height="7" rx="1" fill="#f3e6d8"/>
+        <rect x="42" y="116" width="36" height="11" rx="5.5" fill="#d8a657"/>
+      </svg><span class="veil"></span><span class="name">Hospitality</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Trade & Field — blocky, high-vis, service cards -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#2a2e33"/><rect width="120" height="8" fill="#ff7a1a"/>
+        <rect x="12" y="22" width="84" height="10" rx="1" fill="#fff"/><rect x="12" y="36" width="54" height="10" rx="1" fill="#ff7a1a"/>
+        <rect x="12" y="58" width="30" height="30" rx="2" fill="#383d44"/><rect x="45" y="58" width="30" height="30" rx="2" fill="#383d44"/><rect x="78" y="58" width="30" height="30" rx="2" fill="#383d44"/>
+        <rect x="12" y="98" width="96" height="13" rx="2" fill="#ff7a1a"/>
+      </svg><span class="veil"></span><span class="name">Trade &amp; Field</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Fitness — dark, angled, one loud action tile -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#0a0a0a"/><path d="M0 0 120 0 120 68 0 96Z" fill="#161616"/>
+        <rect x="12" y="18" width="70" height="12" rx="1" fill="#fff"/><rect x="12" y="34" width="44" height="12" rx="1" fill="#ff2d55"/>
+        <rect x="12" y="106" width="28" height="26" rx="3" fill="#171717"/><rect x="46" y="106" width="28" height="26" rx="3" fill="#171717"/><rect x="80" y="106" width="28" height="26" rx="3" fill="#ff2d55"/>
+      </svg><span class="veil"></span><span class="name">Fitness</span><span class="hov"><b>Use this →</b></span></a>
+
+      <!-- Minimal Luxe — hairlines, small type, one hero image, no accent -->
+      <a class="preset" href="#contact"><svg class="pv" viewBox="0 0 120 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="120" height="160" fill="#efece7"/>
+        <rect x="14" y="14" width="10" height="2" fill="#111"/><rect x="96" y="14" width="10" height="2" fill="#11111175"/>
+        <rect x="14" y="26" width="92" height="1" fill="#1111112e"/>
+        <rect x="14" y="44" width="60" height="4" rx=".5" fill="#111"/><rect x="14" y="52" width="36" height="4" rx=".5" fill="#111"/>
+        <rect x="14" y="70" width="92" height="56" fill="#e2ded7"/>
+        <rect x="14" y="134" width="24" height="2" fill="#11111159"/>
+      </svg><span class="veil"></span><span class="name">Minimal Luxe</span><span class="hov"><b>Use this →</b></span></a>
     </div>
   </div>
 </section>

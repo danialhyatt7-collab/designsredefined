@@ -145,13 +145,21 @@ p{margin:0}
    ============================================================ */
 .topbar{
   position:relative;z-index:60;
-  background:linear-gradient(90deg,var(--pink),#b6006a 45%,#131517 100%);
+  background:var(--card);
+  border-bottom:1px solid rgba(209,254,23,.28);
+  color:var(--fg-2);
   font-size:13px;font-weight:500;
 }
-.topbar .shell{display:flex;align-items:center;justify-content:center;gap:12px;min-height:38px;flex-wrap:wrap;text-align:center}
-.topbar b{font-family:var(--grotesk);letter-spacing:.02em}
-.topbar a{text-decoration:underline;text-underline-offset:3px;opacity:.95}
-.topbar a:hover{opacity:1}
+/* a faint lime wash off the left keeps it from reading as a flat strip */
+.topbar::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(209,254,23,.10),transparent 46%);
+}
+.topbar .shell{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;min-height:38px;flex-wrap:wrap;text-align:center}
+.topbar b{font-family:var(--grotesk);letter-spacing:.02em;color:var(--lime)}
+.topbar #slots{color:var(--fg)}
+.topbar a{color:var(--fg);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(209,254,23,.5);opacity:.95}
+.topbar a:hover{opacity:1;color:var(--lime)}
 #slots{font-variant-numeric:tabular-nums}
 
 /* ============================================================

@@ -61,7 +61,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
@@ -79,6 +79,7 @@ body{
 img,video{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a,button{-webkit-tap-highlight-color:rgba(209,254,23,.18)}
 h1,h2,h3,h4{font-family:var(--grotesk);font-weight:600;letter-spacing:-.03em;line-height:1.06;margin:0}
 p{margin:0}
 ::selection{background:var(--lime);color:var(--on-lime)}
@@ -170,9 +171,20 @@ p{margin:0}
 .burger span{display:block;width:16px;height:1.5px;background:var(--fg);position:relative}
 .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:16px;height:1.5px;background:var(--fg)}
 .burger span::before{top:-5px}.burger span::after{top:5px}
+/* the nav CTA carries a long and a short label; CSS picks one so the button never wraps */
+.btn .short{display:none}
 @media(max-width:960px){
   .nav-links,.nav-price{display:none}
   .burger{display:flex}
+  .nav-in{gap:12px}
+  /* the brand is the only flexible item, so the row can always fit the viewport */
+  .brand{min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-right{flex:none;gap:8px}
+  .nav-right .btn-ghost{display:none}
+}
+@media(max-width:560px){
+  .nav-right .btn .full{display:none}
+  .nav-right .btn .short{display:inline}
 }
 .drawer{display:none;border-top:1px solid var(--line);padding:12px 0 20px}
 .drawer.open{display:block}
@@ -492,6 +504,88 @@ p{margin:0}
 .sticky .close:hover{color:var(--fg);background:var(--fill-2)}
 @media(max-width:620px){.sticky{border-radius:18px;padding:14px 16px}.sticky .txt{flex:1 1 100%}}
 
+/* ============================================================
+   Mobile — no split buttons, no clipped rails, no stray scroll.
+   ============================================================ */
+@media(max-width:720px){
+
+  .shell{padding-inline:18px}
+  .section{padding:clamp(48px,11vw,72px) 0}
+
+  /* announcement bar stays one tidy line */
+  .topbar{font-size:12.5px}
+  .topbar .shell{gap:8px;min-height:36px;flex-wrap:nowrap;justify-content:center}
+  .topbar .tb-long{display:none}
+
+  /* every stacked button group goes full width — never a ragged half-row */
+  .hero-cta,.band .btns,.cta .btns{flex-direction:column;align-items:stretch;gap:10px}
+  .hero-cta .btn,.band .btns .btn,.cta .btns .btn,.ent .btn,.sec-head.row>.btn{width:100%}
+  .hero-note{text-align:center;margin-top:2px}
+
+  /* buttons keep one line: shrink type before ever wrapping */
+  .btn{font-size:14px;padding-inline:18px}
+  .btn-lg{height:52px;font-size:15px;padding-inline:20px}
+  .cta .btns .btn-lg{font-size:14px;padding-inline:14px}
+
+  /* touch targets: 44px minimum on everything tappable */
+  .btn-sm{height:40px}
+  .go,.visit{padding:9px 0;min-height:44px;align-items:center}
+  .foot-col a{padding:9px 0}
+  .nav-links a{padding:12px}
+
+  /* hero */
+  .hero{padding-top:34px}
+  .hero h1{font-size:clamp(32px,8.6vw,44px)}
+  .hero .lede{margin-top:18px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:18px 16px;margin-top:30px}
+
+  /* rails bleed to the screen edge so cards are never sliced by the gutter */
+  .rail{
+    margin-inline:-18px;padding-inline:18px;
+    grid-auto-columns:78vw;
+    scroll-padding-left:18px;
+  }
+  .rail-head{margin-top:40px}
+  .rail-head .btn{width:100%}
+
+  /* pricing toggle: two equal halves, each on one line */
+  .toggle{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .toggle button{padding:0 8px;font-size:12.5px;height:44px;justify-content:center;display:flex;align-items:center}
+  .toggle .save{display:none}
+  .sec-head.row{gap:18px}
+
+  .price .amt{font-size:38px}
+  .plan{padding:24px 20px 26px}
+  .band,.cta{padding-inline:22px}
+  .ent{padding:24px 22px;text-align:left}
+
+  /* work cards show more of the page, less letterbox */
+  .work .shot{aspect-ratio:5/4}
+
+  /* sticky offer bar: stacked block, full-width action */
+  .sticky{left:12px;right:12px;bottom:12px;padding:14px;gap:10px}
+  .sticky .txt{flex:1 1 100%;font-size:13px;padding-right:26px}
+  .sticky .btn{width:100%}
+  .sticky .close{position:absolute;top:8px;right:8px;width:38px;height:38px}
+  .brand{padding-block:8px}
+
+  .faq summary{font-size:15px;padding:16px 0}
+  .quote,.cap,.step{padding:22px 20px 24px}
+}
+
+@media(max-width:420px){
+  .shell{padding-inline:15px}
+  .rail{margin-inline:-15px;padding-inline:15px;scroll-padding-left:15px;grid-auto-columns:84vw}
+  .hero h1{font-size:30px}
+  .h-lg{font-size:27px}
+  .h-md{font-size:21px}
+  .stats{grid-template-columns:1fr 1fr;gap:14px 12px}
+  .stat b{font-size:20px}
+  .presets{gap:8px}
+  .metrics{grid-template-columns:1fr 1fr}
+  .cta .btns .btn-lg{font-size:13px;letter-spacing:-.02em}
+}
+
 /* scroll reveal */
 .rv{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
 .rv.in{opacity:1;transform:none}
@@ -504,9 +598,9 @@ p{margin:0}
 <div class="topbar">
   <div class="shell">
     <b>SUMMER SPRINT — 30% OFF</b>
-    <span>every build booked this month ·</span>
+    <span class="tb-long">every build booked this month ·</span>
     <span><b id="slots">3</b> of 6 build slots left</span>
-    <a href="#pricing">See pricing →</a>
+    <a class="tb-long" href="#pricing">See pricing →</a>
   </div>
 </div>
 
@@ -525,7 +619,7 @@ p{margin:0}
       <div class="nav-right">
         <a class="nav-price" href="#pricing">Pricing <span class="off">30% OFF</span></a>
         <a class="btn btn-ghost btn-sm" href="#audit">Free site audit</a>
-        <a class="btn btn-primary btn-sm" href="#contact">Start a project</a>
+        <a class="btn btn-primary btn-sm" href="#contact"><span class="full">Start a project</span><span class="short">Start</span></a>
         <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span></button>
       </div>
     </div>

@@ -312,58 +312,61 @@ p{margin:0}
 /* ============================================================
    Superpanel — glowing lime stage with floating product cards
    ============================================================ */
+.sp-sec{padding-top:0}
+/* breaks out of the 1240px shell so the panel reads as a full-width stage */
+.sp-wrap{width:100%;padding-inline:clamp(12px,1.6vw,22px)}
 .sp{
   position:relative;overflow:hidden;border-radius:var(--radius-lg);
-  min-height:min(78vh,620px);
+  min-height:min(74vh,600px);
   display:grid;place-items:center;
-  padding:clamp(52px,8vw,96px) clamp(20px,4vw,48px);
+  padding:clamp(56px,7vw,90px) clamp(20px,4vw,48px);
   background:var(--lime);
-  box-shadow:0 40px 120px -50px rgba(209,254,23,.55);
+  box-shadow:0 0 90px -10px rgba(209,254,23,.65),0 40px 140px -60px rgba(209,254,23,.9);
 }
-/* dark core painted over a lime ground, so the rim stays lit all the way round */
+/* a small dark core over a lime ground leaves a thick neon band all the way round */
 .sp::before{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(108% 96% at 50% 50%,
-    #05080f 0%, #060b02 40%, rgba(8,14,2,.92) 62%, rgba(60,88,6,.55) 84%, transparent 100%);
+  background:radial-gradient(80% 70% at 50% 47%,
+    #04070c 0%, #050a02 44%, rgba(6,12,2,.95) 64%, rgba(46,70,4,.6) 83%, transparent 100%);
 }
 /* receding grid floor, drawn in 3d so the lines actually converge */
 .sp-grid{position:absolute;inset:0;z-index:2;perspective:560px;overflow:hidden;pointer-events:none}
 .sp-grid i{
   position:absolute;left:-60%;right:-60%;bottom:-24%;height:150%;
   background-image:
-    linear-gradient(rgba(209,254,23,.30) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(209,254,23,.30) 1px,transparent 1px);
+    linear-gradient(rgba(209,254,23,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(209,254,23,.5) 1px,transparent 1px);
   background-size:64px 64px;
   transform:rotateX(72deg);transform-origin:50% 100%;
 }
 .sp-grid b{
   position:absolute;inset:0;
   background-image:
-    linear-gradient(rgba(209,254,23,.10) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(209,254,23,.10) 1px,transparent 1px);
+    linear-gradient(rgba(209,254,23,.22) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(209,254,23,.22) 1px,transparent 1px);
   background-size:64px 64px;
-  -webkit-mask:radial-gradient(75% 70% at 50% 50%,transparent 30%,#000 100%);
-  mask:radial-gradient(75% 70% at 50% 50%,transparent 30%,#000 100%);
+  -webkit-mask:radial-gradient(70% 64% at 50% 50%,transparent 24%,#000 100%);
+  mask:radial-gradient(70% 64% at 50% 50%,transparent 24%,#000 100%);
 }
-.sp-in{position:relative;z-index:4;text-align:center;max-width:540px}
-.sp-mark{display:flex;justify-content:center;gap:5px;margin-bottom:20px}
-.sp-mark span{width:26px;height:26px;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 6px 18px -6px #000;filter:saturate(1.5) brightness(1.9)}
-.sp-mark span:nth-child(2){transform:translateY(-3px) rotate(-6deg)}
-.sp-mark span:nth-child(4){transform:translateY(-3px) rotate(6deg)}
+.sp-in{position:relative;z-index:4;text-align:center;max-width:840px}
+.sp-mark{display:flex;justify-content:center;gap:5px;margin-bottom:22px}
+.sp-mark span{width:28px;height:28px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.24),0 6px 18px -6px #000;filter:saturate(1.5) brightness(1.9)}
+.sp-mark span:nth-child(2){transform:translateY(-4px) rotate(-6deg)}
+.sp-mark span:nth-child(4){transform:translateY(-4px) rotate(6deg)}
 .sp-title{
   font-family:var(--grotesk);font-weight:700;color:var(--lime);
-  font-size:clamp(38px,7.4vw,88px);letter-spacing:-.045em;line-height:.94;
-  text-shadow:0 0 46px rgba(209,254,23,.45);
+  font-size:clamp(34px,5.6vw,76px);letter-spacing:-.045em;line-height:.96;text-wrap:balance;
+  text-shadow:0 0 30px rgba(209,254,23,.6),0 0 90px rgba(209,254,23,.35);
 }
-.sp-sub{margin-top:16px;color:rgba(255,255,255,.86);font-size:clamp(14.5px,1.5vw,18px)}
-.sp-cta{margin-top:28px;background:#fff;color:var(--on-lime)}
-.sp-cta:hover{background:#fff;transform:translateY(-2px);box-shadow:0 14px 40px -12px rgba(255,255,255,.5)}
+.sp-sub{margin-top:18px;margin-inline:auto;max-width:44ch;color:rgba(255,255,255,.9);font-size:clamp(15px,1.6vw,19px)}
+.sp-cta{margin-top:30px;background:#fff;color:var(--on-lime)}
+.sp-cta:hover{background:#fff;transform:translateY(-2px);box-shadow:0 14px 40px -12px rgba(255,255,255,.6)}
 
 /* floating product cards — decorative, desktop only */
 .fc{
-  position:absolute;z-index:3;width:250px;border-radius:16px;padding:12px;
-  background:rgba(10,14,8,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 30px 70px -30px #000;
+  position:absolute;z-index:3;width:262px;border-radius:16px;padding:13px;
+  background:rgba(10,14,8,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 30px 70px -30px #000;
 }
 .fc-head{display:flex;align-items:center;gap:8px;font-family:var(--grotesk);font-size:13px;font-weight:600}
 .fc-head .ic{width:18px;height:18px;border-radius:5px;background:rgba(209,254,23,.18);color:var(--lime);display:grid;place-items:center;flex:none}
@@ -374,14 +377,18 @@ p{margin:0}
 .fc-row .av{width:22px;height:22px;border-radius:99px;flex:none}
 .fc-row b{display:block;font-size:11.5px;font-family:var(--grotesk)}
 .fc-row span{display:block;font-size:10px;color:var(--fg-4)}
-.fc-tag{margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:5px 9px;border-radius:99px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px var(--line-2)}
+.fc-bars{display:flex;align-items:flex-end;gap:5px;height:38px;margin-top:11px}
+.fc-bars i{flex:1;border-radius:3px 3px 0 0;background:rgba(209,254,23,.35)}
+.fc-bars i:last-child{background:var(--lime)}
+.fc-tag{margin-top:11px;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:5px 9px;border-radius:99px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px var(--line-2)}
 .fc-tag .dot{width:5px;height:5px;border-radius:99px;background:var(--lime)}
 
-.fc-a{left:2.5%;top:24%}
-.fc-b{right:2.5%;top:13%}
-.fc-c{right:11%;bottom:-9%}
+.fc-a{left:3%;top:20%}
+.fc-b{right:3%;top:12%}
+.fc-c{right:19%;bottom:-7%}
+.fc-d{left:4%;bottom:9%}
 
-/* status pills with a pointer, exactly the tell of the reference layout */
+/* status pills with a pointer, the tell of the reference layout */
 .sp-pill{
   position:absolute;z-index:5;display:inline-flex;align-items:center;
   font-family:var(--grotesk);font-size:12.5px;font-weight:600;
@@ -391,14 +398,14 @@ p{margin:0}
 .sp-pill.light{background:#fff;color:var(--on-lime)}
 .sp-pill.lime{background:var(--lime);color:var(--on-lime)}
 .sp-cursor{position:absolute;z-index:6;width:14px;height:14px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
-.p-1{left:56%;top:22%}
-.c-1{left:53.4%;top:16.5%}
-.p-2{right:5%;top:63%}
-.c-2{right:17.5%;top:58%}
+.p-1{left:63%;top:23%}
+.c-1{left:60.4%;top:17.5%}
+.p-2{right:6%;top:62%}
+.c-2{right:18.5%;top:57%}
 
-@media(max-width:1080px){
+@media(max-width:1400px){
   .fc,.sp-pill,.sp-cursor{display:none}
-  .sp{min-height:auto;padding-block:clamp(48px,10vw,72px)}
+  .sp{min-height:auto;padding-block:clamp(52px,10vw,76px)}
 }
 
 /* ============================================================
@@ -866,8 +873,8 @@ p{margin:0}
 </section>
 
 <!-- ========== superpanel ========== -->
-<section class="section" id="oneteam" style="padding-top:0">
-  <div class="shell">
+<section class="section sp-sec" id="stack">
+  <div class="sp-wrap">
     <div class="sp rv">
       <div class="sp-grid" aria-hidden="true"><i></i><b></b></div>
 
@@ -875,12 +882,11 @@ p{margin:0}
         <div class="sp-mark" aria-hidden="true">
           <span class="art-c"></span><span class="art-a"></span><span class="art-e"></span><span class="art-b"></span><span class="art-d"></span>
         </div>
-        <h2 class="sp-title">ONE TEAM</h2>
-        <p class="sp-sub">One team for your entire online presence</p>
+        <h2 class="sp-title">THE WHOLE STACK</h2>
+        <p class="sp-sub">Your website, brand and marketing from one team</p>
         <a class="btn btn-lg sp-cta" href="#contact">Start a project</a>
       </div>
 
-      <!-- floating stack cards -->
       <div class="fc fc-a" aria-hidden="true">
         <div class="fc-head"><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="2.4"/><path d="M3 9h18" stroke="currentColor" stroke-width="2.4"/></svg></span> Website <span class="rt">5/5</span></div>
         <div class="fc-shots"><span class="art-a"></span><span class="art-e"></span><span class="art-c"></span></div>
@@ -899,6 +905,12 @@ p{margin:0}
       <div class="fc fc-c" aria-hidden="true">
         <div class="fc-head"><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="2.4"/><path d="m10 9.5 5 2.5-5 2.5v-5Z" fill="currentColor"/></svg></span> Motion <span class="rt">6 shots</span></div>
         <div class="fc-shots"><span class="art-d"></span><span class="art-c"></span><span class="art-e"></span></div>
+      </div>
+
+      <div class="fc fc-d" aria-hidden="true">
+        <div class="fc-head"><span class="ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.4"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span> Search <span class="rt">+180%</span></div>
+        <div class="fc-bars"><i style="height:32%"></i><i style="height:46%"></i><i style="height:40%"></i><i style="height:62%"></i><i style="height:78%"></i><i style="height:100%"></i></div>
+        <span class="fc-tag"><i class="dot"></i> Page one</span>
       </div>
 
       <span class="sp-pill light p-1" aria-hidden="true">Designing</span>

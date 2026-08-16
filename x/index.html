@@ -321,7 +321,8 @@ p{margin:0}
   display:grid;place-items:center;
   padding:clamp(56px,7vw,90px) clamp(20px,4vw,48px);
   background:var(--lime);
-  box-shadow:0 0 90px -10px rgba(209,254,23,.65),0 40px 140px -60px rgba(209,254,23,.9);
+  /* the glow lives entirely inside the box — no lime bleeding onto the page */
+  box-shadow:0 30px 80px -50px rgba(0,0,0,.9);
 }
 /* a small dark core over a lime ground leaves a thick neon band all the way round */
 .sp::before{

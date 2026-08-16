@@ -320,15 +320,18 @@ p{margin:0}
   min-height:min(74vh,600px);
   display:grid;place-items:center;
   padding:clamp(56px,7vw,90px) clamp(20px,4vw,48px);
-  background:var(--lime);
-  /* the glow lives entirely inside the box — no lime bleeding onto the page */
+  background:#05080a;
   box-shadow:0 30px 80px -50px rgba(0,0,0,.9);
 }
-/* a small dark core over a lime ground leaves a thick neon band all the way round */
+/* inset shadows hug the rounded rect, so the band is the same depth on every edge
+   and around every corner — a radial gradient cannot do this on a wide box */
 .sp::before{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(80% 70% at 50% 47%,
-    #04070c 0%, #050a02 44%, rgba(6,12,2,.95) 64%, rgba(46,70,4,.6) 83%, transparent 100%);
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
+  box-shadow:
+    inset 0 0 0 1px rgba(209,254,23,.85),
+    inset 0 0 34px 3px rgba(209,254,23,.80),
+    inset 0 0 105px 24px rgba(209,254,23,.42),
+    inset 0 0 200px 52px rgba(209,254,23,.16);
 }
 /* receding grid floor, drawn in 3d so the lines actually converge */
 .sp-grid{position:absolute;inset:0;z-index:2;perspective:560px;overflow:hidden;pointer-events:none}

@@ -263,17 +263,9 @@ section{position:relative;z-index:1;padding:72px 0;overflow:hidden}
 }
 .btn-arrow:hover i{transform:translateX(3px)}
 
-/* the hero preview is desktop-only: on phones it would cost a screenshot and
-   a lot of hero height for something the Work section already does better */
-.hero .hero-preview{display:none}
 @media(min-width:900px){
-  .hero-grid{
-    min-height:340px;
-    grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
-    align-items:center;gap:40px;
-  }
-  .hero h1{font-size:clamp(34px,4.05vw,48px);max-width:none}
-  .hero .hero-preview{display:flex}
+  .hero-grid{min-height:340px}
+  .hero h1{max-width:15ch}
 }
 
 /* bottom pill bar */
@@ -315,13 +307,12 @@ html.ready .hero h1{animation:headIn 1s cubic-bezier(.2,.75,.25,1) .12s both}
   from{opacity:0;clip-path:inset(0 0 108% 0);transform:translateY(10px)}
   to{opacity:1;clip-path:inset(0 0 -25% 0);transform:none}
 }
-html.ready .hero-preview{animation:riseIn .9s cubic-bezier(.2,.7,.3,1) .3s both}
 html.ready .ticker,html.ready .hero-bar{animation:riseIn .8s cubic-bezier(.2,.7,.3,1) .44s both}
 
 @media(prefers-reduced-motion:reduce){
   .hb-scroll i,.hero-proof .stars i{animation:none}
   .hero-copy>*{animation:none}
-  html.ready .nav,html.ready .hero h1,html.ready .hero-preview,
+  html.ready .nav,html.ready .hero h1,
   html.ready .ticker,html.ready .hero-bar{animation:none}
 }
 
@@ -748,19 +739,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:48px
       </div>
     </div>
 
-    <!-- desktop-only live preview; same opt-in machinery as the Work cards -->
-    <div class="hero-preview work-item">
-      <div class="work-chrome"><i></i><i></i><i></i><em class="url">danialhyatt7-collab.github.io/O-kly</em></div>
-      <div class="shot" data-src="https://danialhyatt7-collab.github.io/O-kly/index.html" data-name="Oakly">
-        <img class="shot-poster" src="assets/work-okly-tall.webp" alt="Oakly furniture site homepage, a recent build" decoding="async" width="880" height="1815">
-        <button class="shot-play" type="button">
-          <span><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Load live preview</span>
-        </button>
-        <span class="live"><b></b>Live</span>
-        <button class="shot-stop" type="button" aria-label="Stop live preview of Oakly" title="Stop live preview">&#215;</button>
-      </div>
-    </div>
-
   </div>
 
   <div class="ticker" aria-hidden="true">
@@ -1126,11 +1104,7 @@ shots.forEach(shot=>{
       if(r.bottom<-80||r.top>vh+80)return;
       const travel=r.width*RATIO-r.height;
       if(travel<=0)return;
-      // the hero card is already on screen at load, so it pans off page scroll
-      // and starts on the site's own hero rather than part-way down
-      const raw=s.closest('.hero-preview')
-        ? 0.18+scrollY/(vh*1.35)
-        : (vh-r.top)/(vh+r.height);
+      const raw=(vh-r.top)/(vh+r.height);
       // hold at the top of the page while the card enters, pan through the
       // middle of the crossing, settle before it leaves
       const p=Math.min(1,Math.max(0,(raw-0.18)/0.62));

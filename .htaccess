@@ -20,3 +20,12 @@ DirectoryIndex index.html index.php
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
+
+# nothing but the site itself should be reachable: the deploy copies the whole
+# repo into the web root, so block the files that are for GitHub, not visitors
+<IfModule mod_rewrite.c>
+  RewriteRule ^\.github(/|$) - [F,L]
+</IfModule>
+<FilesMatch "(?i)\.(md|yml|yaml|json|gitignore|gitattributes)$">
+  Require all denied
+</FilesMatch>

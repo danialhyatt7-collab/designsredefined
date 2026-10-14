@@ -568,11 +568,11 @@ document.body.classList.remove('no-js');
 
   var dir = rows.map(function(r){ return r.classList.contains('rev') ? 1 : -1; }),
       x   = rows.map(function(){ return 0; }),
-      run = rows.map(function(r){ return r.firstElementChild.offsetWidth || 1; }),
+      run = rows.map(function(r){ return r.firstElementChild.getBoundingClientRect().width || 1; }),
       lastY = window.pageYOffset, push = 0, visible = false, running = false;
 
   addEventListener('resize', function(){
-    run = rows.map(function(r){ return r.firstElementChild.offsetWidth || 1; });
+    run = rows.map(function(r){ return r.firstElementChild.getBoundingClientRect().width || 1; });
   }, { passive: true });
 
   addEventListener('scroll', function(){
@@ -591,8 +591,10 @@ document.body.classList.remove('no-js');
     for (var i = 0; i < rows.length; i++) {
       var w = run[i];
       x[i] += dir[i] * (0.4 + push * 0.075);
-      if (x[i] <= -w) x[i] += w;
-      else if (x[i] >= w) x[i] -= w;
+      /* keep the offset inside (-w, 0] whichever way the row travels: a
+         rightward row wrapped at +w would drag an ever-widening gap behind it */
+      x[i] = x[i] % w;
+      if (x[i] > 0) x[i] -= w;
       rows[i].style.transform = 'translate3d(' + x[i].toFixed(2) + 'px,0,0)';
     }
     requestAnimationFrame(frame);

@@ -123,21 +123,42 @@ section{position:relative;padding:64px 0}
 .hero-cta{display:flex;flex-wrap:wrap;gap:12px}
 .hero-note{margin:24px 0 0;font-size:14px;color:var(--ink-faint);max-width:48ch}
 
-/* ---------- marquee: CSS transform only, so it never touches the main thread ---------- */
-.ticker{position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;display:flex;flex-direction:column;gap:4px;margin-top:8px}
-.t-line{display:flex;width:max-content;animation:marq 46s linear infinite;will-change:transform}
-.ticker.js .t-line{animation:none}
-.t-line.rev{animation-duration:64s}
-.t-run{display:flex;align-items:center;flex:none;padding-right:34px}
-.t-run b{
-  font-family:'Space Grotesk',sans-serif;font-weight:700;
-  font-size:clamp(26px,5vw,46px);letter-spacing:-.03em;line-height:1.18;
-  color:rgba(var(--ink-rgb),.5);white-space:nowrap;display:inline-flex;align-items:center;
+/* ---------- hero ticker (continuous + scroll-driven) ---------- */
+.ticker{
+  position:relative;z-index:1;
+  margin:46px 0 0;padding:26px 0;
+  display:flex;flex-direction:column;gap:2px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(var(--ov),.035),transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
 }
-.t-run i{font-style:normal;margin:0 26px;font-size:.42em;color:rgba(var(--ink-rgb),.3)}
-.t-line.rev .t-run b{color:transparent;-webkit-text-stroke:1.2px rgba(var(--ink-rgb),.52)}
-@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){.t-line{animation:none}}
+@media(min-width:768px){.ticker{margin-top:64px;padding:34px 0;gap:6px}}
+.t-line{overflow:hidden}
+/* scroll offset lives on this wrapper so it never fights the CSS loop below */
+.t-shift{will-change:transform}
+.t-run{
+  display:flex;width:max-content;
+  will-change:transform;   /* position is driven in JS so scrolling can steer it */
+}
+.t-run b{
+  font-family:'Space Grotesk','Inter',sans-serif;font-weight:700;
+  font-size:clamp(32px,8.4vw,64px);line-height:1.14;letter-spacing:-.02em;
+  padding-right:.42em;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:.42em;
+}
+.t-run b i{
+  font-style:normal;font-size:.42em;
+  color:var(--ink-faint);transform:translateY(-.08em);
+}
+/* second row is outlined, which reads as depth rather than repetition */
+.t-line.rev .t-run b{
+  color:transparent;
+  -webkit-text-stroke:1px rgba(var(--ink-rgb),.45);
+}
+@media(prefers-reduced-motion:reduce){
+  .t-run{transform:none!important}
+}
 
 /* ---------- problem ---------- */
 .grid-3{display:grid;gap:16px;margin-top:38px}
@@ -279,8 +300,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 48px;margin-top:20px}
 </header>
 
 <div class="ticker" aria-hidden="true">
-  <div class="t-line"><div class="t-run"><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Turnkey Interiors<i>&#10022;</i></b><b>Joinery &amp; Millwork<i>&#10022;</i></b><b>Showroom Design<i>&#10022;</i></b><b>Retail Rollouts<i>&#10022;</i></b><b>F&amp;B Interiors<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Corporate Offices<i>&#10022;</i></b><b>Villa Interiors<i>&#10022;</i></b></div><div class="t-run"><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Turnkey Interiors<i>&#10022;</i></b><b>Joinery &amp; Millwork<i>&#10022;</i></b><b>Showroom Design<i>&#10022;</i></b><b>Retail Rollouts<i>&#10022;</i></b><b>F&amp;B Interiors<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Corporate Offices<i>&#10022;</i></b><b>Villa Interiors<i>&#10022;</i></b></div></div>
-  <div class="t-line rev"><div class="t-run"><b>Project Galleries<i>&#10022;</i></b><b>Before &amp; After<i>&#10022;</i></b><b>Written Case Studies<i>&#10022;</i></b><b>Tender-Ready Profiles<i>&#10022;</i></b><b>Arabic &amp; English<i>&#10022;</i></b><b>Fast on 4G<i>&#10022;</i></b><b>Quote Requests<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b><b>Rankings Protected<i>&#10022;</i></b></div><div class="t-run"><b>Project Galleries<i>&#10022;</i></b><b>Before &amp; After<i>&#10022;</i></b><b>Written Case Studies<i>&#10022;</i></b><b>Tender-Ready Profiles<i>&#10022;</i></b><b>Arabic &amp; English<i>&#10022;</i></b><b>Fast on 4G<i>&#10022;</i></b><b>Quote Requests<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b><b>Rankings Protected<i>&#10022;</i></b></div></div>
+  <div class="t-line"><div class="t-shift" data-dir="-1"><div class="t-run"><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Turnkey Interiors<i>&#10022;</i></b><b>Joinery &amp; Millwork<i>&#10022;</i></b><b>Showroom Design<i>&#10022;</i></b><b>Retail Rollouts<i>&#10022;</i></b><b>F&amp;B Interiors<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Corporate Offices<i>&#10022;</i></b><b>Villa Interiors<i>&#10022;</i></b><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Turnkey Interiors<i>&#10022;</i></b><b>Joinery &amp; Millwork<i>&#10022;</i></b><b>Showroom Design<i>&#10022;</i></b><b>Retail Rollouts<i>&#10022;</i></b><b>F&amp;B Interiors<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Corporate Offices<i>&#10022;</i></b><b>Villa Interiors<i>&#10022;</i></b></div></div></div>
+  <div class="t-line rev"><div class="t-shift" data-dir="1"><div class="t-run"><b>Project Galleries<i>&#10022;</i></b><b>Before &amp; After<i>&#10022;</i></b><b>Written Case Studies<i>&#10022;</i></b><b>Tender-Ready Profiles<i>&#10022;</i></b><b>Arabic &amp; English<i>&#10022;</i></b><b>Fast on 4G<i>&#10022;</i></b><b>Quote Requests<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b><b>Rankings Protected<i>&#10022;</i></b><b>Project Galleries<i>&#10022;</i></b><b>Before &amp; After<i>&#10022;</i></b><b>Written Case Studies<i>&#10022;</i></b><b>Tender-Ready Profiles<i>&#10022;</i></b><b>Arabic &amp; English<i>&#10022;</i></b><b>Fast on 4G<i>&#10022;</i></b><b>Quote Requests<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b><b>Rankings Protected<i>&#10022;</i></b></div></div></div>
 </div>
 
 <section id="problem">
@@ -554,64 +575,41 @@ footer{border-top:1px solid var(--line);padding:40px 0 48px;margin-top:20px}
 <script>
 document.body.classList.remove('no-js');
 
-/* Marquee reacts to scroll: it drifts on its own, speeds up as you scroll
-   down and reverses when you scroll up, so the motion always agrees with the
-   direction of travel. Runs only while the band is on screen and the tab is
-   visible; without JS the CSS keyframes keep it moving. */
+/* Ticker rows advance on their own and take their direction from the scroll:
+   scrolling down runs them right-to-left, scrolling up reverses them. Each row
+   declares a base direction so the two rows always travel opposite each other. */
 (function(){
-  var ticker = document.querySelector('.ticker');
-  if (!ticker) return;
-  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var rows = Array.prototype.slice.call(ticker.querySelectorAll('.t-line'));
-  if (!rows.length) return;
-  ticker.classList.add('js');
+  const runs=[...document.querySelectorAll('.t-run')];
+  if(!runs.length||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 
-  /* both rows travel the same way: right to left as you scroll down, left to
-     right as you scroll up. The second row runs slower so they do not lockstep. */
-  var speed = rows.map(function(r){ return r.classList.contains('rev') ? 0.7 : 1; }),
-      x   = rows.map(function(){ return 0; }),
-      run = rows.map(function(r){ return r.firstElementChild.getBoundingClientRect().width || 1; }),
-      lastY = window.pageYOffset, push = 0, visible = false, running = false;
+  const SPEED=34;                 // px per second - an unhurried reading pace
+  const rows=runs.map(el=>({el,x:0,base:+el.closest('.t-shift').dataset.dir||-1}));
+  let dirSign=1, lastY=window.scrollY, lastT=performance.now(), visible=true, raf=0;
 
-  addEventListener('resize', function(){
-    run = rows.map(function(r){ return r.firstElementChild.getBoundingClientRect().width || 1; });
-  }, { passive: true });
+  addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    if(y!==lastY){dirSign=y>lastY?1:-1;lastY=y;}   // down = forward, up = reversed
+  },{passive:true});
 
-  addEventListener('scroll', function(){
-    var y = window.pageYOffset, d = y - lastY;
-    lastY = y;
-    push += d;
-    if (push >  90) push =  90;
-    if (push < -90) push = -90;
-    start();
-  }, { passive: true });
-
-  function frame(){
-    if (!visible || document.hidden) { running = false; return; }
-    push *= 0.90;                       // settle back to the idle drift
-    if (Math.abs(push) < 0.05) push = 0;
-    var v = -(0.4 + push * 0.075);     // negative = right to left
-    for (var i = 0; i < rows.length; i++) {
-      var w = run[i];
-      x[i] += v * speed[i];
-      /* keep the offset inside (-w, 0] whichever way the row travels: a
-         rightward row wrapped at +w would drag an ever-widening gap behind it */
-      x[i] = x[i] % w;
-      if (x[i] > 0) x[i] -= w;
-      rows[i].style.transform = 'translate3d(' + x[i].toFixed(2) + 'px,0,0)';
+  function frame(now){
+    const dt=Math.min((now-lastT)/1000,0.05);      // clamp so a stalled tab cannot jump
+    lastT=now;
+    for(const r of rows){
+      const half=r.el.scrollWidth/2;               // content is duplicated once
+      if(half>0){
+        r.x+=SPEED*dt*r.base*dirSign;
+        if(r.x<=-half)r.x+=half;                   // wrap seamlessly, both ways
+        else if(r.x>=0)r.x-=half;
+        r.el.style.transform=`translate3d(${r.x.toFixed(2)}px,0,0)`;
+      }
     }
-    requestAnimationFrame(frame);
+    raf=visible?requestAnimationFrame(frame):0;
   }
-  function start(){ if (!running && visible && !document.hidden) { running = true; requestAnimationFrame(frame); } }
-
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function(es){
-      visible = es[0].isIntersecting;
-      start();
-    }, { rootMargin: '120px 0px' }).observe(ticker);
-  } else { visible = true; }
-  addEventListener('visibilitychange', start);
-  start();
+  // only animate while the ticker is actually on screen
+  new IntersectionObserver(es=>{
+    visible=es[0].isIntersecting;
+    if(visible&&!raf){lastT=performance.now();raf=requestAnimationFrame(frame);}
+  },{rootMargin:'100px'}).observe(runs[0].closest('.ticker'));
 })();
 (function(){
   var els = document.querySelectorAll('.rv');

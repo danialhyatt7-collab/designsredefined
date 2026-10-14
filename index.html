@@ -126,6 +126,7 @@ section{position:relative;padding:64px 0}
 /* ---------- marquee: CSS transform only, so it never touches the main thread ---------- */
 .ticker{position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;display:flex;flex-direction:column;gap:4px;margin-top:8px}
 .t-line{display:flex;width:max-content;animation:marq 46s linear infinite;will-change:transform}
+.ticker.js .t-line{animation:none}
 .t-line.rev{animation-direction:reverse}
 .t-run{display:flex;align-items:center;flex:none;padding-right:34px}
 .t-run b{
@@ -278,8 +279,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 48px;margin-top:20px}
 </header>
 
 <div class="ticker" aria-hidden="true">
-  <div class="t-line"><div class="t-run"><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Showrooms<i>&#10022;</i></b><b>Retail<i>&#10022;</i></b><b>F&amp;B<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Residential<i>&#10022;</i></b><b>Commercial<i>&#10022;</i></b></div><div class="t-run"><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Showrooms<i>&#10022;</i></b><b>Retail<i>&#10022;</i></b><b>F&amp;B<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Residential<i>&#10022;</i></b><b>Commercial<i>&#10022;</i></b></div></div>
-  <div class="t-line rev"><div class="t-run"><b>Project Galleries<i>&#10022;</i></b><b>Case Studies<i>&#10022;</i></b><b>Arabic Ready<i>&#10022;</i></b><b>Fast on Mobile<i>&#10022;</i></b><b>Quote Forms<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b></div><div class="t-run"><b>Project Galleries<i>&#10022;</i></b><b>Case Studies<i>&#10022;</i></b><b>Arabic Ready<i>&#10022;</i></b><b>Fast on Mobile<i>&#10022;</i></b><b>Quote Forms<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b></div></div>
+  <div class="t-line"><div class="t-run"><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Turnkey Interiors<i>&#10022;</i></b><b>Joinery &amp; Millwork<i>&#10022;</i></b><b>Showroom Design<i>&#10022;</i></b><b>Retail Rollouts<i>&#10022;</i></b><b>F&amp;B Interiors<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Corporate Offices<i>&#10022;</i></b><b>Villa Interiors<i>&#10022;</i></b></div><div class="t-run"><b>Interior Fit-Out<i>&#10022;</i></b><b>Design &amp; Build<i>&#10022;</i></b><b>Turnkey Interiors<i>&#10022;</i></b><b>Joinery &amp; Millwork<i>&#10022;</i></b><b>Showroom Design<i>&#10022;</i></b><b>Retail Rollouts<i>&#10022;</i></b><b>F&amp;B Interiors<i>&#10022;</i></b><b>Hospitality<i>&#10022;</i></b><b>Corporate Offices<i>&#10022;</i></b><b>Villa Interiors<i>&#10022;</i></b></div></div>
+  <div class="t-line rev"><div class="t-run"><b>Project Galleries<i>&#10022;</i></b><b>Before &amp; After<i>&#10022;</i></b><b>Written Case Studies<i>&#10022;</i></b><b>Tender-Ready Profiles<i>&#10022;</i></b><b>Arabic &amp; English<i>&#10022;</i></b><b>Fast on 4G<i>&#10022;</i></b><b>Quote Requests<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b><b>Rankings Protected<i>&#10022;</i></b></div><div class="t-run"><b>Project Galleries<i>&#10022;</i></b><b>Before &amp; After<i>&#10022;</i></b><b>Written Case Studies<i>&#10022;</i></b><b>Tender-Ready Profiles<i>&#10022;</i></b><b>Arabic &amp; English<i>&#10022;</i></b><b>Fast on 4G<i>&#10022;</i></b><b>Quote Requests<i>&#10022;</i></b><b>WhatsApp Enquiries<i>&#10022;</i></b><b>Rankings Protected<i>&#10022;</i></b></div></div>
 </div>
 
 <section id="problem">
@@ -552,6 +553,61 @@ footer{border-top:1px solid var(--line);padding:40px 0 48px;margin-top:20px}
 
 <script>
 document.body.classList.remove('no-js');
+
+/* Marquee reacts to scroll: it drifts on its own, speeds up as you scroll
+   down and reverses when you scroll up, so the motion always agrees with the
+   direction of travel. Runs only while the band is on screen and the tab is
+   visible; without JS the CSS keyframes keep it moving. */
+(function(){
+  var ticker = document.querySelector('.ticker');
+  if (!ticker) return;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var rows = Array.prototype.slice.call(ticker.querySelectorAll('.t-line'));
+  if (!rows.length) return;
+  ticker.classList.add('js');
+
+  var dir = rows.map(function(r){ return r.classList.contains('rev') ? 1 : -1; }),
+      x   = rows.map(function(){ return 0; }),
+      run = rows.map(function(r){ return r.firstElementChild.offsetWidth || 1; }),
+      lastY = window.pageYOffset, push = 0, visible = false, running = false;
+
+  addEventListener('resize', function(){
+    run = rows.map(function(r){ return r.firstElementChild.offsetWidth || 1; });
+  }, { passive: true });
+
+  addEventListener('scroll', function(){
+    var y = window.pageYOffset, d = y - lastY;
+    lastY = y;
+    push += d;
+    if (push >  90) push =  90;
+    if (push < -90) push = -90;
+    start();
+  }, { passive: true });
+
+  function frame(){
+    if (!visible || document.hidden) { running = false; return; }
+    push *= 0.90;                       // settle back to the idle drift
+    if (Math.abs(push) < 0.05) push = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var w = run[i];
+      x[i] += dir[i] * (0.4 + push * 0.075);
+      if (x[i] <= -w) x[i] += w;
+      else if (x[i] >= w) x[i] -= w;
+      rows[i].style.transform = 'translate3d(' + x[i].toFixed(2) + 'px,0,0)';
+    }
+    requestAnimationFrame(frame);
+  }
+  function start(){ if (!running && visible && !document.hidden) { running = true; requestAnimationFrame(frame); } }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(es){
+      visible = es[0].isIntersecting;
+      start();
+    }, { rootMargin: '120px 0px' }).observe(ticker);
+  } else { visible = true; }
+  addEventListener('visibilitychange', start);
+  start();
+})();
 (function(){
   var els = document.querySelectorAll('.rv');
   if (!('IntersectionObserver' in window)) { els.forEach(function(e){e.classList.add('on')}); return; }

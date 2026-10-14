@@ -127,7 +127,7 @@ section{position:relative;padding:64px 0}
 .ticker{position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;display:flex;flex-direction:column;gap:4px;margin-top:8px}
 .t-line{display:flex;width:max-content;animation:marq 46s linear infinite;will-change:transform}
 .ticker.js .t-line{animation:none}
-.t-line.rev{animation-direction:reverse}
+.t-line.rev{animation-duration:64s}
 .t-run{display:flex;align-items:center;flex:none;padding-right:34px}
 .t-run b{
   font-family:'Space Grotesk',sans-serif;font-weight:700;
@@ -566,7 +566,9 @@ document.body.classList.remove('no-js');
   if (!rows.length) return;
   ticker.classList.add('js');
 
-  var dir = rows.map(function(r){ return r.classList.contains('rev') ? 1 : -1; }),
+  /* both rows travel the same way: right to left as you scroll down, left to
+     right as you scroll up. The second row runs slower so they do not lockstep. */
+  var speed = rows.map(function(r){ return r.classList.contains('rev') ? 0.7 : 1; }),
       x   = rows.map(function(){ return 0; }),
       run = rows.map(function(r){ return r.firstElementChild.getBoundingClientRect().width || 1; }),
       lastY = window.pageYOffset, push = 0, visible = false, running = false;
@@ -588,9 +590,10 @@ document.body.classList.remove('no-js');
     if (!visible || document.hidden) { running = false; return; }
     push *= 0.90;                       // settle back to the idle drift
     if (Math.abs(push) < 0.05) push = 0;
+    var v = -(0.4 + push * 0.075);     // negative = right to left
     for (var i = 0; i < rows.length; i++) {
       var w = run[i];
-      x[i] += dir[i] * (0.4 + push * 0.075);
+      x[i] += v * speed[i];
       /* keep the offset inside (-w, 0] whichever way the row travels: a
          rightward row wrapped at +w would drag an ever-widening gap behind it */
       x[i] = x[i] % w;
